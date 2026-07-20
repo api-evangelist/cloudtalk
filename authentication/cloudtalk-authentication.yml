@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+source: https://developers.cloudtalk.io/
+docs: https://developers.cloudtalk.io/
+summary:
+  types: [http]
+  http_schemes: [basic]
+  api_key_in: []
+  oauth2_flows: []
+  note: The published OpenAPI (v1.7) declares no components.securitySchemes; the auth model
+    below is captured from the CloudTalk API reference documentation.
+schemes:
+- name: BasicAuth
+  type: http
+  scheme: basic
+  description: >-
+    HTTPS-only HTTP Basic Authentication. The username is the API Access Key ID and the
+    password is the Access Key Secret, passed as an `Authorization: Basic <base64(id:secret)>`
+    header. The Basic Auth credential pair also determines which project the request executes
+    against. Credentials are created by Administrators in the CloudTalk Dashboard under
+    Account -> Settings -> API keys.
+  example: "curl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET https://my.cloudtalk.io/api/calls/index.json"
+  sources: [openapi/cloudtalk-openapi.json]
+scopes_model: none
+notes: >-
+  Authentication is account/project-scoped with no token granularity or scopes — a key pair
+  holds full read/write access to the project's data. No OAuth 2.0 or OpenID Connect is offered.
+  There is no documented read-only or scoped credential.
