@@ -1,0 +1,534 @@
+openapi: 3.0.1
+info:
+  title: CloudTalk Agents Bulks API
+  description: "# Introduction\nWelcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk.\n\n# API Overview\n\nThe API is organized around the following resources:\n\nAPI Area | Description\n----------------|-------------\nCalls | Browse your call history, download recordings and access all your calls data.\nContacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually.\nNumbers | Automate Numbers modifications. List all your numbers.\nAgents | Create or update your Agents, access their settings.\nConversation Intelligence | Get Conversation Intelligence data about your calls.\nVoiceAgent | Initiate VoiceAgent calls\n\n\n[JSON](http://www.json.org/) is returned in all responses. XML is not supported.\n\nThe API also uses common approaches for the following:\n\nFunction | Description\n----------------|-------------\nData | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects.\nErrors | 4xx and 5xx responses returning JSON with error codes\nRate Limiting | Controls how many requests can be made in a time window\nHTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS.\n\n\n## Authentication\n\nThis is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication.\n\n Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the Cloudtalk Dashboard Account → Settings → API keys tab.\n\nTo try the API via curl on the command-line, the general form used would be:\n```\ncurl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL\n```\n\nFor instance, you would execute:\n```\ncurl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json\n```\n\n## Usage\n\nThe API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **'429 Too Many Requests'** response code will be returned along with the following headers -\n\nHeader name | Description\n----------------|-------------\nX-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window.\nX-CloudTalkAPI-Remaining | Number of API requests left in the current window.\nX-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp.\n\nNote that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case.\n\n## Response Envelopes\n\n**Note:** Conversation Intelligence doesn't follow envelopes.\n\nThe API returns one of three envelopes depending upon the request issued:\n\n1. Single Item Envelope\n2. Collections Envelope\n3. Error Envelope\n\n### Single Item Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"id\": 123,\n        ...\n        \"created\": \"2018-01-10 12:34:56\"\n    }\n}\n```\n\n### Collections Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"itemsCount\": 65,\n        \"pageCount\": 3,\n        \"pageNumber\": 1,\n        \"limit\": 30,\n        \"data\": [\n            {\n                \"id\": 123,\n                ...\n                \"created\": \"2018-01-10 12:34:56\"\n            },\n            {\n                \"id\": 456,\n                ...\n                \"created\": \"2017-10-19 09:21:29\"\n            },\n            ...\n        ]\n    }\n}\n```\n\n### Error Envelope\n\n```\nStatus: 404 Not Found\n{\n    \"responseData\": {\n        \"status\": 404,\n        \"message\": \"Not Found\"\n    }\n}\n```\n\n## Encoding\n\nData is encoded as defined by JSON in [RFC4627](http://www.ietf.org/rfc/rfc4627.txt). The default encoding for APIs is UTF-8.\n\nSome query parameters may need to be [url encoded](https://www.wikiwand.com/en/Percent-encoding) when sending - for example, the email parameter value used to query users should be encoded.\n\n## Use of HTTP\n\nRequest methods are used in accordance with HTTP -\n\n- `GET` is used to access resources and perform queries. The API does not allow modifications (creates, updates, deletes) to occur via GET.\n- `PUT` is used to create resources.\n- `POST` is used to update resources. PATCH is not currently used by the API.\n- `DELETE` is used to delete resources.\n\nResponses use standard HTTP codes. Where there are client or server errors, a list of of one or more errors in JSON format is returned in the body.\n\nThe `Accept` header must be used by a client used to indicate a preferred response for `GET/HEAD` requests. Requests without an `Accept` header of `application/json` may be rejected with a client error of 404 or 406. The `Content-Type` header should be used by clients to indicate the submitted format for `POST/PUT` requests."
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+tags:
+- name: Bulks
+  description: Bulk actions.
+paths:
+  /bulk/contacts.json:
+    post:
+      tags:
+      - Bulks
+      summary: Contact actions
+      description: Max 10 actions are available in one request. Only sent parameters/values will be updated. If you want to clear the value, just set empty string for that attribute. After sending empty string for properties of `ContactNumber`, `ContactEmail`, `ContactsTag` or `ContactAttribute` all data from these properties will be cleared. When you send values for properties of `ContactNumber`, `ContactEmail`, `ContactsTag` or `ContactAttribute` only these data will be updated, all other will be cleared.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              maxItems: 10
+              example:
+              - action: add_contact
+                command_id: '123'
+                data:
+                  name: John Snow
+                  title: Ing.
+                  company: Night watch
+                  industry: it
+                  website: https://www.castleblack.com/
+                  address: Room 1
+                  city: New York
+                  zip: '18104'
+                  state: NY
+                  country_id: 201
+                  ContactNumber:
+                  - public_number: 421901123456
+                  ContactEmail:
+                  - email: snow@example.com
+                  ContactsTag:
+                  - name: watch
+              - action: delete_contact
+                command_id: '1234'
+                data:
+                  id: 1234
+              - action: edit_contact
+                command_id: '12345'
+                data:
+                  id: 123
+                  name: Daenerys Stormborn
+                  title: Ing.
+                  company: Targaryen inc.
+                  industry: it
+                  website: https://www.fireandblood.com/
+                  address: First st.
+                  zip: '18104'
+                  state: NY
+                  country_id: 201
+                  ContactNumber:
+                  - public_number: 421901123456
+                  - public_number: 421908123456
+                  ContactEmail:
+                  - email: danny@example.com
+                  - email: targ@example.com
+                  ContactsTag:
+                  - name: fire
+                  - name: dragons
+              - action: add_activity
+                command_id: '123456'
+                data:
+                  contact_id: 123
+                  type: order
+                  name: Burn the usurper
+                  activity_date: '2020-08-22T09:53:47.000Z'
+                  description: Defeat the forces at kings landing
+                  activity_author: Danny Stormborn
+                  external_id: 123456
+                  external_url: https://fireandblood.io/order
+              - action: delete_activity
+                command_id: '1234567'
+                data:
+                  id: 12345
+              - action: edit_activity
+                command_id: '12345678'
+                data:
+                  id: 123456
+                  contact_id: 123456
+                  type: order
+                  name: Defend the Wall
+                  activity_date: '2020-08-25T09:53:47.000Z'
+                  description: Repel white walkers attack
+                  activity_author: Danny Stormborn
+                  external_id: 1234567
+                  external_url: https://fireandblood.com/defend
+              - action: add_note
+                command_id: '123456789'
+                data:
+                  contact_id: 1234
+                  note: Dont feed the dragon
+                  user_id: 12345678
+              - action: delete_note
+                command_id: '1234567890'
+                data:
+                  id: 1234567890
+              - action: edit_note
+                command_id: 1234567890A
+                data:
+                  id: 123456789
+                  note: Seriously, dont
+                  user_id: 1075
+                  contact_id: 1234
+              items:
+                required:
+                - action
+                - command_id
+                - data
+                type: object
+                properties:
+                  action:
+                    type: string
+                    description: Action
+                    enum:
+                    - add_contact
+                    - edit_contact
+                    - delete_contact
+                    - add_activity
+                    - edit_activity
+                    - delete_activity
+                    - add_note
+                    - edit_note
+                    - delete_note
+                  command_id:
+                    $ref: '#/components/schemas/command_id'
+                  data:
+                    oneOf:
+                    - title: add contact
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Name. Only for actions add_contact, edit_contact, add_activity, edit_activity.
+                        title:
+                          type: string
+                          description: Title. Only for actions add_contact, edit_contact.
+                        company:
+                          type: string
+                          description: Company. Only for actions add_contact, edit_contact.
+                        industry:
+                          type: string
+                          description: Industry. Only for actions add_contact, edit_contact.
+                        website:
+                          type: string
+                          description: Website. Only for actions add_contact, edit_contact.
+                        address:
+                          type: string
+                          description: Address. Only for actions add_contact, edit_contact.
+                        city:
+                          type: string
+                          description: City. Only for actions add_contact, edit_contact.
+                        zip:
+                          type: string
+                          description: ZIP. Only for actions add_contact, edit_contact.
+                        state:
+                          type: string
+                          description: State. Only for actions add_contact, edit_contact.
+                        country_id:
+                          type: integer
+                          description: Country ID. Only for actions add_contact, edit_contact.
+                        favorite_agent:
+                          type: integer
+                          description: Favorite agent. Only for actions add_contact, edit_contact.
+                        ExternalUrl:
+                          $ref: '#/components/schemas/ExternalUrlArray'
+                        ContactNumber:
+                          $ref: '#/components/schemas/ContactNumberArray'
+                        ContactEmail:
+                          $ref: '#/components/schemas/ContactEmailArray'
+                        ContactsTag:
+                          $ref: '#/components/schemas/ContactsTag'
+                        ContactAttribute:
+                          type: array
+                          description: Attributes for contact. Only for actions add_contact, edit_contact.
+                          items:
+                            type: object
+                            properties:
+                              attribute_id:
+                                $ref: '#/components/schemas/ContactAttribute/items/properties/attribute_id'
+                              value:
+                                $ref: '#/components/schemas/ContactAttribute/items/properties/value'
+                    - title: delete contact/note/activity
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: ID. Only for actions edit_contact, delete_contact, edit_activity, delete_activity, edit_note, delete_note.
+                    - title: edit contact
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: ID. Only for actions edit_contact, delete_contact, edit_activity, delete_activity, edit_note, delete_note.
+                        name:
+                          type: string
+                          description: Name. Only for actions add_contact, edit_contact, add_activity, edit_activity.
+                        title:
+                          type: string
+                          description: Title. Only for actions add_contact, edit_contact.
+                        company:
+                          type: string
+                          description: Company. Only for actions add_contact, edit_contact.
+                        industry:
+                          type: string
+                          description: Industry. Only for actions add_contact, edit_contact.
+                        website:
+                          type: string
+                          description: Website. Only for actions add_contact, edit_contact.
+                        address:
+                          type: string
+                          description: Address. Only for actions add_contact, edit_contact.
+                        city:
+                          type: string
+                          description: City. Only for actions add_contact, edit_contact.
+                        zip:
+                          type: string
+                          description: ZIP. Only for actions add_contact, edit_contact.
+                        state:
+                          type: string
+                          description: State. Only for actions add_contact, edit_contact.
+                        country_id:
+                          type: integer
+                          description: Country ID. Only for actions add_contact, edit_contact.
+                        favorite_agent:
+                          type: integer
+                          description: Favorite agent. Only for actions add_contact, edit_contact.
+                        ExternalUrl:
+                          $ref: '#/components/schemas/ExternalUrlArray'
+                        ContactNumber:
+                          $ref: '#/components/schemas/ContactNumberArray'
+                        ContactEmail:
+                          $ref: '#/components/schemas/ContactEmailArray'
+                        ContactsTag:
+                          $ref: '#/components/schemas/ContactsTag'
+                        ContactAttribute:
+                          type: array
+                          description: Attributes for contact. Only for actions add_contact, edit_contact.
+                          items:
+                            type: object
+                            properties:
+                              attribute_id:
+                                $ref: '#/components/schemas/ContactAttribute/items/properties/attribute_id'
+                              value:
+                                $ref: '#/components/schemas/ContactAttribute/items/properties/value'
+                    - title: add activity
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Name. Only for actions add_contact, edit_contact, add_activity, edit_activity.
+                        contact_id:
+                          type: integer
+                          description: Contact ID. Only for actions add_activity, edit_activity, add_note, edit_note.
+                        type:
+                          $ref: '#/components/schemas/ContactActivity/properties/type'
+                        activity_date:
+                          $ref: '#/components/schemas/ContactActivity/properties/activity_date'
+                        description:
+                          $ref: '#/components/schemas/ContactActivity/properties/description'
+                        activity_author:
+                          $ref: '#/components/schemas/ContactActivity/properties/activity_author'
+                        external_id:
+                          $ref: '#/components/schemas/ContactActivity/properties/external_id'
+                        external_url:
+                          $ref: '#/components/schemas/ContactActivity/properties/external_url'
+                    - title: edit activity
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: ID. Only for actions edit_contact, delete_contact, edit_activity, delete_activity, edit_note, delete_note.
+                        name:
+                          type: string
+                          description: Name. Only for actions add_contact, edit_contact, add_activity, edit_activity.
+                        contact_id:
+                          type: integer
+                          description: Contact ID. Only for actions add_activity, edit_activity, add_note, edit_note.
+                        type:
+                          $ref: '#/components/schemas/ContactActivity/properties/type'
+                        activity_date:
+                          $ref: '#/components/schemas/ContactActivity/properties/activity_date'
+                        description:
+                          $ref: '#/components/schemas/ContactActivity/properties/description'
+                        activity_author:
+                          $ref: '#/components/schemas/ContactActivity/properties/activity_author'
+                        external_id:
+                          $ref: '#/components/schemas/ContactActivity/properties/external_id'
+                        external_url:
+                          $ref: '#/components/schemas/ContactActivity/properties/external_url'
+                    - title: add note
+                      type: object
+                      properties:
+                        contact_id:
+                          type: integer
+                          description: Contact ID. Only for actions add_activity, edit_activity, add_note, edit_note.
+                        user_id:
+                          $ref: '#/components/schemas/ContactNote/properties/user_id'
+                        note:
+                          $ref: '#/components/schemas/ContactNote/properties/note'
+                    - title: edit note
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: ID. Only for actions edit_contact, delete_contact, edit_activity, delete_activity, edit_note, delete_note.
+                        contact_id:
+                          type: integer
+                          description: Contact ID. Only for actions add_activity, edit_activity, add_note, edit_note.
+                        user_id:
+                          $ref: '#/components/schemas/ContactNote/properties/user_id'
+                        note:
+                          $ref: '#/components/schemas/ContactNote/properties/note'
+        required: true
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseData:
+                    type: object
+                    properties:
+                      status:
+                        $ref: '#/components/schemas/StatusCode/properties/status'
+                      data:
+                        $ref: '#/components/schemas/ContactsBulkDataResponse'
+              example:
+                responseData:
+                  status: 200
+                  data:
+                  - command_id: '123'
+                    status: 201
+                    data:
+                      id: '123'
+                  - command_id: '1234'
+                    status: 200
+                  - command_id: '12345'
+                    status: 200
+                  - command_id: '123456'
+                    status: 201
+                    data:
+                      id: '123456'
+                  - command_id: '1234567'
+                    status: 200
+                  - command_id: '12345678'
+                    status: 200
+                  - command_id: '12356789'
+                    status: 201
+                    data:
+                      id: '123456789'
+                  - command_id: '1234567890'
+                    status: 200
+                  - command_id: 123456789A
+                    status: 200
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    email:
+                    - Please supply a valid email address.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    ExternalUrlArray:
+      type: array
+      maxItems: 3
+      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
+      items:
+        type: object
+        properties:
+          name:
+            maxLength: 30
+            type: string
+            description: Name of external service. Name will be shown to agents while working with contacts.
+          url:
+            type: string
+            description: External URL to contact page
+    ContactActivity:
+      properties:
+        external_url:
+          type: string
+          description: External url which can be opened from activity detail
+        type:
+          type: string
+          description: Type of activity
+          enum:
+          - order
+          - task
+          - chat
+          - ticket
+          - other
+          - invoice
+          - proforma
+          - estimate
+          - cancel
+        activity_date:
+          type: string
+          description: Activity date and time. Set to current company time by default.
+          format: date-time
+        activity_author:
+          type: string
+          description: Author of activity - user name you want to show
+        external_id:
+          type: integer
+          description: Activity ID from external resource - e.g. your order ID
+        description:
+          type: string
+          description: Detailed description
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    ContactNumberArray:
+      type: array
+      description: Numbers assigned to contact
+      items:
+        type: object
+        properties:
+          public_number:
+            type: string
+            description: Full number in international E.164 format
+    ContactNote:
+      properties:
+        note:
+          type: string
+          description: Note content
+        user_id:
+          type: integer
+          description: Assigned agent ID
+    ContactsTag:
+      type: array
+      description: Tags for contact - can include multiple
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Tag
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    ContactAttribute:
+      items:
+        properties:
+          value:
+            type: string
+            description: Attribute value (max 255 chars per attribute)
+            maximum: 255
+          attribute_id:
+            type: integer
+            description: Attribute ID
+    ContactEmailArray:
+      type: array
+      description: Emails assigned to contact
+      items:
+        type: object
+        properties:
+          email:
+            type: string
+            description: Email address
+            format: email
+    StatusCode:
+      properties:
+        status:
+          type: string
+          description: Status code
+    command_id:
+      type: string
+      description: Unique action identifier
+    ContactsBulkDataResponse:
+      type: array
+      description: Response data
+      items:
+        type: object
+        properties:
+          command_id:
+            $ref: '#/components/schemas/command_id'
+          status:
+            $ref: '#/components/schemas/StatusCode/properties/status'
+          message:
+            $ref: '#/components/schemas/ErrorInvalidData/properties/message'
+          data:
+            type: object
+            properties: {}
+            description: Available only in add actions or invalid action data. More data explaining the error or id of new entity.

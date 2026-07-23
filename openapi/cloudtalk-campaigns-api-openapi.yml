@@ -1,0 +1,583 @@
+openapi: 3.0.1
+info:
+  title: CloudTalk Agents Campaigns API
+  description: "# Introduction\nWelcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk.\n\n# API Overview\n\nThe API is organized around the following resources:\n\nAPI Area | Description\n----------------|-------------\nCalls | Browse your call history, download recordings and access all your calls data.\nContacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually.\nNumbers | Automate Numbers modifications. List all your numbers.\nAgents | Create or update your Agents, access their settings.\nConversation Intelligence | Get Conversation Intelligence data about your calls.\nVoiceAgent | Initiate VoiceAgent calls\n\n\n[JSON](http://www.json.org/) is returned in all responses. XML is not supported.\n\nThe API also uses common approaches for the following:\n\nFunction | Description\n----------------|-------------\nData | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects.\nErrors | 4xx and 5xx responses returning JSON with error codes\nRate Limiting | Controls how many requests can be made in a time window\nHTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS.\n\n\n## Authentication\n\nThis is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication.\n\n Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the Cloudtalk Dashboard Account → Settings → API keys tab.\n\nTo try the API via curl on the command-line, the general form used would be:\n```\ncurl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL\n```\n\nFor instance, you would execute:\n```\ncurl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json\n```\n\n## Usage\n\nThe API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **'429 Too Many Requests'** response code will be returned along with the following headers -\n\nHeader name | Description\n----------------|-------------\nX-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window.\nX-CloudTalkAPI-Remaining | Number of API requests left in the current window.\nX-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp.\n\nNote that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case.\n\n## Response Envelopes\n\n**Note:** Conversation Intelligence doesn't follow envelopes.\n\nThe API returns one of three envelopes depending upon the request issued:\n\n1. Single Item Envelope\n2. Collections Envelope\n3. Error Envelope\n\n### Single Item Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"id\": 123,\n        ...\n        \"created\": \"2018-01-10 12:34:56\"\n    }\n}\n```\n\n### Collections Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"itemsCount\": 65,\n        \"pageCount\": 3,\n        \"pageNumber\": 1,\n        \"limit\": 30,\n        \"data\": [\n            {\n                \"id\": 123,\n                ...\n                \"created\": \"2018-01-10 12:34:56\"\n            },\n            {\n                \"id\": 456,\n                ...\n                \"created\": \"2017-10-19 09:21:29\"\n            },\n            ...\n        ]\n    }\n}\n```\n\n### Error Envelope\n\n```\nStatus: 404 Not Found\n{\n    \"responseData\": {\n        \"status\": 404,\n        \"message\": \"Not Found\"\n    }\n}\n```\n\n## Encoding\n\nData is encoded as defined by JSON in [RFC4627](http://www.ietf.org/rfc/rfc4627.txt). The default encoding for APIs is UTF-8.\n\nSome query parameters may need to be [url encoded](https://www.wikiwand.com/en/Percent-encoding) when sending - for example, the email parameter value used to query users should be encoded.\n\n## Use of HTTP\n\nRequest methods are used in accordance with HTTP -\n\n- `GET` is used to access resources and perform queries. The API does not allow modifications (creates, updates, deletes) to occur via GET.\n- `PUT` is used to create resources.\n- `POST` is used to update resources. PATCH is not currently used by the API.\n- `DELETE` is used to delete resources.\n\nResponses use standard HTTP codes. Where there are client or server errors, a list of of one or more errors in JSON format is returned in the body.\n\nThe `Accept` header must be used by a client used to indicate a preferred response for `GET/HEAD` requests. Requests without an `Accept` header of `application/json` may be rejected with a client error of 404 or 406. The `Content-Type` header should be used by clients to indicate the submitted format for `POST/PUT` requests."
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+tags:
+- name: Campaigns
+  description: All data you can get about your campaigns.
+paths:
+  /campaigns/index.json:
+    get:
+      tags:
+      - Campaigns
+      summary: List campaigns
+      parameters:
+      - name: id
+        in: query
+        description: Filter by campaign ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Max. number of items in response data.
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - name: page
+        in: query
+        description: Number of page to return.
+        schema:
+          minimum: 1
+          type: integer
+      responses:
+        '200':
+          description: Contacts data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  itemsCount:
+                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
+                  pageCount:
+                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
+                  pageNumber:
+                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
+                  limit:
+                    $ref: '#/components/schemas/PaginationData/properties/limit'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Campaign:
+                          $ref: '#/components/schemas/CampaignList'
+                        Button:
+                          $ref: '#/components/schemas/Button'
+                        Tag:
+                          $ref: '#/components/schemas/Tag'
+                        Group:
+                          $ref: '#/components/schemas/Group'
+                        Agent:
+                          $ref: '#/components/schemas/PdAgent'
+              example:
+                responseData:
+                  itemsCount: 3
+                  pageCount: 1
+                  pageNumber: 1
+                  limit: 3
+                  data:
+                  - Campaign:
+                      id: '63'
+                      name: Test Dialer
+                      status: inactive
+                      has_schedule_date: false
+                      answer_wait_time: '45'
+                      after_call_dialing_auto: false
+                      after_call_time: '5'
+                      is_recording: false
+                      is_predictive: false
+                      attempts: '1'
+                      attempts_interval: '18'
+                    Button:
+                    - id: '252'
+                      title: Sale
+                      type: successful_positive
+                      color: '#2980b9'
+                      description: Sold
+                    ContactsTag:
+                    - id: '133'
+                      name: dialer
+                    Group:
+                    - id: '568'
+                      internal_name: Agents
+                    Agent:
+                    - id: '1075'
+                      fullname: Jane Doe
+  /campaigns/add.json:
+    put:
+      tags:
+      - Campaigns
+      summary: Add campaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - Button
+              - name
+              type: object
+              properties:
+                name:
+                  $ref: '#/components/schemas/CampaignList/properties/name'
+                status:
+                  $ref: '#/components/schemas/CampaignList/properties/status'
+                has_schedule_date:
+                  $ref: '#/components/schemas/CampaignList/properties/has_schedule_date'
+                schedule_start_date:
+                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_date'
+                schedule_start_time:
+                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_time'
+                answer_wait_time:
+                  $ref: '#/components/schemas/CampaignList/properties/answer_wait_time'
+                after_call_dialing_auto:
+                  $ref: '#/components/schemas/CampaignList/properties/after_call_dialing_auto'
+                after_call_time:
+                  $ref: '#/components/schemas/CampaignList/properties/after_call_time'
+                is_recording:
+                  $ref: '#/components/schemas/CampaignList/properties/is_recording'
+                call_number_id:
+                  $ref: '#/components/schemas/CampaignList/properties/call_number_id'
+                call_script_id:
+                  $ref: '#/components/schemas/CampaignList/properties/call_script_id'
+                survey_id:
+                  $ref: '#/components/schemas/CampaignList/properties/survey_id'
+                is_predictive:
+                  $ref: '#/components/schemas/CampaignList/properties/is_predictive'
+                calls_percentage:
+                  $ref: '#/components/schemas/CampaignList/properties/calls_percentage'
+                attempts:
+                  $ref: '#/components/schemas/CampaignList/properties/attempts'
+                attempts_interval:
+                  $ref: '#/components/schemas/CampaignList/properties/attempts_interval'
+                Button:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        $ref: '#/components/schemas/Button/properties/title'
+                      type:
+                        $ref: '#/components/schemas/Button/properties/type'
+                      color:
+                        $ref: '#/components/schemas/Button/properties/color'
+                      description:
+                        $ref: '#/components/schemas/Button/properties/description'
+                ContactsTag:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Tag ID
+                Agent:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Agent/properties/id'
+                Group:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Group/properties/id'
+        required: true
+      responses:
+        '201':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/CampaignList/properties/id'
+              example:
+                responseData:
+                  status: 201
+                  data:
+                    id: '12345'
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    name:
+                    - Please supply a valid campaign name.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+  /campaigns/edit/{id}.json:
+    post:
+      tags:
+      - Campaigns
+      summary: Edit campaign
+      description: Edit a campaign
+      parameters:
+      - name: id
+        in: path
+        description: Campaign ID to edit
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - Button
+              - name
+              type: object
+              properties:
+                name:
+                  $ref: '#/components/schemas/CampaignList/properties/name'
+                status:
+                  $ref: '#/components/schemas/CampaignList/properties/status'
+                has_schedule_date:
+                  $ref: '#/components/schemas/CampaignList/properties/has_schedule_date'
+                schedule_start_date:
+                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_date'
+                schedule_start_time:
+                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_time'
+                answer_wait_time:
+                  $ref: '#/components/schemas/CampaignList/properties/answer_wait_time'
+                after_call_dialing_auto:
+                  $ref: '#/components/schemas/CampaignList/properties/after_call_dialing_auto'
+                after_call_time:
+                  $ref: '#/components/schemas/CampaignList/properties/after_call_time'
+                is_recording:
+                  $ref: '#/components/schemas/CampaignList/properties/is_recording'
+                call_number_id:
+                  $ref: '#/components/schemas/CampaignList/properties/call_number_id'
+                call_script_id:
+                  $ref: '#/components/schemas/CampaignList/properties/call_script_id'
+                survey_id:
+                  $ref: '#/components/schemas/CampaignList/properties/survey_id'
+                is_predictive:
+                  $ref: '#/components/schemas/CampaignList/properties/is_predictive'
+                calls_percentage:
+                  $ref: '#/components/schemas/CampaignList/properties/calls_percentage'
+                attempts:
+                  $ref: '#/components/schemas/CampaignList/properties/attempts'
+                attempts_interval:
+                  $ref: '#/components/schemas/CampaignList/properties/attempts_interval'
+                Button:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Button id
+                      title:
+                        $ref: '#/components/schemas/Button/properties/title'
+                      type:
+                        $ref: '#/components/schemas/Button/properties/type'
+                      color:
+                        $ref: '#/components/schemas/Button/properties/color'
+                      description:
+                        $ref: '#/components/schemas/Button/properties/description'
+                ContactsTag:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Tag ID
+                Agent:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Agent/properties/id'
+                Group:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Group/properties/id'
+        required: true
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    name:
+                    - Please supply a valid campaign name.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+  /campaigns/delete/{id}.json:
+    delete:
+      tags:
+      - Campaigns
+      summary: Delete campaign
+      parameters:
+      - name: id
+        in: path
+        description: Campaign ID to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessGeneralData'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Campaign not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+components:
+  schemas:
+    CampaignList:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Campaign ID
+        name:
+          type: string
+          description: Campaign name
+        status:
+          type: string
+          description: Campaign status (active/inactive)
+        has_schedule_date:
+          type: boolean
+          description: Is campaign scheduled?
+        schedule_start_date:
+          type: string
+          description: Campaign start date
+          format: date
+        schedule_start_time:
+          type: string
+          description: Campaign start time
+          format: time
+        answer_wait_time:
+          type: integer
+          description: Maximum number of seconds we will wait for the call to be answered.
+        after_call_dialing_auto:
+          type: boolean
+          description: Automatically dial next contact after a call ends true/false
+        after_call_time:
+          type: integer
+          description: After call time (in seconds)
+        is_recording:
+          type: boolean
+          description: Calls recording true/false
+        call_number_id:
+          type: integer
+          description: Outbound caller id
+        call_script_id:
+          type: integer
+          description: Call script ID
+        survey_id:
+          type: integer
+          description: Survey ID
+        is_predictive:
+          type: integer
+          description: Is predictive dialer campaign 0/1
+        calls_percentage:
+          type: integer
+          description: Agents utilization
+        attempts:
+          type: integer
+          description: Attempts per contact
+        attempts_interval:
+          type: integer
+          description: Hours between attempts
+      description: Campaign data
+    PaginationData:
+      properties:
+        limit:
+          type: integer
+          description: number of objects sent per page
+          format: int64
+        itemsCount:
+          type: integer
+          description: number of resources in the response
+          format: int64
+        pageCount:
+          type: integer
+          description: number of pages found
+          format: int64
+        pageNumber:
+          type: integer
+          description: current page in the response
+          format: int64
+    Button:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Button ID
+        title:
+          type: string
+          description: Button title
+        type:
+          type: string
+          enum:
+          - successful_positive
+          - successful_negative
+          - rescheduled
+          - unsuccessful_call_again
+          - unsuccessful_do_not_call
+          description: Button type
+        color:
+          type: string
+          description: Button color (hex code)
+        description:
+          type: string
+          description: Button description
+      description: Campaign button
+    PdAgent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Agent ID
+        fullname:
+          type: string
+          description: Agent name
+      description: Campaign agent
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Group ID
+        internal_name:
+          type: string
+          description: Group name
+      description: Campaign group
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    StatusCode:
+      properties:
+        status:
+          type: string
+          description: Status code
+    Agent:
+      properties:
+        id:
+          type: integer
+          description: Agent ID
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Tag ID
+        name:
+          type: string
+          description: Tag name
+      description: Campaign tag

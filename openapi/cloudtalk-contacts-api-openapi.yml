@@ -1,0 +1,1530 @@
+openapi: 3.0.1
+info:
+  title: CloudTalk Agents Contacts API
+  description: "# Introduction\nWelcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk.\n\n# API Overview\n\nThe API is organized around the following resources:\n\nAPI Area | Description\n----------------|-------------\nCalls | Browse your call history, download recordings and access all your calls data.\nContacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually.\nNumbers | Automate Numbers modifications. List all your numbers.\nAgents | Create or update your Agents, access their settings.\nConversation Intelligence | Get Conversation Intelligence data about your calls.\nVoiceAgent | Initiate VoiceAgent calls\n\n\n[JSON](http://www.json.org/) is returned in all responses. XML is not supported.\n\nThe API also uses common approaches for the following:\n\nFunction | Description\n----------------|-------------\nData | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects.\nErrors | 4xx and 5xx responses returning JSON with error codes\nRate Limiting | Controls how many requests can be made in a time window\nHTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS.\n\n\n## Authentication\n\nThis is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication.\n\n Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the Cloudtalk Dashboard Account → Settings → API keys tab.\n\nTo try the API via curl on the command-line, the general form used would be:\n```\ncurl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL\n```\n\nFor instance, you would execute:\n```\ncurl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json\n```\n\n## Usage\n\nThe API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **'429 Too Many Requests'** response code will be returned along with the following headers -\n\nHeader name | Description\n----------------|-------------\nX-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window.\nX-CloudTalkAPI-Remaining | Number of API requests left in the current window.\nX-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp.\n\nNote that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case.\n\n## Response Envelopes\n\n**Note:** Conversation Intelligence doesn't follow envelopes.\n\nThe API returns one of three envelopes depending upon the request issued:\n\n1. Single Item Envelope\n2. Collections Envelope\n3. Error Envelope\n\n### Single Item Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"id\": 123,\n        ...\n        \"created\": \"2018-01-10 12:34:56\"\n    }\n}\n```\n\n### Collections Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"itemsCount\": 65,\n        \"pageCount\": 3,\n        \"pageNumber\": 1,\n        \"limit\": 30,\n        \"data\": [\n            {\n                \"id\": 123,\n                ...\n                \"created\": \"2018-01-10 12:34:56\"\n            },\n            {\n                \"id\": 456,\n                ...\n                \"created\": \"2017-10-19 09:21:29\"\n            },\n            ...\n        ]\n    }\n}\n```\n\n### Error Envelope\n\n```\nStatus: 404 Not Found\n{\n    \"responseData\": {\n        \"status\": 404,\n        \"message\": \"Not Found\"\n    }\n}\n```\n\n## Encoding\n\nData is encoded as defined by JSON in [RFC4627](http://www.ietf.org/rfc/rfc4627.txt). The default encoding for APIs is UTF-8.\n\nSome query parameters may need to be [url encoded](https://www.wikiwand.com/en/Percent-encoding) when sending - for example, the email parameter value used to query users should be encoded.\n\n## Use of HTTP\n\nRequest methods are used in accordance with HTTP -\n\n- `GET` is used to access resources and perform queries. The API does not allow modifications (creates, updates, deletes) to occur via GET.\n- `PUT` is used to create resources.\n- `POST` is used to update resources. PATCH is not currently used by the API.\n- `DELETE` is used to delete resources.\n\nResponses use standard HTTP codes. Where there are client or server errors, a list of of one or more errors in JSON format is returned in the body.\n\nThe `Accept` header must be used by a client used to indicate a preferred response for `GET/HEAD` requests. Requests without an `Accept` header of `application/json` may be rejected with a client error of 404 or 406. The `Content-Type` header should be used by clients to indicate the submitted format for `POST/PUT` requests."
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+tags:
+- name: Contacts
+  description: All data you can get about your contacts.
+paths:
+  /contacts/index.json:
+    get:
+      tags:
+      - Contacts
+      summary: List contacts
+      parameters:
+      - name: country_id
+        in: query
+        description: Filter by country ID
+        schema:
+          type: integer
+      - name: tag_id
+        in: query
+        description: Filter by tag ID
+        schema:
+          type: integer
+      - name: industry
+        in: query
+        description: Filter by industry
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        description: Filter by keyword
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Max. number of items in response data.
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - name: page
+        in: query
+        description: Number of page to return.
+        schema:
+          minimum: 1
+          type: integer
+      responses:
+        '200':
+          description: Contacts data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  itemsCount:
+                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
+                  pageCount:
+                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
+                  pageNumber:
+                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
+                  limit:
+                    $ref: '#/components/schemas/PaginationData/properties/limit'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Contact:
+                          $ref: '#/components/schemas/ContactList'
+                        ContactNumber:
+                          $ref: '#/components/schemas/ContactNumber'
+                        ContactEmail:
+                          $ref: '#/components/schemas/ContactEmail'
+                        ContactAttribute:
+                          $ref: '#/components/schemas/ContactAttribute'
+              example:
+                responseData:
+                  itemsCount: 3
+                  pageCount: 1
+                  pageNumber: 1
+                  limit: 3
+                  data:
+                  - Contact:
+                      id: '1234'
+                      name: John Doe
+                      company: Google
+                    ContactNumber:
+                      public_number: 442012345678
+                    ContactEmail:
+                      email: john.doe@gmail.com
+  /contacts/add.json:
+    put:
+      tags:
+      - Contacts
+      summary: Add contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - name
+              type: object
+              properties:
+                name:
+                  $ref: '#/components/schemas/Contact/properties/name'
+                title:
+                  $ref: '#/components/schemas/Contact/properties/title'
+                company:
+                  $ref: '#/components/schemas/Contact/properties/company'
+                industry:
+                  $ref: '#/components/schemas/Contact/properties/industry'
+                website:
+                  $ref: '#/components/schemas/Contact/properties/website'
+                address:
+                  $ref: '#/components/schemas/Contact/properties/address'
+                city:
+                  $ref: '#/components/schemas/Contact/properties/city'
+                zip:
+                  $ref: '#/components/schemas/Contact/properties/zip'
+                state:
+                  $ref: '#/components/schemas/Contact/properties/state'
+                country_id:
+                  $ref: '#/components/schemas/Contact/properties/country_id'
+                favorite_agent:
+                  $ref: '#/components/schemas/Contact/properties/favorite_agent'
+                ExternalUrl:
+                  $ref: '#/components/schemas/ExternalUrlArray'
+                ContactNumber:
+                  $ref: '#/components/schemas/ContactNumberArray'
+                ContactEmail:
+                  $ref: '#/components/schemas/ContactEmailArray'
+                ContactsTag:
+                  $ref: '#/components/schemas/ContactsTag'
+                ContactAttribute:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      attribute_id:
+                        $ref: '#/components/schemas/ContactAttribute/items/properties/attribute_id'
+                      value:
+                        $ref: '#/components/schemas/ContactAttribute/items/properties/value'
+        required: true
+      responses:
+        '201':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Contact/properties/id'
+              example:
+                responseData:
+                  status: 201
+                  data:
+                    id: '12345'
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    email:
+                    - Please supply a valid email address.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+  /contacts/edit/{contactId}.json:
+    post:
+      tags:
+      - Contacts
+      summary: Edit contact
+      description: Only sent parameters/values will be updated. If you want to clear the value, just set empty string for that attribute. After sending empty string for properties of `ContactNumber`, `ContactEmail`, `ContactsTag` or `ContactAttribute` all data from these properties will be cleared. When you send values for properties of `ContactNumber`, `ContactEmail`, `ContactsTag` or `ContactAttribute` only these data will be updated, all other will be cleared.
+      parameters:
+      - name: contactId
+        in: path
+        description: Contact ID to edit
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: '#/components/schemas/Contact/properties/name'
+                title:
+                  $ref: '#/components/schemas/Contact/properties/title'
+                company:
+                  $ref: '#/components/schemas/Contact/properties/company'
+                industry:
+                  $ref: '#/components/schemas/Contact/properties/industry'
+                website:
+                  $ref: '#/components/schemas/Contact/properties/website'
+                address:
+                  $ref: '#/components/schemas/Contact/properties/address'
+                city:
+                  $ref: '#/components/schemas/Contact/properties/city'
+                zip:
+                  $ref: '#/components/schemas/Contact/properties/zip'
+                state:
+                  $ref: '#/components/schemas/Contact/properties/state'
+                country_id:
+                  $ref: '#/components/schemas/Contact/properties/country_id'
+                favorite_agent:
+                  $ref: '#/components/schemas/Contact/properties/favorite_agent'
+                ExternalUrl:
+                  $ref: '#/components/schemas/ExternalUrlArray'
+                ContactNumber:
+                  $ref: '#/components/schemas/ContactNumberArray'
+                ContactEmail:
+                  $ref: '#/components/schemas/ContactEmailArray'
+                ContactsTag:
+                  $ref: '#/components/schemas/ContactsTag'
+                ContactAttribute:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      attribute_id:
+                        $ref: '#/components/schemas/ContactAttribute/items/properties/attribute_id'
+                      value:
+                        $ref: '#/components/schemas/ContactAttribute/items/properties/value'
+        required: true
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    email:
+                    - Please supply a valid email address.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+  /contacts/delete/{contactId}.json:
+    delete:
+      tags:
+      - Contacts
+      summary: Delete contact
+      parameters:
+      - name: contactId
+        in: path
+        description: Contact ID to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessGeneralData'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Contact not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+  /contacts/show/{contactId}.json:
+    get:
+      tags:
+      - Contacts
+      summary: Inspect a contact
+      parameters:
+      - name: contactId
+        in: path
+        description: Contact ID to show
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Contacts data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Contact:
+                    $ref: '#/components/schemas/Contact'
+                  ExternalUrl:
+                    $ref: '#/components/schemas/ExternalUrlArray'
+                  ContactNumber:
+                    $ref: '#/components/schemas/ContactNumberArray'
+                  ContactEmail:
+                    $ref: '#/components/schemas/ContactEmailArray'
+                  ContactsTag:
+                    $ref: '#/components/schemas/ContactsTag'
+                  ContactAttribute:
+                    $ref: '#/components/schemas/ContactAttribute'
+              example:
+                responseData:
+                  Contact:
+                    id: '1234'
+                    name: John Doe
+                    title: Dr.
+                    company: Google
+                    industry: it
+                    website: https://www.google.com/
+                    address: First st.
+                    city: New York
+                    zip: '11804'
+                    state: NY
+                    country_id: '1'
+                    favorite_agent: '123'
+                    created: '2017-11-11T15:25:42.000Z'
+                    modified: '2017-04-26T22:57:50.000Z'
+                  ExternalUrl:
+                  - name: CRM
+                    url: https://cloudtalk.io/c/show/123
+                  ContactEmail:
+                  - email: joh.doe@gmail.com
+                  ContactNumber:
+                  - public_number: 442012345678
+                  ContactsTag:
+                  - name: vipClients
+                  - name: shopify
+        '404':
+          description: Contact not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+  /contacts/attributes.json:
+    get:
+      tags:
+      - Contacts
+      summary: Attributes
+      description: List all attributes which can be assigned to a contact.
+      responses:
+        '200':
+          description: All attributes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseData:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ContactAttribute:
+                          type: object
+                          properties:
+                            id:
+                              $ref: '#/components/schemas/ContactAttribute/items/properties/attribute_id'
+                            title:
+                              $ref: '#/components/schemas/ContactAttribute/items/properties/title'
+              example:
+                responseData:
+                - ContactAttribute:
+                    id: '123'
+                    title: Salary
+                - ContactAttribute:
+                    id: '124'
+                    title: Custom notes
+  /contacts/addTags/{contactId}.json:
+    put:
+      tags:
+      - Contacts
+      summary: Assign Tags
+      description: Assign tags to contact.
+      parameters:
+      - name: contactId
+        in: path
+        description: Contact ID for adding tags
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - tags
+              type: object
+              properties:
+                tags:
+                  type: array
+                  description: Array of tag names
+                  items:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Tags assigned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: Status code
+                  message:
+                    type: string
+                    description: Success message
+                  data:
+                    type: object
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: Tag ID
+                            name:
+                              type: string
+                              description: Tag name
+                      contact_id:
+                        type: string
+                        description: Contact ID
+                    description: Data of assigned tags
+              example:
+                responseData:
+                  status: 200
+                  message: Tags were sucessfully added.
+                  data:
+                    tags:
+                    - id: '123'
+                      name: First
+                    - id: '456'
+                      name: Second
+                    - id: '789'
+                      name: Third
+                    contact_id: '123456'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: Status code
+                  message:
+                    type: string
+                    description: Error message
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: Status code
+                  message:
+                    type: string
+                    description: Error message
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+      x-codegen-request-body-name: body
+  /contacts/removeTags/{contactId}.json:
+    delete:
+      tags:
+      - Contacts
+      summary: Unassign Tags
+      description: Unassign tags to contact.
+      parameters:
+      - name: contactId
+        in: path
+        description: Contact ID for deleting tags
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - tags
+              type: object
+              properties:
+                tags:
+                  type: array
+                  description: Array of tag names
+                  items:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Tags unassigned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: Status code
+                  message:
+                    type: string
+                    description: Success message
+                  data:
+                    type: object
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: Tag ID
+                            name:
+                              type: string
+                              description: Tag name
+                      contact_id:
+                        type: string
+                        description: Contact ID
+                    description: Data of unassigned tags
+              example:
+                responseData:
+                  status: 200
+                  message: Tags were successfully removed.
+                  data:
+                    tags:
+                    - id: '123'
+                      name: First
+                    - id: '456'
+                      name: Second
+                    - id: '789'
+                      name: Third
+                    contact_id: '123456'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: Status code
+                  message:
+                    type: string
+                    description: Error message
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: Status code
+                  message:
+                    type: string
+                    description: Error message
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+      x-codegen-request-body-name: body
+  /notes/index.json:
+    get:
+      tags:
+      - Contacts
+      summary: List notes
+      description: List all notes assigned to contacts
+      parameters:
+      - name: contact_id
+        in: query
+        description: Filter by contact ID
+        schema:
+          type: integer
+      - name: user_id
+        in: query
+        description: Filter by agent ID
+        schema:
+          type: integer
+      - name: keyword
+        in: query
+        description: Filter by keyword in note content
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Max. number of items in response data.
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - name: page
+        in: query
+        description: Number of page to return.
+        schema:
+          minimum: 1
+          type: integer
+      responses:
+        '200':
+          description: Notes data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  itemsCount:
+                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
+                  pageCount:
+                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
+                  pageNumber:
+                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
+                  limit:
+                    $ref: '#/components/schemas/PaginationData/properties/limit'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ContactNote:
+                          $ref: '#/components/schemas/ContactNote'
+              example:
+                responseData:
+                  itemsCount: 3
+                  pageCount: 1
+                  pageNumber: 1
+                  limit: 3
+                  data:
+                  - ContactNote:
+                      id: '1234'
+                      contact_id: '567'
+                      user_id: '456'
+                      note: Note content...
+                      created: '2018-05-01T12:12:12.000Z'
+  /notes/add/{contactId}.json:
+    put:
+      tags:
+      - Contacts
+      summary: Add note
+      description: Assign a note to existing contact.
+      parameters:
+      - name: contactId
+        in: path
+        description: Contact ID to which note will be assigned
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - note
+              type: object
+              properties:
+                user_id:
+                  $ref: '#/components/schemas/ContactNote/properties/user_id'
+                note:
+                  $ref: '#/components/schemas/ContactNote/properties/note'
+        required: true
+      responses:
+        '201':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/ContactNote/properties/id'
+              example:
+                responseData:
+                  status: 201
+                  data:
+                    id: '12345'
+        '404':
+          description: Contact not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    note:
+                    - This field is required.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+  /notes/edit/{noteId}.json:
+    post:
+      tags:
+      - Contacts
+      summary: Edit note
+      parameters:
+      - name: noteId
+        in: path
+        description: Note ID to edit
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - contact_id
+              - note
+              type: object
+              properties:
+                contact_id:
+                  $ref: '#/components/schemas/ContactNote/properties/contact_id'
+                user_id:
+                  $ref: '#/components/schemas/ContactNote/properties/user_id'
+                note:
+                  $ref: '#/components/schemas/ContactNote/properties/note'
+        required: true
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    note:
+                    - This field is required.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+  /notes/delete/{noteId}.json:
+    delete:
+      tags:
+      - Contacts
+      summary: Delete note
+      parameters:
+      - name: noteId
+        in: path
+        description: Note ID to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessGeneralData'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Note not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+  /activity/index.json:
+    get:
+      tags:
+      - Contacts
+      summary: List activities
+      description: List all activities assigned to contacts
+      parameters:
+      - name: contact_id
+        in: query
+        description: Filter by contact ID
+        schema:
+          type: integer
+      - name: type
+        in: query
+        description: Filter by type - check below for possible values
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Max. number of items in response data.
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - name: page
+        in: query
+        description: Number of page to return.
+        schema:
+          minimum: 1
+          type: integer
+      responses:
+        '200':
+          description: Activities data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  itemsCount:
+                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
+                  pageCount:
+                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
+                  pageNumber:
+                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
+                  limit:
+                    $ref: '#/components/schemas/PaginationData/properties/limit'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ContactActivity:
+                          $ref: '#/components/schemas/ContactActivity'
+              example:
+                responseData:
+                  itemsCount: 3
+                  pageCount: 1
+                  pageNumber: 1
+                  limit: 3
+                  data:
+                  - ContactActivity:
+                      id: '1234'
+                      contact_id: '567'
+                      type: order
+                      name: 'Order #201712399'
+                      description: Content of order...
+                      activity_author: John Doe
+                      external_id: '201712399'
+                      external_url: https://www.shopify.com/orders/detail/999
+                      activity_date: '2018-02-02T12:12:12.000Z'
+                      created: '2018-05-01T12:12:12.000Z'
+  /activity/add/{contactId}.json:
+    put:
+      tags:
+      - Contacts
+      summary: Add activity
+      description: Assign an activity to existing contact.
+      parameters:
+      - name: contactId
+        in: path
+        description: Contact ID to which activity will be assigned
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - name
+              - type
+              type: object
+              properties:
+                type:
+                  $ref: '#/components/schemas/ContactActivity/properties/type'
+                name:
+                  $ref: '#/components/schemas/ContactActivity/properties/name'
+                activity_date:
+                  $ref: '#/components/schemas/ContactActivity/properties/activity_date'
+                description:
+                  $ref: '#/components/schemas/ContactActivity/properties/description'
+                activity_author:
+                  $ref: '#/components/schemas/ContactActivity/properties/activity_author'
+                external_id:
+                  $ref: '#/components/schemas/ContactActivity/properties/external_id'
+                external_url:
+                  $ref: '#/components/schemas/ContactActivity/properties/external_url'
+        required: true
+      responses:
+        '201':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/ContactActivity/properties/id'
+              example:
+                responseData:
+                  status: 201
+                  data:
+                    id: '12345'
+        '404':
+          description: Contact not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    name:
+                    - This field is required.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+  /activity/edit/{activityId}.json:
+    post:
+      tags:
+      - Contacts
+      summary: Edit activity
+      parameters:
+      - name: activityId
+        in: path
+        description: Activity ID to edit
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - contact_id
+              type: object
+              properties:
+                contact_id:
+                  $ref: '#/components/schemas/ContactActivity/properties/contact_id'
+                type:
+                  $ref: '#/components/schemas/ContactActivity/properties/type'
+                name:
+                  $ref: '#/components/schemas/ContactActivity/properties/name'
+                activity_date:
+                  $ref: '#/components/schemas/ContactActivity/properties/activity_date'
+                description:
+                  $ref: '#/components/schemas/ContactActivity/properties/description'
+                activity_author:
+                  $ref: '#/components/schemas/ContactActivity/properties/activity_author'
+                external_id:
+                  $ref: '#/components/schemas/ContactActivity/properties/external_id'
+                external_url:
+                  $ref: '#/components/schemas/ContactActivity/properties/external_url'
+        required: true
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    contact_id:
+                    - This field is required.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+  /activity/delete/{activityId}.json:
+    delete:
+      tags:
+      - Contacts
+      summary: Delete activity
+      parameters:
+      - name: activityId
+        in: path
+        description: Activity ID to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessGeneralData'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Activity not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+components:
+  schemas:
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Contact ID
+        name:
+          type: string
+          maximum: 150
+          description: Name
+        title:
+          type: string
+          maximum: 255
+          description: Title
+        company:
+          type: string
+          maximum: 100
+          description: Company name
+        industry:
+          type: string
+          maximum: 100
+          description: Industry
+        website:
+          type: string
+          maximum: 100
+          description: Website
+        address:
+          type: string
+          maximum: 255
+          description: Address
+        city:
+          type: string
+          maximum: 255
+          description: City
+        zip:
+          type: string
+          maximum: 15
+          description: ZIP code
+        state:
+          type: string
+          maximum: 255
+          description: State
+        country_id:
+          type: integer
+          description: Country ID
+        favorite_agent:
+          type: integer
+          description: Favorite agent ID
+        type:
+          type: string
+          description: Type of contact (contact/lead)
+        created:
+          type: string
+          description: Created date and time
+          format: date-time
+        modified:
+          type: string
+          description: Last modified date and time
+          format: date-time
+        contact_numbers:
+          type: array
+          description: Array of contact numbers
+          items:
+            type: string
+        contact_emails:
+          type: array
+          description: Array of contact emails
+          items:
+            type: string
+        tags:
+          type: array
+          description: Array of contact tags
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Tag ID
+              name:
+                type: string
+                description: Tag name
+        external_urls:
+          type: array
+          description: Array of contact external urls
+          items:
+            type: object
+            properties:
+              external_system:
+                type: string
+                description: Name of external service. Name will be shown to agents while working with contacts.
+              external_url:
+                type: string
+                description: External URL to contact page
+        custom_fields:
+          type: array
+          description: Array of contact emails
+          items:
+            type: object
+            maximum: 255
+            properties:
+              key:
+                type: string
+                description: Custom field key (max 255 chars per attribute)
+              value:
+                type: string
+                description: Custom field value (max 255 chars per attribute)
+      description: Contact data
+    ExternalUrlArray:
+      type: array
+      maxItems: 3
+      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
+      items:
+        type: object
+        properties:
+          name:
+            maxLength: 30
+            type: string
+            description: Name of external service. Name will be shown to agents while working with contacts.
+          url:
+            type: string
+            description: External URL to contact page
+    ContactActivity:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Activity ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        type:
+          type: string
+          description: Type of activity
+          enum:
+          - order
+          - task
+          - chat
+          - ticket
+          - other
+          - invoice
+          - proforma
+          - estimate
+          - cancel
+        name:
+          type: string
+          description: Name/Title
+        description:
+          type: string
+          description: Detailed description
+        activity_author:
+          type: string
+          description: Author of activity - user name you want to show
+        external_id:
+          type: integer
+          description: Activity ID from external resource - e.g. your order ID
+        external_url:
+          type: string
+          description: External url which can be opened from activity detail
+        activity_date:
+          type: string
+          description: Activity date and time. Set to current company time by default.
+          format: date-time
+        created:
+          type: string
+          description: Created date and time
+          format: date-time
+      description: Activity data
+    PaginationData:
+      properties:
+        limit:
+          type: integer
+          description: number of objects sent per page
+          format: int64
+        pageCount:
+          type: integer
+          description: number of pages found
+          format: int64
+        itemsCount:
+          type: integer
+          description: number of resources in the response
+          format: int64
+        pageNumber:
+          type: integer
+          description: current page in the response
+          format: int64
+    ContactNote:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Note ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        user_id:
+          type: integer
+          description: Assigned agent ID
+        note:
+          type: string
+          description: Note content
+        created:
+          type: string
+          description: Created date and time
+          format: date-time
+      description: Note data
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    ContactAttribute:
+      type: array
+      description: Attributes for contact - can include multiple
+      items:
+        type: object
+        properties:
+          attribute_id:
+            type: integer
+            description: Attribute ID
+          title:
+            type: string
+            description: Attribute name (max 255 chars per attribute)
+            maximum: 255
+          value:
+            type: string
+            description: Attribute value (max 255 chars per attribute)
+            maximum: 255
+    ContactNumberArray:
+      type: array
+      description: Numbers assigned to contact
+      items:
+        type: object
+        properties:
+          public_number:
+            type: string
+            description: Full number in international E.164 format
+    ContactEmail:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address
+          format: email
+      description: Email assigned to contact
+    ContactNumber:
+      type: object
+      properties:
+        public_number:
+          type: string
+          description: Full number in international E.164 format
+      description: Number assigned to contact
+    ContactsTag:
+      type: array
+      description: Tags for contact - can include multiple
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Tag
+    ContactList:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Contact ID
+        name:
+          type: string
+          description: Name
+        company:
+          type: string
+          description: Company name
+      description: Contact data
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    ContactEmailArray:
+      type: array
+      description: Emails assigned to contact
+      items:
+        type: object
+        properties:
+          email:
+            type: string
+            description: Email address
+            format: email
+    StatusCode:
+      properties:
+        status:
+          type: string
+          description: Status code
