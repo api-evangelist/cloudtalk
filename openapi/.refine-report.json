@@ -1,0 +1,38 @@
+{
+  "provider": "cloudtalk",
+  "sources": [
+    "cloudtalk-agents-api-openapi.yml",
+    "cloudtalk-bulks-api-openapi.yml",
+    "cloudtalk-calls-api-openapi.yml",
+    "cloudtalk-campaigns-api-openapi.yml",
+    "cloudtalk-contacts-api-openapi.yml",
+    "cloudtalk-conversation-intelligence-api-openapi.yml",
+    "cloudtalk-cuecard-api-openapi.yml",
+    "cloudtalk-groups-api-openapi.yml",
+    "cloudtalk-numbers-api-openapi.yml",
+    "cloudtalk-other-api-openapi.yml",
+    "cloudtalk-sms-api-openapi.yml",
+    "cloudtalk-tags-api-openapi.yml",
+    "cloudtalk-voiceagent-api-openapi.yml"
+  ],
+  "outputs": [
+    "cloudtalk-agents-api-openapi.yml",
+    "cloudtalk-bulks-api-openapi.yml",
+    "cloudtalk-calls-api-openapi.yml",
+    "cloudtalk-campaigns-api-openapi.yml",
+    "cloudtalk-contacts-api-openapi.yml",
+    "cloudtalk-conversation-intelligence-api-openapi.yml",
+    "cloudtalk-cuecard-api-openapi.yml",
+    "cloudtalk-groups-api-openapi.yml",
+    "cloudtalk-numbers-api-openapi.yml",
+    "cloudtalk-other-api-openapi.yml",
+    "cloudtalk-sms-api-openapi.yml",
+    "cloudtalk-tags-api-openapi.yml",
+    "cloudtalk-voiceagent-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

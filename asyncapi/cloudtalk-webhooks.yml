@@ -1,0 +1,36 @@
+generated: '2026-07-18'
+method: searched
+source: https://help.cloudtalk.io/en/articles/5648924-triggers
+type: Webhooks
+spec_type: none
+delivery: >-
+  CloudTalk exposes events through Workflow Automations: a Trigger (object + action) fires an
+  action, one of which is an "API Request" (outbound HTTP call / webhook) to a URL you configure.
+  Native and virtual webhooks deliver instant updates with no polling. Webhooks are configured in
+  the CloudTalk dashboard (Workflow Automations), not through the public REST API. No AsyncAPI
+  document is published.
+docs:
+- https://help.cloudtalk.io/en/articles/5648924-triggers
+- https://help.cloudtalk.io/en/articles/5450779-configuring-workflow-automations
+- https://help.cloudtalk.io/en/articles/6883940-http-request-step
+actions:
+- API Request (outbound HTTP webhook)
+- SMS
+- Speech to Text (Recording trigger only)
+- Send notification to Slack
+events:
+- object: Call
+  actions: [Started, Ringing on Agent, Answered, Modified, Ended, Raised Hand]
+- object: Message
+  actions: [Sent, Received]
+- object: Contact
+  actions: [Created, Updated, Deleted]
+- object: User
+  actions: [Created, Updated, Deleted, Status Changed]
+- object: Recording
+  actions: [Uploaded]
+- object: Transcription
+  actions: [Created]
+notes: >-
+  Each workflow has exactly one trigger; one triggering event can activate multiple workflows.
+  Transcription trigger applies to legacy Google Speech-to-Text transcriptions.

@@ -1,0 +1,73 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/cloudtalk-openapi.json
+note: >-
+  Entity-relationship graph derived from the OpenAPI v1.7 component schemas and id-reference fields
+  (country_id, contact_id, user_id, call_number_id, favorite_agent, groups). CloudTalk uses integer
+  ids (no typed id-prefixes).
+entities:
+- name: Agent
+  schema: Agent
+  key: id
+  relationships:
+  - {kind: belongs_to, target: Number, via: call_number_id}
+  - {kind: has_many, target: Number, via: associated_numbers}
+  - {kind: has_many, target: Group, via: groups}
+- name: Group
+  schema: Group
+  key: id
+  relationships:
+  - {kind: has_many, target: Agent, via: agents}
+- name: Contact
+  schema: Contact
+  key: id
+  relationships:
+  - {kind: belongs_to, target: Country, via: country_id}
+  - {kind: belongs_to, target: Agent, via: favorite_agent}
+  - {kind: has_many, target: ContactNumber, via: contact_numbers}
+  - {kind: has_many, target: ContactEmail, via: contact_emails}
+  - {kind: has_many, target: ContactsTag, via: tags}
+  - {kind: has_many, target: ContactNote, via: notes}
+  - {kind: has_many, target: ContactActivity, via: activity}
+- name: ContactNote
+  schema: ContactNote
+  key: id
+  relationships:
+  - {kind: belongs_to, target: Contact, via: contact_id}
+  - {kind: belongs_to, target: Agent, via: user_id}
+- name: ContactActivity
+  schema: ContactActivity
+  key: id
+  relationships:
+  - {kind: belongs_to, target: Contact, via: contact_id}
+- name: Call
+  schema: Cdr
+  key: id
+  relationships:
+  - {kind: belongs_to, target: Agent, via: user_id}
+  - {kind: has_many, target: CallTag, via: tags}
+  - {kind: has_one, target: CallNote, via: note}
+  - {kind: has_one, target: CallRating, via: rating}
+- name: Number
+  schema: CallNumber
+  key: id
+- name: Campaign
+  schema: CampaignList
+  key: id
+- name: Tag
+  schema: Tag
+  key: id
+- name: Blacklist
+  schema: Blacklist
+  key: id
+- name: Country
+  schema: Country
+  key: id
+- name: Sms
+  schema: Sms
+  key: id
+conversation_intelligence:
+  note: >-
+    AI/Conversation Intelligence resources (transcription, sentiment, topics, smart notes,
+    talk-listen ratio, summary) hang off a Call by callId and are read-only.
+  entities: [CallTranscription, CallOverallSentiment, CallTalkListenRatio, CallSmartNotes, CallTopics]

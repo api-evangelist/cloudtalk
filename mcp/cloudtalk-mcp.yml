@@ -1,0 +1,236 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: openapi/cloudtalk-openapi.json
+note: No official CloudTalk MCP server was found (docs, npm @modelcontextprotocol, MCP registries). CANDIDATE
+  tool list derived one-per-operation from the published OpenAPI v1.7 (56 operations). Auth is HTTP Basic;
+  a real server would map credentials to a project.
+server:
+  name: cloudtalk
+  transport: http
+  url: null
+tools:
+- name: update_cuecards
+  description: Create CueCard request to be displayed to agent during the active call
+  tag: CueCard
+  source_operation: openapi/cloudtalk-openapi.json#postCueCard
+- name: get_agents_index
+  description: List agents
+  tag: Agents
+  source_operation: openapi/cloudtalk-openapi.json GET /agents/index.json
+- name: create_agents_add
+  description: Add an agent
+  tag: Agents
+  source_operation: openapi/cloudtalk-openapi.json PUT /agents/add.json
+- name: update_agents_edit_agentid
+  description: Edit an agent
+  tag: Agents
+  source_operation: openapi/cloudtalk-openapi.json POST /agents/edit/{agentId}.json
+- name: delete_agents_delete_agentid
+  description: Delete an agent
+  tag: Agents
+  source_operation: openapi/cloudtalk-openapi.json DELETE /agents/delete/{agentId}.json
+- name: get_groups_index
+  description: List groups
+  tag: Groups
+  source_operation: openapi/cloudtalk-openapi.json GET /groups/index.json
+- name: create_groups_add
+  description: Add an agent to a group
+  tag: Groups
+  source_operation: openapi/cloudtalk-openapi.json PUT /groups/add.json
+- name: delete_groups_delete_agent_id
+  description: Delete an agent
+  tag: Groups
+  source_operation: openapi/cloudtalk-openapi.json DELETE /groups/delete/{agent_id}.json
+- name: update_bulk_contacts
+  description: Contact actions
+  tag: Bulks
+  source_operation: openapi/cloudtalk-openapi.json POST /bulk/contacts.json
+- name: get_campaigns_index
+  description: List campaigns
+  tag: Campaigns
+  source_operation: openapi/cloudtalk-openapi.json GET /campaigns/index.json
+- name: create_campaigns_add
+  description: Add campaign
+  tag: Campaigns
+  source_operation: openapi/cloudtalk-openapi.json PUT /campaigns/add.json
+- name: update_campaigns_edit_id
+  description: Edit campaign
+  tag: Campaigns
+  source_operation: openapi/cloudtalk-openapi.json POST /campaigns/edit/{id}.json
+- name: delete_campaigns_delete_id
+  description: Delete campaign
+  tag: Campaigns
+  source_operation: openapi/cloudtalk-openapi.json DELETE /campaigns/delete/{id}.json
+- name: get_contacts_index
+  description: List contacts
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json GET /contacts/index.json
+- name: create_contacts_add
+  description: Add contact
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json PUT /contacts/add.json
+- name: update_contacts_edit_contactid
+  description: Edit contact
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json POST /contacts/edit/{contactId}.json
+- name: delete_contacts_delete_contactid
+  description: Delete contact
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json DELETE /contacts/delete/{contactId}.json
+- name: get_contacts_show_contactid
+  description: Inspect a contact
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json GET /contacts/show/{contactId}.json
+- name: get_contacts_attributes
+  description: Attributes
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json GET /contacts/attributes.json
+- name: create_contacts_addtags_contactid
+  description: Assign Tags
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json PUT /contacts/addTags/{contactId}.json
+- name: delete_contacts_removetags_contactid
+  description: Unassign Tags
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json DELETE /contacts/removeTags/{contactId}.json
+- name: get_notes_index
+  description: List notes
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json GET /notes/index.json
+- name: create_notes_add_contactid
+  description: Add note
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json PUT /notes/add/{contactId}.json
+- name: update_notes_edit_noteid
+  description: Edit note
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json POST /notes/edit/{noteId}.json
+- name: delete_notes_delete_noteid
+  description: Delete note
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json DELETE /notes/delete/{noteId}.json
+- name: get_activity_index
+  description: List activities
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json GET /activity/index.json
+- name: create_activity_add_contactid
+  description: Add activity
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json PUT /activity/add/{contactId}.json
+- name: update_activity_edit_activityid
+  description: Edit activity
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json POST /activity/edit/{activityId}.json
+- name: delete_activity_delete_activityid
+  description: Delete activity
+  tag: Contacts
+  source_operation: openapi/cloudtalk-openapi.json DELETE /activity/delete/{activityId}.json
+- name: get_numbers_index
+  description: List numbers
+  tag: Numbers
+  source_operation: openapi/cloudtalk-openapi.json GET /numbers/index.json
+- name: update_numbers_edit_id
+  description: Edit a number
+  tag: Numbers
+  source_operation: openapi/cloudtalk-openapi.json POST /numbers/edit/{id}.json
+- name: delete_numbers_clear_id
+  description: Unregister a number
+  tag: Numbers
+  source_operation: openapi/cloudtalk-openapi.json DELETE /numbers/clear/{id}.json
+- name: get_countries_index
+  description: List countries
+  tag: Other
+  source_operation: openapi/cloudtalk-openapi.json GET /countries/index.json
+- name: get_blacklist_index
+  description: List blacklist
+  tag: Other
+  source_operation: openapi/cloudtalk-openapi.json GET /blacklist/index.json
+- name: create_blacklist_add
+  description: Add number to blacklist
+  tag: Other
+  source_operation: openapi/cloudtalk-openapi.json PUT /blacklist/add.json
+- name: update_blacklist_edit_id
+  description: Edit number on blacklist
+  tag: Other
+  source_operation: openapi/cloudtalk-openapi.json POST /blacklist/edit/{id}.json
+- name: delete_blacklist_delete_id
+  description: Delete number from blacklist
+  tag: Other
+  source_operation: openapi/cloudtalk-openapi.json DELETE /blacklist/delete/{id}.json
+- name: update_sms_send
+  description: Send sms
+  tag: Sms
+  source_operation: openapi/cloudtalk-openapi.json POST /sms/send.json
+- name: get_calls_index
+  description: Call history
+  tag: Calls
+  source_operation: openapi/cloudtalk-openapi.json GET /calls/index.json
+- name: get_calls_callid
+  description: Comprehensive information about a call and its flow
+  tag: Calls
+  source_operation: openapi/cloudtalk-openapi.json GET /calls/{callId}
+- name: get_calls_recording_callid
+  description: Recording media
+  tag: Calls
+  source_operation: openapi/cloudtalk-openapi.json GET /calls/recording/{callId}.json
+- name: delete_recordings_delete_callid
+  description: Delete call recording
+  tag: Calls
+  source_operation: openapi/cloudtalk-openapi.json DELETE /recordings/delete/{callId}.json
+- name: update_calls_create
+  description: Make a call
+  tag: Calls
+  source_operation: openapi/cloudtalk-openapi.json POST /calls/create.json
+- name: get_statistics_realtime_groups
+  description: Group statistics
+  tag: Calls
+  source_operation: openapi/cloudtalk-openapi.json GET /statistics/realtime/groups.json
+- name: get_tags_index
+  description: List tags
+  tag: Tags
+  source_operation: openapi/cloudtalk-openapi.json GET /tags/index.json
+- name: create_tags_add
+  description: Add a tag
+  tag: Tags
+  source_operation: openapi/cloudtalk-openapi.json PUT /tags/add.json
+- name: update_tags_edit_id
+  description: Edit a tag
+  tag: Tags
+  source_operation: openapi/cloudtalk-openapi.json POST /tags/edit/{id}.json
+- name: delete_tags_delete_id
+  description: Delete a tag
+  tag: Tags
+  source_operation: openapi/cloudtalk-openapi.json DELETE /tags/delete/{id}.json
+- name: get_ai_calls_callid_summary
+  description: Summary
+  tag: Conversation Intelligence
+  source_operation: openapi/cloudtalk-openapi.json GET /ai/calls/{callId}/summary
+- name: get_ai_calls_callid_overall_sentiment
+  description: Overall sentiment
+  tag: Conversation Intelligence
+  source_operation: openapi/cloudtalk-openapi.json GET /ai/calls/{callId}/overall-sentiment
+- name: get_ai_calls_callid_talk_listen_ratio
+  description: Talk-listen ratio
+  tag: Conversation Intelligence
+  source_operation: openapi/cloudtalk-openapi.json GET /ai/calls/{callId}/talk-listen-ratio
+- name: get_ai_calls_callid_topics
+  description: Topics
+  tag: Conversation Intelligence
+  source_operation: openapi/cloudtalk-openapi.json GET /ai/calls/{callId}/topics
+- name: get_ai_calls_callid_transcription
+  description: Transcription
+  tag: Conversation Intelligence
+  source_operation: openapi/cloudtalk-openapi.json GET /ai/calls/{callId}/transcription
+- name: get_ai_calls_callid_smart_notes
+  description: Smart notes
+  tag: Conversation Intelligence
+  source_operation: openapi/cloudtalk-openapi.json GET /ai/calls/{callId}/smart-notes
+- name: get_ai_calls_callid_details_link
+  description: Link to the call details page
+  tag: Conversation Intelligence
+  source_operation: openapi/cloudtalk-openapi.json GET /ai/calls/{callId}/details-link
+- name: update_voice_agent_calls
+  description: Initiate a VoiceAgent call
+  tag: VoiceAgent
+  source_operation: openapi/cloudtalk-openapi.json#createVoiceAgentCall

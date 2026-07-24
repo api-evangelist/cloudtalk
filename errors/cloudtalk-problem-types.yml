@@ -1,0 +1,59 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/cloudtalk-openapi.json
+format: custom-envelope
+envelope: >-
+  Error Envelope — { "responseData": { "status": <int>, "message": <string> } }. Write endpoints
+  may instead return the Error schema { "success": false, "message": <string> } and the CueCard
+  endpoint returns CueCardError { "success": false, "errors": [<string>] }. Conversation
+  Intelligence endpoints do not use the response envelopes.
+notes: >-
+  CloudTalk does NOT use RFC 9457 application/problem+json; errors are JSON with HTTP status codes
+  and a message. Problem list below is derived from the 4xx/5xx responses declared across the 56
+  operations in the OpenAPI (v1.7).
+problems:
+- status: 400
+  title: Bad Request
+  meaning: Request body not matching definition
+  operations_count: 11
+  example_operation: POST /cuecards
+- status: 401
+  title: Unauthorized
+  meaning: Unauthorized action (missing/invalid Basic Auth credentials)
+  operations_count: 9
+  example_operation: POST /sms/send.json
+- status: 403
+  title: Forbidden
+  meaning: Action not permitted (e.g. maximum number of agents reached)
+  operations_count: 3
+  example_operation: PUT /agents/add.json
+- status: 404
+  title: Not Found
+  meaning: Resource not found (also returned when Accept is not application/json)
+  operations_count: 34
+  example_operation: POST /agents/edit/{agentId}.json
+- status: 406
+  title: Not Acceptable
+  meaning: Invalid input
+  operations_count: 20
+  example_operation: PUT /agents/add.json
+- status: 409
+  title: Conflict
+  meaning: Resource conflict (e.g. agent is already calling)
+  operations_count: 1
+  example_operation: POST /calls/create.json
+- status: 410
+  title: Gone
+  meaning: Resource no longer available (e.g. recording expired)
+  operations_count: 2
+  example_operation: GET /calls/recording/{callId}.json
+- status: 424
+  title: Failed Dependency
+  meaning: No active call matching the call id was found (CueCard)
+  operations_count: 1
+  example_operation: POST /cuecards
+- status: 500
+  title: Internal Server Error
+  meaning: Unexpected server error
+  operations_count: 35
+  example_operation: POST /cuecards

@@ -1,0 +1,42 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/cloudtalk-openapi.json
+standards:
+- id: https-only
+  conforms: true
+  evidence: OpenAPI servers[] use https; docs state HTTPS-only API.
+- id: http-basic-auth
+  conforms: true
+  evidence: Authentication via HTTP Basic (RFC 7617), Access Key ID + Secret.
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme; account-scoped Basic Auth only.
+- id: oidc
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom JSON envelope (responseData.status/message), not application/problem+json.
+- id: pagination
+  conforms: true
+  evidence: Collections Envelope with itemsCount/pageCount/pageNumber/limit + page/limit params.
+- id: idempotency
+  conforms: false
+  evidence: No idempotency-key mechanism documented.
+- id: rate-limiting
+  conforms: true
+  evidence: 60 req/min per company; 429 + X-CloudTalkAPI-Limit/Remaining/ResetTime headers.
+- id: iso8601-datetimes
+  conforms: true
+  evidence: All dates/times returned in ISO 8601, UTC.
+- id: openapi-3
+  conforms: true
+  evidence: Published OpenAPI 3.0.1 document (v1.7) at developers.cloudtalk.io/swagger.json.
+compliance_programs:
+- SOC 2 Type II
+- ISO 27001:2022
+- PCI DSS
+- HIPAA
+- GDPR
+- CCPA
+- CSA STAR
+compliance_source: https://trust.cloudtalk.io/

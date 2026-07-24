@@ -1,0 +1,37 @@
+generated: '2026-07-18'
+method: searched
+probe: true
+source: https://trust.cloudtalk.io/
+url: https://trust.cloudtalk.io/
+certifications:
+- ISO 27001:2022
+- SOC 2 Type II
+- PCI DSS
+- HIPAA
+- GDPR
+- CCPA
+- CSA STAR
+- EU-US Data Privacy Framework
+- UK-US Data Privacy Framework
+practices:
+- annual third-party audits
+- annual penetration testing
+- cyber insurance
+- subprocessors list
+- Data Processing Agreement (DPA)
+security_contact: security@cloudtalk.io
+evidence:
+- source: https://trust.cloudtalk.io/
+  keywords:
+  - iso 27001
+  - soc 2 type ii
+  - pci dss
+  - hipaa
+  - gdpr
+  - ccpa
+  - csa star
+  - eu-us data privacy framework
+  - trust center
+notes: FedRAMP and FIPS 140 are NOT listed as held by CloudTalk (removed from the automated
+  keyword match after verifying the trust center). Certifications above are those the trust
+  center states as achieved/current.

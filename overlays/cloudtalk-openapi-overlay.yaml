@@ -1,0 +1,38 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for CloudTalk API
+  version: 1.0.0
+extends: openapi/cloudtalk-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-slug: cloudtalk
+    x-apievangelist-provider: CloudTalk
+    x-apievangelist-category: [communications, voip, call-center, ccaas]
+    x-apievangelist-auth: http-basic
+    x-apievangelist-rate-limit: 60/min per company
+    x-apievangelist-notes: >-
+      The published spec declares no components.securitySchemes although the API requires HTTP
+      Basic Auth (Access Key ID + Secret) — captured in authentication/cloudtalk-authentication.yml.
+      Most operations lack operationId, summary, description, and request/response examples;
+      surfaced as gaps for a follow-up with the provider.
+- target: $.components
+  update:
+    securitySchemes:
+      BasicAuth:
+        type: http
+        scheme: basic
+        description: >-
+          HTTP Basic Auth — username = API Access Key ID, password = Access Key Secret. The
+          credential pair also selects the CloudTalk project the request runs against.
+- target: $
+  update:
+    security:
+    - BasicAuth: []
+    x-apievangelist-artifacts:
+      authentication: authentication/cloudtalk-authentication.yml
+      conventions: conventions/cloudtalk-conventions.yml
+      errors: errors/cloudtalk-problem-types.yml
+      lifecycle: lifecycle/cloudtalk-lifecycle.yml
+      webhooks: asyncapi/cloudtalk-webhooks.yml
+      data_model: data-model/cloudtalk-data-model.yml

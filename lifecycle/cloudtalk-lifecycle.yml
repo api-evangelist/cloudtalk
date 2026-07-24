@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: searched
+source: https://developers.cloudtalk.io/
+versioning:
+  scheme: document-version
+  current: '1.7'
+  in_path: false
+  docs: https://developers.cloudtalk.io/
+  notes: >-
+    Single unversioned base path (https://my.cloudtalk.io/api); the OpenAPI document carries
+    info.version 1.7. No version segment in the URL.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No formal deprecation policy or RFC 8594 Sunset/Deprecation header support documented.
+status_page: https://status.cloudtalk.io/
+roadmap: https://releases.cloudtalk.io/
+sla:
+  url: null
+  notes: SLA/uptime commitments are handled per plan/contract; not published as a standalone page.
+deprecated_operations: []

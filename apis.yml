@@ -1,25 +1,302 @@
 aid: cloudtalk
-name: cloudtalk
-description: cloudtalk is a company surfaced as a portfolio company of point-nine and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+name: CloudTalk
+description: >-
+  CloudTalk is an AI-powered cloud call center and business phone system (CCaaS) for sales and
+  customer support teams, backed by Point Nine. Its public REST API (served at
+  https://my.cloudtalk.io/api, published as OpenAPI 3.0.1 version 1.7) lets developers automate
+  calls, contacts, agents, groups, phone numbers, campaigns, tags, SMS, blacklists and notes, and
+  read Conversation Intelligence data — transcription, sentiment, topics, talk-listen ratio and
+  smart notes — plus initiate VoiceAgent calls. Authentication is HTTPS-only HTTP Basic Auth using
+  an API Access Key ID and Secret; responses are JSON, paginated with a Collections Envelope, and
+  rate limited to 60 requests per minute per company. Events are delivered through Workflow
+  Automation triggers (native and virtual webhooks) rather than the REST API.
 url: https://raw.githubusercontent.com/api-evangelist/cloudtalk/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - point-nine
-x-tier: stub
+x-tier: enriched
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
+image: https://www.cloudtalk.sk/files/social/1/Share-Img.png
 tags:
 - Company
-apis: []
+- Communications
+- Voice
+- VoIP
+- Call Center
+- Contact Center
+- CCaaS
+- Telephony
+- SMS
+- Conversation Intelligence
+apis:
+- aid: cloudtalk:cloudtalk-agents-api
+  name: CloudTalk Agents API
+  description: All data you can get about your agents.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-agents-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-bulks-api
+  name: CloudTalk Bulks API
+  description: Bulk actions.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Bulks
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-bulks-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-calls-api
+  name: CloudTalk Calls API
+  description: All data you can get about your calls.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Calls
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-calls-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-campaigns-api
+  name: CloudTalk Campaigns API
+  description: All data you can get about your campaigns.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-campaigns-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-contacts-api
+  name: CloudTalk Contacts API
+  description: All data you can get about your contacts.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-contacts-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-conversation-intelligence-api
+  name: CloudTalk Conversation Intelligence API
+  description: Conversation Intelligence data about your calls.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Conversation Intelligence
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-conversation-intelligence-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-cuecard-api
+  name: CloudTalk CueCard API
+  description: CueCards API ver. 1.0.2
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - CueCard
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-cuecard-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-groups-api
+  name: CloudTalk Groups API
+  description: The Groups API from CloudTalk — 3 operation(s) for groups.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-groups-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-numbers-api
+  name: CloudTalk Numbers API
+  description: All data you can get about your numbers.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Numbers
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-numbers-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-other-api
+  name: CloudTalk Other API
+  description: All other helper endpoints.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Other
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-other-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-sms-api
+  name: CloudTalk Sms API
+  description: Sms handling.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Sms
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-sms-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-tags-api
+  name: CloudTalk Tags API
+  description: All data you can get about your tags.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-tags-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-voiceagent-api
+  name: CloudTalk VoiceAgent API
+  description: VoiceAgent API ver. 1.0.0
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - VoiceAgent
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-voiceagent-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DeveloperPortal
+  url: https://developers.cloudtalk.io/
+- type: Documentation
+  url: https://developers.cloudtalk.io/
+- type: APIReference
+  url: https://developers.cloudtalk.io/
+- type: Support
+  url: https://help.cloudtalk.io/en/
+- type: Blog
+  url: https://www.cloudtalk.io/blog/
+- type: GitHubOrganization
+  url: https://github.com/CloudTalk-io
+- type: Roadmap
+  url: https://releases.cloudtalk.io/
+- type: StatusPage
+  url: https://status.cloudtalk.io/
+- type: Pricing
+  url: https://www.cloudtalk.io/pricing/
+- type: SignUp
+  url: https://www.cloudtalk.io/signup/
+- type: TermsOfService
+  url: https://www.cloudtalk.io/terms-and-conditions/
+- type: PrivacyPolicy
+  url: https://www.cloudtalk.io/privacy-notice/
+- type: Authentication
+  url: authentication/cloudtalk-authentication.yml
+- type: Conventions
+  url: conventions/cloudtalk-conventions.yml
+- type: RateLimits
+  url: conventions/cloudtalk-conventions.yml
+- type: ErrorCatalog
+  url: errors/cloudtalk-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/cloudtalk-lifecycle.yml
+- type: Conformance
+  url: conformance/cloudtalk-conformance.yml
+- type: Compliance
+  url: https://trust.cloudtalk.io/
+- type: TrustCenter
+  url: security/cloudtalk-trust-center.yml
+- type: Security
+  url: https://trust.cloudtalk.io/
+- type: VulnerabilityDisclosure
+  url: security/cloudtalk-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/cloudtalk-domain-security.yml
+- type: DataModel
+  url: data-model/cloudtalk-data-model.yml
+- type: Webhooks
+  url: asyncapi/cloudtalk-webhooks.yml
+- type: MCPServer
+  url: mcp/cloudtalk-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/cloudtalk-llms.txt
+- type: Overlay
+  url: overlays/cloudtalk-openapi-overlay.yaml
+- type: AgenticAccess
+  url: agentic-access/cloudtalk-agentic-access.yml
 - type: Website
   url: https://www.cloudtalk.io
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

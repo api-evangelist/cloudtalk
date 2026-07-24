@@ -1,0 +1,64 @@
+generated: '2026-07-18'
+method: searched
+source: https://developers.cloudtalk.io/
+docs: https://developers.cloudtalk.io/
+api: openapi/cloudtalk-openapi.json
+authentication:
+  style: HTTP Basic (Access Key ID + Access Key Secret)
+  transport: HTTPS only
+  ref: authentication/cloudtalk-authentication.yml
+idempotency:
+  supported: false
+  notes: >-
+    CloudTalk documents no idempotency-key mechanism. PUT is used to create and POST to update;
+    POST /calls/create.json can return 409 Conflict but there is no client-supplied idempotency
+    key documented.
+pagination:
+  style: page-number
+  envelope: Collections Envelope (responseData object)
+  request_params:
+  - page
+  - limit
+  response_fields:
+  - responseData.itemsCount
+  - responseData.pageCount
+  - responseData.pageNumber
+  - responseData.limit
+  - responseData.data
+versioning:
+  scheme: none-in-path
+  current: '1.7'
+  notes: >-
+    The API is served at a single unversioned base path (https://my.cloudtalk.io/api); the OpenAPI
+    document carries info.version 1.7. Endpoints use a `.json` suffix convention (e.g. /agents/index.json).
+http_methods:
+  GET: read / query (no modifications)
+  PUT: create resources
+  POST: update resources
+  DELETE: delete resources
+  PATCH: not used
+content_negotiation:
+  request: Content-Type header for POST/PUT bodies
+  response: JSON only (XML unsupported); Accept header of application/json expected on GET/HEAD,
+    else 404/406 may be returned
+  encoding: UTF-8 (JSON per RFC 4627)
+dates: ISO 8601, UTC timezone
+rate_limiting:
+  default: 60 operations per minute per company
+  status_code: 429 Too Many Requests
+  headers:
+  - X-CloudTalkAPI-Limit
+  - X-CloudTalkAPI-Remaining
+  - X-CloudTalkAPI-ResetTime
+  ref: null
+error_envelope:
+  shape: >-
+    Error Envelope — { "responseData": { "status": <int>, "message": <string> } }. Some endpoints
+    return { "success": false, "message": ... } (Error schema) or { "success": false, "errors": [...] }
+    (CueCardError). Conversation Intelligence endpoints do NOT use the response envelopes.
+  ref: errors/cloudtalk-problem-types.yml
+metadata:
+  supported: false
+request_tracing:
+  supported: false
+  notes: No request-id / correlation-id header documented.

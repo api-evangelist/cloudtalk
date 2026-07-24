@@ -1,0 +1,35 @@
+# CloudTalk
+
+> CloudTalk is an AI-powered cloud call center and business phone system (CCaaS) for sales and
+> support teams. Its REST API (https://my.cloudtalk.io/api, OpenAPI v1.7) manages calls, contacts,
+> agents, groups, phone numbers, campaigns, tags, SMS, and blacklists, and exposes Conversation
+> Intelligence (transcription, sentiment, topics, smart notes) and VoiceAgent calling. Authentication
+> is HTTPS-only HTTP Basic Auth (API Access Key ID + Secret). JSON only; 60 requests/min per company.
+
+## APIs
+
+- [CloudTalk API Reference](https://developers.cloudtalk.io/): REST API for the CloudTalk call-center platform.
+- [OpenAPI (swagger.json)](https://developers.cloudtalk.io/swagger.json): Published OpenAPI 3.0.1 document, version 1.7.
+
+## Specs & Artifacts
+
+- [OpenAPI](openapi/cloudtalk-openapi.json): 56 operations across Calls, Contacts, Agents, Numbers, SMS, Tags, Campaigns, CueCard, Conversation Intelligence, VoiceAgent.
+- [Authentication](authentication/cloudtalk-authentication.yml): HTTP Basic Auth profile.
+- [Conventions](conventions/cloudtalk-conventions.yml): pagination, rate limiting, error envelope, versioning.
+- [Error catalog](errors/cloudtalk-problem-types.yml): derived 4xx/5xx problem types.
+- [Lifecycle](lifecycle/cloudtalk-lifecycle.yml): versioning, status page, roadmap.
+- [Webhooks](asyncapi/cloudtalk-webhooks.yml): workflow-automation trigger events.
+- [Data model](data-model/cloudtalk-data-model.yml): entity-relationship graph.
+- [Conformance](conformance/cloudtalk-conformance.yml): standards + compliance programs.
+- [Agentic access](agentic-access/cloudtalk-agentic-access.yml): recommended x-agentic-access contracts.
+
+## Docs
+
+- [Developer Portal](https://developers.cloudtalk.io/)
+- [Help Center](https://help.cloudtalk.io/en/)
+- [Workflow Automations / Triggers](https://help.cloudtalk.io/en/articles/5648924-triggers)
+- [Status Page](https://status.cloudtalk.io/)
+- [Product Roadmap](https://releases.cloudtalk.io/)
+- [Trust Center](https://trust.cloudtalk.io/)
+- [Pricing](https://www.cloudtalk.io/pricing/)
+- [Sign Up (14-day trial)](https://www.cloudtalk.io/signup/)

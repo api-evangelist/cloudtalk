@@ -1,0 +1,27 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/cloudtalk-openapi.json
+skills:
+- file: cloudtalk-manage-contacts.md
+  name: Manage CloudTalk contacts
+  api: openapi/cloudtalk-openapi.json
+  operations:
+  - GET /contacts/index.json
+  - PUT /contacts/add.json
+  - POST /contacts/edit/{contactId}.json
+  - PUT /contacts/addTags/{contactId}.json
+  - PUT /notes/add/{contactId}.json
+- file: cloudtalk-make-outbound-call.md
+  name: Make an outbound CloudTalk call
+  api: openapi/cloudtalk-openapi.json
+  operations:
+  - POST /calls/create.json
+  - GET /calls/index.json
+  - GET /calls/recording/{callId}.json
+- file: cloudtalk-conversation-intelligence.md
+  name: Get CloudTalk Conversation Intelligence for a call
+  api: openapi/cloudtalk-openapi.json
+  operations:
+  - GET /ai/calls/{callId}/transcription
+  - GET /ai/calls/{callId}/summary
+  - GET /ai/calls/{callId}/topics
