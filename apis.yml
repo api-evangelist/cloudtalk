@@ -31,7 +31,7 @@ accessModel:
   method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-18'
+modified: '2026-08-14'
 image: https://www.cloudtalk.sk/files/social/1/Share-Img.png
 tags:
 - Company
@@ -239,6 +239,8 @@ common:
   url: https://developers.cloudtalk.io/
 - type: APIReference
   url: https://developers.cloudtalk.io/
+- type: GettingStarted
+  url: https://help.cloudtalk.io/en/collections/441737-getting-started-with-cloudtalk
 - type: Support
   url: https://help.cloudtalk.io/en/
 - type: Blog
@@ -262,7 +264,13 @@ common:
 - type: Conventions
   url: conventions/cloudtalk-conventions.yml
 - type: RateLimits
-  url: conventions/cloudtalk-conventions.yml
+  url: rate-limits/cloudtalk-rate-limits.yml
+- type: Plans
+  url: plans/cloudtalk-plans-pricing.yml
+- type: ChangeLog
+  url: changelog/cloudtalk-changelog.yml
+- type: Packages
+  url: packages/cloudtalk-packages.yml
 - type: ErrorCatalog
   url: errors/cloudtalk-problem-types.yml
 - type: Lifecycle
@@ -288,6 +296,8 @@ common:
 - type: AgentSkill
   url: skills/_index.yml
 - type: LLMsTxt
+  url: llms/cloudtalk-help-llms.txt
+- type: LLMsTxt
   url: llms/cloudtalk-llms.txt
 - type: Overlay
   url: overlays/cloudtalk-openapi-overlay.yaml
@@ -296,7 +306,7 @@ common:
 - type: Website
   url: https://www.cloudtalk.io
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-14'
+  status: enriched
+  artifacts_added: 6
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
