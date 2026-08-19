@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CloudTalk Agents API",
+    "version": "1.7"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List agents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/agents/index.json",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by agent ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Max. number of items in response data."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Number of page to return."
+              },
+              {
+                "name": "associated_number",
+                "value": "",
+                "type": "query",
+                "description": "Filters agents by their assigned number. Please enter a valid  number in e164 format"
+              }
+            ]
+          },
+          "docs": "List agents"
+        },
+        {
+          "info": {
+            "name": "Add an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://my.cloudtalk.io/api/agents/add.json",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add an agent"
+        },
+        {
+          "info": {
+            "name": "Edit an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/agents/edit/:agentId.json",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path",
+                "description": "Agent ID to edit"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit an agent"
+        },
+        {
+          "info": {
+            "name": "Delete an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://my.cloudtalk.io/api/agents/delete/:agentId.json",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path",
+                "description": "Agent ID to delete"
+              }
+            ]
+          },
+          "docs": "Delete an agent"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

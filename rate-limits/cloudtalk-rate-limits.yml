@@ -1,0 +1,56 @@
+generated: '2026-08-14'
+method: searched
+source: https://developers.cloudtalk.io/swagger.json
+docs: https://developers.cloudtalk.io/
+note: >-
+  Limits and the exact runtime response headers are published by CloudTalk in the "Usage" section of
+  info.description in their own OpenAPI 3.0.1 v1.7 document, fetched verbatim from
+  https://developers.cloudtalk.io/swagger.json (HTTP 200, application/json) on 2026-08-14. The same
+  text renders on the developer reference at https://developers.cloudtalk.io/.
+limit_count: 1
+limits:
+- scope: per-company
+  window: 1 minute
+  limit: 60
+  unit: requests
+  burst: null
+  applies_to: all operations across https://my.cloudtalk.io/api
+  note: >-
+    "the default rate limit is 60 operations per minute per company" — an operation is a read or an
+    update. Limits are enforced per company (account), not per API key, so multiple integrations
+    sharing one CloudTalk account contend for the same 60/min budget.
+  increase: >-
+    "If you need to make more requests, please contact our support with detailed explanation of your
+    use case." No self-serve limit increase and no published tier-based ceilings.
+exhaustion:
+  status_code: 429
+  status_text: Too Many Requests
+  retry_after_header: false
+  note: >-
+    CloudTalk returns 429 and the three X-CloudTalkAPI-* headers below. It does NOT return a standard
+    Retry-After header, and does not implement the IETF draft RateLimit-* headers. A client must
+    compute the wait itself from X-CloudTalkAPI-ResetTime.
+response_headers:
+- name: X-CloudTalkAPI-Limit
+  description: Maximum number of API requests allowed in the current time window.
+  standard: vendor-specific
+- name: X-CloudTalkAPI-Remaining
+  description: Number of API requests left in the current window.
+  standard: vendor-specific
+- name: X-CloudTalkAPI-ResetTime
+  description: Time when the rate limit window will be reset, as a Unix timestamp.
+  standard: vendor-specific
+standard_headers:
+  ietf_ratelimit: false
+  retry_after: false
+  note: >-
+    No `RateLimit-Limit`/`RateLimit-Remaining`/`RateLimit-Reset` (IETF draft) and no `Retry-After`.
+    Agent clients must special-case the X-CloudTalkAPI-* triple.
+agent_guidance: >-
+  Read X-CloudTalkAPI-Remaining on every response and back off before it reaches zero; on a 429, sleep
+  until the Unix timestamp in X-CloudTalkAPI-ResetTime rather than using a fixed backoff. Because the
+  budget is per company, an agent sharing an account with human users or other integrations should
+  reserve headroom rather than consuming the full 60/min.
+related:
+- conventions/cloudtalk-conventions.yml
+- errors/cloudtalk-problem-types.yml

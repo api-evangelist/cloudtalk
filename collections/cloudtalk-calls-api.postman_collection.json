@@ -1,0 +1,1116 @@
+{
+  "item": [
+    {
+      "id": "fc207b57-35bb-422e-8797-6b8fd59a9787",
+      "name": "Calls",
+      "description": {
+        "content": "All data you can get about your calls.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "58d2fd20-e46a-4392-a097-bc7e9e172365",
+          "name": "Call history",
+          "request": {
+            "name": "Call history",
+            "description": {},
+            "url": {
+              "path": [
+                "calls",
+                "index.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "public_internal",
+                  "value": "<string>",
+                  "description": "Filter by internal number of agent"
+                },
+                {
+                  "disabled": false,
+                  "key": "public_external",
+                  "value": "<string>",
+                  "description": "Filter by number of caller"
+                },
+                {
+                  "disabled": false,
+                  "key": "date_from",
+                  "value": "<dateTime>",
+                  "description": "Filter by date from, e.g. 2017-12-24 12:22:00"
+                },
+                {
+                  "disabled": false,
+                  "key": "date_to",
+                  "value": "<dateTime>",
+                  "description": "Filter by date to, napríklad 2017-12-24 12:22:00"
+                },
+                {
+                  "disabled": false,
+                  "key": "contact_id",
+                  "value": "<integer>",
+                  "description": "Filter by assigned contact ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_id",
+                  "value": "<integer>",
+                  "description": "Filter by assigned agent ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "agent_extension",
+                  "value": "<integer>",
+                  "description": "Filter by assigned agent's extension."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Filter by call type"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by call status - 'missed' = for only missed calls, 'answered' = for all answered calls"
+                },
+                {
+                  "disabled": false,
+                  "key": "tag_id",
+                  "value": "<integer>",
+                  "description": "Filter by assigned call tag ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "call_id",
+                  "value": "<integer>",
+                  "description": "Filter by call ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Max. number of items in response data."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Number of page to return."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2bbd6e44-1dc4-4db7-adf0-e5a6c1815ba1",
+              "name": "Calls data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "index.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "public_internal",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "public_external",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "contact_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "agent_extension",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tag_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "call_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"itemsCount\": 3,\n    \"pageCount\": 1,\n    \"pageNumber\": 1,\n    \"limit\": 3,\n    \"data\": [\n      {\n        \"Cdr\": {\n          \"id\": \"27\",\n          \"billsec\": \"0\",\n          \"type\": \"outgoing\",\n          \"country_code\": \"421\",\n          \"public_external\": 421904247371,\n          \"public_internal\": 421221291400,\n          \"recorded\": true,\n          \"is_voicemail\": false,\n          \"fax_email\": \"0\",\n          \"is_redirected\": \"0\",\n          \"redirected_from\": \"\",\n          \"is_local\": true,\n          \"user_id\": \"1234\",\n          \"talking_time\": \"21\",\n          \"started_at\": \"2017-10-04T06:33:37.000Z\",\n          \"answered_at\": \"2017-10-04T06:33:37.000Z\",\n          \"ended_at\": \"2017-10-04T06:33:49.000Z\",\n          \"waiting_time\": 2,\n          \"wrapup_time\": 5,\n          \"recording_link\": \"https://my.cloudtalk.io/r/play/27\"\n        },\n        \"Contact\": {\n          \"id\": \"1234\",\n          \"name\": \"Jon Doe\",\n          \"title\": \"title\",\n          \"company\": \"First ltd.\",\n          \"industry\": \"IT\",\n          \"address\": \"8th Avenue\",\n          \"city\": \"London\",\n          \"zip\": \"838298\",\n          \"state\": \"England\",\n          \"type\": \"contact\",\n          \"tags\": [\n            {\n              \"id\": \"615\",\n              \"name\": \"VIP\"\n            },\n            {\n              \"id\": \"609\",\n              \"name\": \"Security\"\n            }\n          ],\n          \"external_urls\": [\n            {\n              \"external_system\": \"CloudTalk\",\n              \"external_url\": \"https://my.cloudtalk.io/c/show/1234\"\n            }\n          ],\n          \"contact_numbers\": [\n            18884871675\n          ],\n          \"contact_emails\": [\n            \"jon.doe@first.com\"\n          ],\n          \"custom_fields\": [\n            {\n              \"key\": \"age\",\n              \"value\": \"33\"\n            }\n          ],\n          \"favorite_agent\": {\n            \"id\": \"1234\",\n            \"firstname\": \"Max\",\n            \"lastname\": \"Yellow\",\n            \"fullname\": \"Max Yellow\",\n            \"email\": \"max.yellow@cloudtalk.io\",\n            \"language\": \"en\",\n            \"role\": \"Admin\",\n            \"status\": \"online\",\n            \"default_outbound_number\": 442012345678,\n            \"associated_numbers\": [\n              442012345678\n            ],\n            \"groups\": [\n              \"sales\",\n              \"support\"\n            ]\n          }\n        },\n        \"CallNumber\": {\n          \"id\": \"12345\",\n          \"internal_name\": \"Sales support\",\n          \"caller_id_e164\": 442012345678,\n          \"country_code\": \"44\",\n          \"area_code\": \"20\"\n        },\n        \"BillingCall\": {\n          \"price\": \"0.000000\"\n        },\n        \"Agent\": {\n          \"id\": \"1234\",\n          \"firstname\": \"Max\",\n          \"lastname\": \"Yellow\",\n          \"fullname\": \"Max Yellow\",\n          \"email\": \"max.yellow@cloudtalk.io\",\n          \"language\": \"en\",\n          \"role\": \"Admin\",\n          \"status\": \"online\",\n          \"default_outbound_number\": 442012345678,\n          \"associated_numbers\": [\n            442012345678\n          ],\n          \"groups\": [\n            \"sales\",\n            \"support\"\n          ]\n        },\n        \"Notes\": [\n          {\n            \"id\": \"23\",\n            \"note\": \"Call later\"\n          }\n        ],\n        \"Tags\": [\n          {\n            \"id\": \"123\",\n            \"name\": \"Missed\"\n          },\n          {\n            \"id\": \"124\",\n            \"name\": \"VIP\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "517b5ca1-0055-4a10-b6e4-015149236942",
+          "name": "Comprehensive information about a call and its flow",
+          "request": {
+            "name": "Comprehensive information about a call and its flow",
+            "description": {},
+            "url": {
+              "protocol": "https",
+              "path": [
+                "api",
+                "",
+                "calls",
+                ":callId"
+              ],
+              "host": [
+                "analytics-api",
+                "cloudtalk",
+                "io"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "callId",
+                  "description": "(Required) ID of a call"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "48ec9c9d-fc3a-4ed0-b3b3-e09475e10fe8",
+              "name": "Detailed information about a given call",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "api",
+                    "",
+                    "calls",
+                    ":callId"
+                  ],
+                  "host": [
+                    "analytics-api",
+                    "cloudtalk",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "callId",
+                      "description": "(Required) ID of a call"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"cdr_id\": 12345,\n  \"uuid\": \"aaaa-bbbb-cccc-dddd\",\n  \"company_id\": 100123,\n  \"date\": \"2022-02-07T13:00:00.000Z\",\n  \"contact\": {\n    \"id\": 1,\n    \"name\": \"John Doe\",\n    \"country\": \"CZ\",\n    \"number\": \"+420123123123\"\n  },\n  \"call_tags\": [\n    {\n      \"id\": 5,\n      \"label\": \"Lead\"\n    }\n  ],\n  \"call_rating\": 3,\n  \"internal_number\": {\n    \"id\": 1,\n    \"name\": \"Europe Sales\",\n    \"number\": \"+421456456456\"\n  },\n  \"call_times\": {\n    \"talking_time\": 60,\n    \"wrap_up_time\": 10,\n    \"ringing_time\": 10,\n    \"total_time\": 80,\n    \"waiting_time\": 20,\n    \"holding_time\": 5\n  },\n  \"direction\": \"incoming\",\n  \"type\": \"regular\",\n  \"status\": \"answered\",\n  \"call_steps\": [\n    {\n      \"type\": \"ivr\",\n      \"id\": 1,\n      \"date\": \"2022-02-07T13:00:00.000Z\",\n      \"total_time\": 10,\n      \"option\": \"1\"\n    },\n    {\n      \"type\": \"queue\",\n      \"id\": 10,\n      \"name\": \"Queue10\",\n      \"date\": \"2022-02-07T13:00:10.000Z\",\n      \"call_times\": {\n        \"talking_time\": 60,\n        \"wrap_up_time\": 10,\n        \"ringing_time\": 10,\n        \"total_time\": 80,\n        \"waiting_time\": 10,\n        \"holding_time\": 3\n      },\n      \"status\": \"answered\",\n      \"reason\": null,\n      \"resolved_by\": null,\n      \"resolved_by_call\": {\n        \"id\": null,\n        \"date\": null,\n        \"agent\": {\n          \"id\": null,\n          \"name\": null\n        }\n      },\n      \"strategy\": \"rrmemory\",\n      \"agent_calls\": [\n        {\n          \"type\": \"agent\",\n          \"id\": 12,\n          \"name\": \"Agent12\",\n          \"group_ids\": [\n            10,\n            20\n          ],\n          \"date\": \"2022-02-07T13:00:10.000Z\",\n          \"call_times\": {\n            \"talking_time\": null,\n            \"wrap_up_time\": null,\n            \"ringing_time\": 5,\n            \"total_time\": 5,\n            \"holding_time\": null\n          },\n          \"status\": \"missed\",\n          \"reason\": \"offline\",\n          \"resolved_by\": null,\n          \"resolved_by_call\": {\n            \"id\": null,\n            \"date\": null,\n            \"agent\": {\n              \"id\": null,\n              \"name\": null\n            }\n          }\n        },\n        {\n          \"type\": \"agent\",\n          \"id\": 11,\n          \"name\": \"Agent11\",\n          \"group_ids\": [\n            10,\n            20\n          ],\n          \"date\": \"2022-02-07T13:00:15.000Z\",\n          \"call_times\": {\n            \"talking_time\": 60,\n            \"wrap_up_time\": 10,\n            \"ringing_time\": 5,\n            \"total_time\": 75,\n            \"holding_time\": 2\n          },\n          \"status\": \"answered\",\n          \"reason\": null,\n          \"resolved_by\": null,\n          \"resolved_by_call\": {\n            \"id\": null,\n            \"date\": null,\n            \"agent\": {\n              \"id\": null,\n              \"name\": null\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"notes\": [\n    \"string\"\n  ],\n  \"recorded\": true,\n  \"out_of_office\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29ed5ae8-c38e-4c4f-96bb-e0d9a2ff7516",
+              "name": "Bad Request - Invalid call ID",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "api",
+                    "",
+                    "calls",
+                    ":callId"
+                  ],
+                  "host": [
+                    "analytics-api",
+                    "cloudtalk",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "callId",
+                      "description": "(Required) ID of a call"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"message\": [\n    \"callId must be a number conforming to the specified constraints\"\n  ],\n  \"error\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3508eef1-af59-42a8-96e8-0b3cb87103cf",
+              "name": "Call not found",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "api",
+                    "",
+                    "calls",
+                    ":callId"
+                  ],
+                  "host": [
+                    "analytics-api",
+                    "cloudtalk",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "callId",
+                      "description": "(Required) ID of a call"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Call with id '12456' doesn't exist on company '100123'\",\n  \"error\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6858c452-981e-4fc2-a0ce-11c9cf63a8f2",
+          "name": "Recording media",
+          "request": {
+            "name": "Recording media",
+            "description": {
+              "content": "Api endpoint returns media data of recording for selected call. Media data are returned in WAV format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "calls",
+                "recording",
+                "{{callId}}.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "audio/x-wav"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "21a837d5-811a-4868-bd15-017cbc360b5d",
+              "name": "Recording media data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "recording",
+                    "{{callId}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "audio/x-wav"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "audio/x-wav"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "480e0e1e-cf0d-4f70-8e6e-30463618802f",
+              "name": "Recording not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "recording",
+                    "{{callId}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 404,\n    \"message\": \"Not found.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8cc119bf-b738-4c75-9aaa-229bbbf0fca2",
+              "name": "Recording expired",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "recording",
+                    "{{callId}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gone",
+              "code": 410,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 410,\n    \"message\": \"Recording expired.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c876ea37-b84e-4ae2-9f73-0ceee3bab773",
+          "name": "Delete call recording",
+          "request": {
+            "name": "Delete call recording",
+            "description": {
+              "content": "Delete call recording file for good. Call recording will be deleted from all our systems.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "recordings",
+                "delete",
+                "{{callId}}.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8cdb2a0f-b5ab-43ec-8b21-85ad11333bf6",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "recordings",
+                    "delete",
+                    "{{callId}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 200\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9eb27ff-eb94-4205-b898-2a0fb37d292e",
+              "name": "Call not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "recordings",
+                    "delete",
+                    "{{callId}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 404,\n    \"message\": \"Not found.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f85408ee-9c20-4d62-b550-63262eba42e6",
+              "name": "Recording not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "recordings",
+                    "delete",
+                    "{{callId}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Gone",
+              "code": 410,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 410,\n    \"message\": \"Recording not found.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3ea6410c-ea0c-49c5-b885-1a02b770e941",
+          "name": "Make a call",
+          "request": {
+            "name": "Make a call",
+            "description": {
+              "content": "Make a call using to any phone numbers. To place a new outbound call, make an HTTP POST request. At first it will initiate a call to an agent. Maximum waiting time for an agent to pick up the call is 20 seconds. After an agent picks up, we will automatically call desired phone number.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "calls",
+                "create.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"agent_id\": \"<integer>\",\n  \"callee_number\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "827d13e4-cc54-449a-8e97-c1b75d2d75f4",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "create.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agent_id\": \"<integer>\",\n  \"callee_number\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 200\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5f08d962-1aab-4eef-90b3-27ccfab3985f",
+              "name": "Agent is not online",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "create.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agent_id\": \"<integer>\",\n  \"callee_number\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 403,\n    \"message\": \"Agent is not online.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a6a1114-d8b8-4f00-811d-7823de6e2f26",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "create.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agent_id\": \"<integer>\",\n  \"callee_number\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 404,\n    \"message\": \"Not found.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bba2555e-0cc5-49d7-b636-61d4391484ba",
+              "name": "Invalid input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "create.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agent_id\": \"<integer>\",\n  \"callee_number\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 406,\n    \"message\": \"Invalid input data.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "793ca19e-c6ce-414c-b81b-211039f93eb5",
+              "name": "Agent is already calling",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "create.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agent_id\": \"<integer>\",\n  \"callee_number\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 409,\n    \"message\": \"Agent is already calling.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cdaf2ef2-dad5-4f22-b7dc-14e68aa6bf4e",
+              "name": "Something went wrong",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "calls",
+                    "create.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agent_id\": \"<integer>\",\n  \"callee_number\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 500,\n    \"message\": \"Something went wrong.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3816b5a9-3eb9-447a-bb25-f0009a9a1890",
+          "name": "Group statistics",
+          "request": {
+            "name": "Group statistics",
+            "description": {},
+            "url": {
+              "path": [
+                "statistics",
+                "realtime",
+                "groups.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b0035f34-b3b7-4ef9-abf8-5ea2abf6da9d",
+              "name": "Group stats data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "statistics",
+                    "realtime",
+                    "groups.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"data\": {\n      \"groups\": [\n        {\n          \"name\": \"Agents\",\n          \"id\": 123,\n          \"operators\": 3,\n          \"answered\": 12,\n          \"unanswered\": 2,\n          \"abandon_rate\": 14.29,\n          \"avg_waiting_time\": 48,\n          \"max_waiting_time\": 55,\n          \"avg_call_duration\": 24,\n          \"real_time\": {\n            \"waiting_queue\": 2,\n            \"avg_waiting_time\": 23,\n            \"max_waiting_time\": 53,\n            \"avg_abandonment_time\": 12\n          }\n        },\n        {\n          \"name\": \"Avengers\",\n          \"id\": 124,\n          \"operators\": 3,\n          \"answered\": 12,\n          \"unanswered\": 2,\n          \"abandon_rate\": 14.29,\n          \"avg_waiting_time\": 48,\n          \"max_waiting_time\": 55,\n          \"avg_call_duration\": 24,\n          \"real_time\": {\n            \"waiting_queue\": 2,\n            \"avg_waiting_time\": 23,\n            \"max_waiting_time\": 53,\n            \"avg_abandonment_time\": 12\n          }\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://my.cloudtalk.io/api",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) Call ID for the requested recording",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<integer>",
+      "key": "callId"
+    }
+  ],
+  "info": {
+    "_postman_id": "edacf7bd-60d1-428a-be0f-63997292362c",
+    "name": "CloudTalk Agents Calls API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\nWelcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk.\n\n# API Overview\n\nThe API is organized around the following resources:\n\nAPI Area | Description\n----------------|-------------\nCalls | Browse your call history, download recordings and access all your calls data.\nContacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually.\nNumbers | Automate Numbers modifications. List all your numbers.\nAgents | Create or update your Agents, access their settings.\nConversation Intelligence | Get Conversation Intelligence data about your calls.\nVoiceAgent | Initiate VoiceAgent calls\n\n\n[JSON](http://www.json.org/) is returned in all responses. XML is not supported.\n\nThe API also uses common approaches for the following:\n\nFunction | Description\n----------------|-------------\nData | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects.\nErrors | 4xx and 5xx responses returning JSON with error codes\nRate Limiting | Controls how many requests can be made in a time window\nHTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS.\n\n\n## Authentication\n\nThis is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication.\n\n Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the Cloudtalk Dashboard Account → Settings → API keys tab.\n\nTo try the API via curl on the command-line, the general form used would be:\n```\ncurl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL\n```\n\nFor instance, you would execute:\n```\ncurl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json\n```\n\n## Usage\n\nThe API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **'429 Too Many Requests'** response code will be returned along with the following headers -\n\nHeader name | Description\n----------------|-------------\nX-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window.\nX-CloudTalkAPI-Remaining | Number of API requests left in the current window.\nX-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp.\n\nNote that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case.\n\n## Response Envelopes\n\n**Note:** Conversation Intelligence doesn't follow envelopes.\n\nThe API returns one of three envelopes depending upon the request issued:\n\n1. Single Item Envelope\n2. Collections Envelope\n3. Error Envelope\n\n### Single Item Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"id\": 123,\n        ...\n        \"created\": \"2018-01-10 12:34:56\"\n    }\n}\n```\n\n### Collections Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"itemsCount\": 65,\n        \"pageCount\": 3,\n        \"pageNumber\": 1,\n        \"limit\": 30,\n        \"data\": [\n            {\n                \"id\": 123,\n                ...\n                \"created\": \"2018-01-10 12:34:56\"\n            },\n            {\n                \"id\": 456,\n                ...\n                \"created\": \"2017-10-19 09:21:29\"\n            },\n            ...\n        ]\n    }\n}\n```\n\n### Error Envelope\n\n```\nStatus: 404 Not Found\n{\n    \"responseData\": {\n        \"status\": 404,\n        \"message\": \"Not Found\"\n    }\n}\n```\n\n## Encoding\n\nData is encoded as defined by JSON in [RFC4627](http://www.ietf.org/rfc/rfc4627.txt). The default encoding for APIs is UTF-8.\n\nSome query parameters may need to be [url encoded](https://www.wikiwand.com/en/Percent-encoding) when sending - for example, the email parameter value used to query users should be encoded.\n\n## Use of HTTP\n\nRequest methods are used in accordance with HTTP -\n\n- `GET` is used to access resources and perform queries. The API does not allow modifications (creates, updates, deletes) to occur via GET.\n- `PUT` is used to create resources.\n- `POST` is used to update resources. PATCH is not currently used by the API.\n- `DELETE` is used to delete resources.\n\nResponses use standard HTTP codes. Where there are client or server errors, a list of of one or more errors in JSON format is returned in the body.\n\nThe `Accept` header must be used by a client used to indicate a preferred response for `GET/HEAD` requests. Requests without an `Accept` header of `application/json` may be rejected with a client error of 404 or 406. The `Content-Type` header should be used by clients to indicate the submitted format for `POST/PUT` requests.\n\nContact Support:\n Name: CloudTalk API Support",
+      "type": "text/plain"
+    }
+  }
+}

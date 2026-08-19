@@ -1,0 +1,130 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.cloudtalk.io/pricing/
+docs: https://www.cloudtalk.io/pricing/
+currency: EUR
+model: per-user-per-month subscription (seat based), plus usage-priced add-ons and per-minute AI voice
+plan_count: 4
+api_access_note: >-
+  API access ("APIs & data sync") is gated to the Essential tier and above. The CloudTalk help center
+  confirms the same gate from the credential side: the Account > Settings > API Keys tab requires an
+  Admin role AND an account "upgraded to the correct plan".
+  Source: https://help.cloudtalk.io/en/articles/15272380-how-to-access-and-generate-your-cloudtalk-api-keys
+plans:
+- name: Lite
+  price_annual: 19
+  price_monthly: 27
+  currency: EUR
+  period: per user per month
+  minimum_users: 1
+  api_access: false
+  includes:
+  - basic call handling
+  - 1 ring group
+  - click-to-call
+  - web dialer
+  - call recording
+  - fundamental analytics
+- name: Starter
+  price_annual: 25
+  price_monthly: 34
+  currency: EUR
+  period: per user per month
+  minimum_users: 1
+  api_access: false
+  includes:
+  - unlimited ring groups
+  - click-to-call
+  - web dialer
+  - call recording
+  - fundamental analytics
+- name: Essential
+  price_annual: 29
+  price_monthly: 39
+  currency: EUR
+  period: per user per month
+  minimum_users: 1
+  api_access: true
+  includes:
+  - APIs & data sync
+  - advanced call handling
+  - outbound tools
+  - 95+ standard CRM/helpdesk integrations
+  - Salesforce ecosystem support
+  - workflow designer with SMS triggers
+- name: Expert
+  price_annual: 49
+  price_monthly: 69
+  currency: EUR
+  period: per user per month
+  minimum_users: 3
+  api_access: true
+  most_popular: true
+  includes:
+  - everything in Essential
+  - Power Dialer included
+  - advanced call monitoring
+  - real-time analytics wallboards
+  - custom dashboards
+ai_voice_agent_plans:
+- name: AI Receptionist
+  price: 0
+  currency: EUR
+  period: first month
+  included_minutes: 50
+- name: AI Specialist
+  price: 349
+  currency: EUR
+  period: month
+  included_minutes: 1000
+  note: starting price
+- name: Custom / Tailored scale
+  price: 0.15
+  currency: EUR
+  period: per minute
+  note: >-
+    "as low as" €0.15/minute; tailored scale tier requires 10,000+ minutes per month with
+    volume-based discounts. Contact sales.
+  contact_sales: true
+add_ons:
+- name: Power Dialer
+  price: 15
+  currency: EUR
+  period: per user per month (annual)
+- name: Parallel Dialer
+  price: 39
+  currency: EUR
+  period: per user per month (annual)
+- name: AI Conversation Intelligence
+  price: 9
+  currency: EUR
+  period: per user per month (annual)
+- name: Branded Caller ID
+  price: 0.07
+  currency: EUR
+  period: per call
+- name: Spam Remediation
+  price: null
+  currency: EUR
+  period: custom
+  contact_sales: true
+quotas:
+  calling_allowances: >-
+    Vary by region. US/Canada is unlimited calling across most tiers. EU, Australia, Mexico, Peru,
+    Brazil and Colombia carry tiered allocations of roughly 250-1000 outbound minutes per user
+    per month.
+  annual_discount: approximately 30% versus monthly billing
+included_all_tiers:
+- 24/7 chat and email support
+- SOC 2 / GDPR / HIPAA compliance posture
+- anti-spam registration
+- local numbers in 160+ countries
+- call recording (retention varies by tier)
+- number porting support
+trial:
+  available: true
+  note: CloudTalk advertises a free trial via self-serve signup at https://www.cloudtalk.io/signup/
+notes: >-
+  Pricing is published openly with no sales gate for the four seat tiers; only the AI VoiceAgent
+  "Tailored scale" tier and Spam Remediation are contact-sales. There is no free-forever tier and no
+  API-only or developer plan — API access is a side effect of buying an Essential or Expert seat.

@@ -1,0 +1,696 @@
+{
+  "item": [
+    {
+      "id": "ba60c07e-1022-4d1c-b544-fbc3df287402",
+      "name": "Campaigns",
+      "description": {
+        "content": "All data you can get about your campaigns.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c5f007f5-7c8e-4463-a11d-8a50e819ad61",
+          "name": "List campaigns",
+          "request": {
+            "name": "List campaigns",
+            "description": {},
+            "url": {
+              "path": [
+                "campaigns",
+                "index.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<integer>",
+                  "description": "Filter by campaign ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Max. number of items in response data."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Number of page to return."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fc1712ff-cbc8-410c-952e-034eafbeed5c",
+              "name": "Contacts data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "index.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"itemsCount\": 3,\n    \"pageCount\": 1,\n    \"pageNumber\": 1,\n    \"limit\": 3,\n    \"data\": [\n      {\n        \"Campaign\": {\n          \"id\": \"63\",\n          \"name\": \"Test Dialer\",\n          \"status\": \"inactive\",\n          \"has_schedule_date\": false,\n          \"answer_wait_time\": \"45\",\n          \"after_call_dialing_auto\": false,\n          \"after_call_time\": \"5\",\n          \"is_recording\": false,\n          \"is_predictive\": false,\n          \"attempts\": \"1\",\n          \"attempts_interval\": \"18\"\n        },\n        \"Button\": [\n          {\n            \"id\": \"252\",\n            \"title\": \"Sale\",\n            \"type\": \"successful_positive\",\n            \"color\": \"#2980b9\",\n            \"description\": \"Sold\"\n          }\n        ],\n        \"ContactsTag\": [\n          {\n            \"id\": \"133\",\n            \"name\": \"dialer\"\n          }\n        ],\n        \"Group\": [\n          {\n            \"id\": \"568\",\n            \"internal_name\": \"Agents\"\n          }\n        ],\n        \"Agent\": [\n          {\n            \"id\": \"1075\",\n            \"fullname\": \"Jane Doe\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5b45fc9d-5eb6-474e-b5aa-d09e1609154a",
+          "name": "Add campaign",
+          "request": {
+            "name": "Add campaign",
+            "description": {},
+            "url": {
+              "path": [
+                "campaigns",
+                "add.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Button\": [\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"has_schedule_date\": \"<boolean>\",\n  \"schedule_start_date\": \"<date>\",\n  \"schedule_start_time\": \"<time>\",\n  \"answer_wait_time\": \"<integer>\",\n  \"after_call_dialing_auto\": \"<boolean>\",\n  \"after_call_time\": \"<integer>\",\n  \"is_recording\": \"<boolean>\",\n  \"call_number_id\": \"<integer>\",\n  \"call_script_id\": \"<integer>\",\n  \"survey_id\": \"<integer>\",\n  \"is_predictive\": \"<integer>\",\n  \"calls_percentage\": \"<integer>\",\n  \"attempts\": \"<integer>\",\n  \"attempts_interval\": \"<integer>\",\n  \"ContactsTag\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Agent\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Group\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9e0e5e63-b916-447f-9085-56e82b24e683",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "add.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Button\": [\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"has_schedule_date\": \"<boolean>\",\n  \"schedule_start_date\": \"<date>\",\n  \"schedule_start_time\": \"<time>\",\n  \"answer_wait_time\": \"<integer>\",\n  \"after_call_dialing_auto\": \"<boolean>\",\n  \"after_call_time\": \"<integer>\",\n  \"is_recording\": \"<boolean>\",\n  \"call_number_id\": \"<integer>\",\n  \"call_script_id\": \"<integer>\",\n  \"survey_id\": \"<integer>\",\n  \"is_predictive\": \"<integer>\",\n  \"calls_percentage\": \"<integer>\",\n  \"attempts\": \"<integer>\",\n  \"attempts_interval\": \"<integer>\",\n  \"ContactsTag\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Agent\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Group\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 201,\n    \"data\": {\n      \"id\": \"12345\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6f75aca-bf36-45b8-a55e-9a992882f114",
+              "name": "Invalid input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "add.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Button\": [\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"has_schedule_date\": \"<boolean>\",\n  \"schedule_start_date\": \"<date>\",\n  \"schedule_start_time\": \"<time>\",\n  \"answer_wait_time\": \"<integer>\",\n  \"after_call_dialing_auto\": \"<boolean>\",\n  \"after_call_time\": \"<integer>\",\n  \"is_recording\": \"<boolean>\",\n  \"call_number_id\": \"<integer>\",\n  \"call_script_id\": \"<integer>\",\n  \"survey_id\": \"<integer>\",\n  \"is_predictive\": \"<integer>\",\n  \"calls_percentage\": \"<integer>\",\n  \"attempts\": \"<integer>\",\n  \"attempts_interval\": \"<integer>\",\n  \"ContactsTag\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Agent\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Group\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 406,\n    \"message\": \"Invalid input data.\",\n    \"data\": {\n      \"name\": [\n        \"Please supply a valid campaign name.\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2ba9901-7016-4d98-b428-1e51ca4f53e5",
+              "name": "Something went wrong",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "add.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Button\": [\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"has_schedule_date\": \"<boolean>\",\n  \"schedule_start_date\": \"<date>\",\n  \"schedule_start_time\": \"<time>\",\n  \"answer_wait_time\": \"<integer>\",\n  \"after_call_dialing_auto\": \"<boolean>\",\n  \"after_call_time\": \"<integer>\",\n  \"is_recording\": \"<boolean>\",\n  \"call_number_id\": \"<integer>\",\n  \"call_script_id\": \"<integer>\",\n  \"survey_id\": \"<integer>\",\n  \"is_predictive\": \"<integer>\",\n  \"calls_percentage\": \"<integer>\",\n  \"attempts\": \"<integer>\",\n  \"attempts_interval\": \"<integer>\",\n  \"ContactsTag\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Agent\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Group\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 500,\n    \"message\": \"Something went wrong.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "147de396-f45a-4f98-a34d-83accb0e5027",
+          "name": "Edit campaign",
+          "request": {
+            "name": "Edit campaign",
+            "description": {
+              "content": "Edit a campaign",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "campaigns",
+                "edit",
+                "{{id}}.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Button\": [\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"has_schedule_date\": \"<boolean>\",\n  \"schedule_start_date\": \"<date>\",\n  \"schedule_start_time\": \"<time>\",\n  \"answer_wait_time\": \"<integer>\",\n  \"after_call_dialing_auto\": \"<boolean>\",\n  \"after_call_time\": \"<integer>\",\n  \"is_recording\": \"<boolean>\",\n  \"call_number_id\": \"<integer>\",\n  \"call_script_id\": \"<integer>\",\n  \"survey_id\": \"<integer>\",\n  \"is_predictive\": \"<integer>\",\n  \"calls_percentage\": \"<integer>\",\n  \"attempts\": \"<integer>\",\n  \"attempts_interval\": \"<integer>\",\n  \"ContactsTag\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Agent\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Group\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3e16f9a4-13aa-4f9c-bcec-236049794425",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "edit",
+                    "{{id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Button\": [\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"has_schedule_date\": \"<boolean>\",\n  \"schedule_start_date\": \"<date>\",\n  \"schedule_start_time\": \"<time>\",\n  \"answer_wait_time\": \"<integer>\",\n  \"after_call_dialing_auto\": \"<boolean>\",\n  \"after_call_time\": \"<integer>\",\n  \"is_recording\": \"<boolean>\",\n  \"call_number_id\": \"<integer>\",\n  \"call_script_id\": \"<integer>\",\n  \"survey_id\": \"<integer>\",\n  \"is_predictive\": \"<integer>\",\n  \"calls_percentage\": \"<integer>\",\n  \"attempts\": \"<integer>\",\n  \"attempts_interval\": \"<integer>\",\n  \"ContactsTag\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Agent\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Group\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 200\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd89912f-3b04-4fb4-9ec0-d98dd56ac75f",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "edit",
+                    "{{id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Button\": [\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"has_schedule_date\": \"<boolean>\",\n  \"schedule_start_date\": \"<date>\",\n  \"schedule_start_time\": \"<time>\",\n  \"answer_wait_time\": \"<integer>\",\n  \"after_call_dialing_auto\": \"<boolean>\",\n  \"after_call_time\": \"<integer>\",\n  \"is_recording\": \"<boolean>\",\n  \"call_number_id\": \"<integer>\",\n  \"call_script_id\": \"<integer>\",\n  \"survey_id\": \"<integer>\",\n  \"is_predictive\": \"<integer>\",\n  \"calls_percentage\": \"<integer>\",\n  \"attempts\": \"<integer>\",\n  \"attempts_interval\": \"<integer>\",\n  \"ContactsTag\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Agent\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Group\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 404,\n    \"message\": \"Not found.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb22e1f0-bfe4-4e6c-a129-abe897263521",
+              "name": "Invalid input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "edit",
+                    "{{id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Button\": [\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"has_schedule_date\": \"<boolean>\",\n  \"schedule_start_date\": \"<date>\",\n  \"schedule_start_time\": \"<time>\",\n  \"answer_wait_time\": \"<integer>\",\n  \"after_call_dialing_auto\": \"<boolean>\",\n  \"after_call_time\": \"<integer>\",\n  \"is_recording\": \"<boolean>\",\n  \"call_number_id\": \"<integer>\",\n  \"call_script_id\": \"<integer>\",\n  \"survey_id\": \"<integer>\",\n  \"is_predictive\": \"<integer>\",\n  \"calls_percentage\": \"<integer>\",\n  \"attempts\": \"<integer>\",\n  \"attempts_interval\": \"<integer>\",\n  \"ContactsTag\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Agent\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Group\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 406,\n    \"message\": \"Invalid input data.\",\n    \"data\": {\n      \"name\": [\n        \"Please supply a valid campaign name.\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ac3baa3-3afa-4e4e-980e-9c4472685bee",
+              "name": "Something went wrong",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "edit",
+                    "{{id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Button\": [\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"id\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"color\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"has_schedule_date\": \"<boolean>\",\n  \"schedule_start_date\": \"<date>\",\n  \"schedule_start_time\": \"<time>\",\n  \"answer_wait_time\": \"<integer>\",\n  \"after_call_dialing_auto\": \"<boolean>\",\n  \"after_call_time\": \"<integer>\",\n  \"is_recording\": \"<boolean>\",\n  \"call_number_id\": \"<integer>\",\n  \"call_script_id\": \"<integer>\",\n  \"survey_id\": \"<integer>\",\n  \"is_predictive\": \"<integer>\",\n  \"calls_percentage\": \"<integer>\",\n  \"attempts\": \"<integer>\",\n  \"attempts_interval\": \"<integer>\",\n  \"ContactsTag\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Agent\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ],\n  \"Group\": [\n    {\n      \"id\": \"<integer>\"\n    },\n    {\n      \"id\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 500,\n    \"message\": \"Something went wrong.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cc57bae1-8b92-4a10-ba96-30975d29ec09",
+          "name": "Delete campaign",
+          "request": {
+            "name": "Delete campaign",
+            "description": {},
+            "url": {
+              "path": [
+                "campaigns",
+                "delete",
+                "{{id}}.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c34693e9-f599-4943-a487-2e41619e990b",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "delete",
+                    "{{id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 200\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7007fae3-0b6a-4867-9ea9-aed6f5f37fd7",
+              "name": "Campaign not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "delete",
+                    "{{id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 404,\n    \"message\": \"Not found.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe141f45-8adc-4293-871e-4269ef0f6f78",
+              "name": "Something went wrong",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    "delete",
+                    "{{id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseData\": {\n    \"status\": 500,\n    \"message\": \"Something went wrong.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://my.cloudtalk.io/api",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) Campaign ID to edit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<integer>",
+      "key": "id"
+    }
+  ],
+  "info": {
+    "_postman_id": "542ed3bc-aba9-4086-8b98-ab91744670d4",
+    "name": "CloudTalk Agents Campaigns API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\nWelcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk.\n\n# API Overview\n\nThe API is organized around the following resources:\n\nAPI Area | Description\n----------------|-------------\nCalls | Browse your call history, download recordings and access all your calls data.\nContacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually.\nNumbers | Automate Numbers modifications. List all your numbers.\nAgents | Create or update your Agents, access their settings.\nConversation Intelligence | Get Conversation Intelligence data about your calls.\nVoiceAgent | Initiate VoiceAgent calls\n\n\n[JSON](http://www.json.org/) is returned in all responses. XML is not supported.\n\nThe API also uses common approaches for the following:\n\nFunction | Description\n----------------|-------------\nData | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects.\nErrors | 4xx and 5xx responses returning JSON with error codes\nRate Limiting | Controls how many requests can be made in a time window\nHTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS.\n\n\n## Authentication\n\nThis is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication.\n\n Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the Cloudtalk Dashboard Account → Settings → API keys tab.\n\nTo try the API via curl on the command-line, the general form used would be:\n```\ncurl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL\n```\n\nFor instance, you would execute:\n```\ncurl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json\n```\n\n## Usage\n\nThe API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **'429 Too Many Requests'** response code will be returned along with the following headers -\n\nHeader name | Description\n----------------|-------------\nX-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window.\nX-CloudTalkAPI-Remaining | Number of API requests left in the current window.\nX-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp.\n\nNote that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case.\n\n## Response Envelopes\n\n**Note:** Conversation Intelligence doesn't follow envelopes.\n\nThe API returns one of three envelopes depending upon the request issued:\n\n1. Single Item Envelope\n2. Collections Envelope\n3. Error Envelope\n\n### Single Item Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"id\": 123,\n        ...\n        \"created\": \"2018-01-10 12:34:56\"\n    }\n}\n```\n\n### Collections Envelope\n\nAll dates/times are returned in ISO8601 format and in UTC timezone.\n\n```\nStatus: 200 OK\n{\n    \"responseData\": {\n        \"itemsCount\": 65,\n        \"pageCount\": 3,\n        \"pageNumber\": 1,\n        \"limit\": 30,\n        \"data\": [\n            {\n                \"id\": 123,\n                ...\n                \"created\": \"2018-01-10 12:34:56\"\n            },\n            {\n                \"id\": 456,\n                ...\n                \"created\": \"2017-10-19 09:21:29\"\n            },\n            ...\n        ]\n    }\n}\n```\n\n### Error Envelope\n\n```\nStatus: 404 Not Found\n{\n    \"responseData\": {\n        \"status\": 404,\n        \"message\": \"Not Found\"\n    }\n}\n```\n\n## Encoding\n\nData is encoded as defined by JSON in [RFC4627](http://www.ietf.org/rfc/rfc4627.txt). The default encoding for APIs is UTF-8.\n\nSome query parameters may need to be [url encoded](https://www.wikiwand.com/en/Percent-encoding) when sending - for example, the email parameter value used to query users should be encoded.\n\n## Use of HTTP\n\nRequest methods are used in accordance with HTTP -\n\n- `GET` is used to access resources and perform queries. The API does not allow modifications (creates, updates, deletes) to occur via GET.\n- `PUT` is used to create resources.\n- `POST` is used to update resources. PATCH is not currently used by the API.\n- `DELETE` is used to delete resources.\n\nResponses use standard HTTP codes. Where there are client or server errors, a list of of one or more errors in JSON format is returned in the body.\n\nThe `Accept` header must be used by a client used to indicate a preferred response for `GET/HEAD` requests. Requests without an `Accept` header of `application/json` may be rejected with a client error of 404 or 406. The `Content-Type` header should be used by clients to indicate the submitted format for `POST/PUT` requests.\n\nContact Support:\n Name: CloudTalk API Support",
+      "type": "text/plain"
+    }
+  }
+}

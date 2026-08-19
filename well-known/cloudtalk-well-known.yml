@@ -1,0 +1,139 @@
+generated: '2026-08-14'
+method: probed
+source: live HTTP probes of every apis.yml baseURL host, OpenAPI servers[] host, and the docs host
+result: no-hits
+note: >-
+  NO /.well-known/ document is served by CloudTalk on any host. This file records a measured ABSENCE:
+  no `WellKnown`, `SecurityTxt`, `APICatalog` or `AIPlugin` pointer is emitted in apis.yml, because no
+  path returned a real document. IMPORTANT FALSE-POSITIVE NOTE: the documentation host
+  developers.cloudtalk.io answers HTTP 200 with the SAME "CloudTalk API Reference" HTML shell for
+  EVERY /.well-known/* path probed (and for /openapi.json, /llms.txt, /mcp, /api-docs and any other
+  path). That is a single-page-app catch-all, not a served document, and every such 200 is recorded
+  below as a miss with `spa_shell: true`.
+hosts_probed:
+- https://my.cloudtalk.io
+- https://www.cloudtalk.io
+- https://developers.cloudtalk.io
+- https://api.cloudtalk.io
+documents:
+- host: my.cloudtalk.io
+  path: /.well-known/security.txt
+  status: 404
+- host: my.cloudtalk.io
+  path: /.well-known/openid-configuration
+  status: 404
+- host: my.cloudtalk.io
+  path: /.well-known/oauth-authorization-server
+  status: 404
+- host: my.cloudtalk.io
+  path: /.well-known/api-catalog
+  status: 404
+- host: my.cloudtalk.io
+  path: /.well-known/ai-plugin.json
+  status: 404
+- host: my.cloudtalk.io
+  path: /.well-known/agent-card.json
+  status: 404
+- host: my.cloudtalk.io
+  path: /.well-known/agent.json
+  status: 404
+- host: www.cloudtalk.io
+  path: /.well-known/security.txt
+  status: 404
+- host: www.cloudtalk.io
+  path: /.well-known/openid-configuration
+  status: 404
+- host: www.cloudtalk.io
+  path: /.well-known/oauth-authorization-server
+  status: 404
+- host: www.cloudtalk.io
+  path: /.well-known/api-catalog
+  status: 404
+- host: www.cloudtalk.io
+  path: /.well-known/ai-plugin.json
+  status: 404
+- host: www.cloudtalk.io
+  path: /.well-known/agent-card.json
+  status: 404
+- host: www.cloudtalk.io
+  path: /.well-known/agent.json
+  status: 404
+- host: api.cloudtalk.io
+  path: /.well-known/security.txt
+  status: 404
+- host: api.cloudtalk.io
+  path: /.well-known/openid-configuration
+  status: 404
+- host: api.cloudtalk.io
+  path: /.well-known/oauth-authorization-server
+  status: 404
+- host: api.cloudtalk.io
+  path: /.well-known/oauth-protected-resource
+  status: 404
+- host: api.cloudtalk.io
+  path: /.well-known/api-catalog
+  status: 404
+- host: api.cloudtalk.io
+  path: /.well-known/agent-card.json
+  status: 404
+- host: api.cloudtalk.io
+  path: /.well-known/agent.json
+  status: 404
+- host: developers.cloudtalk.io
+  path: /.well-known/security.txt
+  status: 200
+  spa_shell: true
+  content_type: text/html
+  verdict: miss
+  detail: returned the "CloudTalk API Reference" SPA HTML shell, not an RFC 9116 document
+- host: developers.cloudtalk.io
+  path: /.well-known/openid-configuration
+  status: 200
+  spa_shell: true
+  content_type: text/html
+  verdict: miss
+- host: developers.cloudtalk.io
+  path: /.well-known/oauth-authorization-server
+  status: 200
+  spa_shell: true
+  content_type: text/html
+  verdict: miss
+- host: developers.cloudtalk.io
+  path: /.well-known/api-catalog
+  status: 200
+  spa_shell: true
+  content_type: text/html
+  verdict: miss
+- host: developers.cloudtalk.io
+  path: /.well-known/ai-plugin.json
+  status: 200
+  spa_shell: true
+  content_type: text/html
+  verdict: miss
+- host: developers.cloudtalk.io
+  path: /.well-known/agent-card.json
+  status: 200
+  spa_shell: true
+  content_type: text/html
+  verdict: miss
+- host: developers.cloudtalk.io
+  path: /.well-known/agent.json
+  status: 200
+  spa_shell: true
+  content_type: text/html
+  verdict: miss
+a2a:
+  found: false
+  note: >-
+    No A2A Agent Card on any host at either the canonical /.well-known/agent-card.json or the legacy
+    /.well-known/agent.json. No a2a/ artifact was written and no AgentCard pointer was emitted — per
+    pipeline rule an agent card is search-only and must never be authored on a provider's behalf.
+security_txt:
+  found: false
+  note: >-
+    CloudTalk serves no /.well-known/security.txt. Its security contact (security@cloudtalk.io) and
+    responsible-disclosure process are published instead via the trust center at
+    https://trust.cloudtalk.io/ — captured in security/cloudtalk-vulnerability-disclosure.yml.
+gap: >-
+  Serving a /.well-known/security.txt on cloudtalk.io that points at the existing trust center would
+  be a one-file fix; the disclosure program already exists, it is just not machine-discoverable.

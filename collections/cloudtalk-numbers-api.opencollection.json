@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CloudTalk Agents Numbers API",
+    "version": "1.7"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Numbers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List numbers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/numbers/index.json",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by number ID"
+              },
+              {
+                "name": "country_code",
+                "value": "",
+                "type": "query",
+                "description": "Filter by country calling code"
+              },
+              {
+                "name": "area_code",
+                "value": "",
+                "type": "query",
+                "description": "Filter by local area code. Area code cannot contain 0 at the beginning"
+              },
+              {
+                "name": "connected_to",
+                "value": "",
+                "type": "query",
+                "description": "Filter by route type. `0 = 'group'`, `1 = 'agent'`, `2 = 'conference room'`, `3 = 'fax'`"
+              },
+              {
+                "name": "is_free",
+                "value": "",
+                "type": "query",
+                "description": "Filter by availability. `0 = 'taken'`, `1 = 'free'`"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Max. number of items in response data."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Number of page to return."
+              }
+            ]
+          },
+          "docs": "List numbers"
+        },
+        {
+          "info": {
+            "name": "Edit a number",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/numbers/edit/:id.json",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Number ID to edit"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit a number"
+        },
+        {
+          "info": {
+            "name": "Unregister a number",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://my.cloudtalk.io/api/numbers/clear/:id.json",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Number ID to unregister"
+              }
+            ]
+          },
+          "docs": "Clear current route settings of the number. Number will be marked as free."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

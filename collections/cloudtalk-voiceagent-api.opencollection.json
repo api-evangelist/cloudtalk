@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CloudTalk Agents VoiceAgent API",
+    "version": "1.7"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "VoiceAgent",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate a VoiceAgent call",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/voice-agent/calls",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new VoiceAgent call with specified parameters and properties. Call properties are optional and can be used to configure the call."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

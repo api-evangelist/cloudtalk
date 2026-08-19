@@ -1,0 +1,62 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.cloudtalk.io/blog/product-update-january-2026/
+docs: https://releases.cloudtalk.io/
+note: >-
+  CloudTalk publishes NO API-specific changelog. There is no dated release feed on the developer
+  reference (https://developers.cloudtalk.io/changelog returns the SPA shell, HTTP 200 HTML, not a
+  changelog), and the OpenAPI document carries only a flat info.version of "1.7" with no history.
+  What CloudTalk does publish is a PRODUCT changelog across three surfaces, captured below. The
+  distinction matters: an integrator cannot learn from any published source when a REST operation
+  changed.
+scheme: product-release-notes (no API versioning scheme; the OpenAPI carries a flat info.version)
+current_version: '1.7'
+current_version_source: openapi/_original/cloudtalk-openapi.json info.version
+surfaces:
+- kind: roadmap-portal
+  url: https://releases.cloudtalk.io/
+  title: CloudTalk Product Portal / Product Roadmap
+  status: 403-to-automation
+  detail: >-
+    A Canny-hosted product portal (public roadmap with PLANNED/IN PROGRESS/SHIPPED lanes). It is
+    genuinely public and search-indexed, but the host returns HTTP 403 (Cloudflare error 1014) to
+    non-browser clients, so its entries could not be harvested. Recorded as a bot challenge on our
+    side, NOT as an absence on CloudTalk's side.
+- kind: blog-series
+  url: https://www.cloudtalk.io/blog/
+  title: CloudTalk Product Updates (dated blog posts)
+  status: readable
+  detail: A recurring dated retrospective of what shipped in the preceding month(s).
+- kind: webinar
+  url: https://www.cloudtalk.io/product-updates-webinar-q4/
+  title: Quarterly Product Updates Webinar
+  status: readable
+  detail: Q3 and Q4 product-update webinars; video, not machine-readable.
+entries:
+- date: '2026-01-16'
+  title: Product Update — December 2025 & early January 2026
+  url: https://www.cloudtalk.io/blog/product-update-january-2026/
+  breaking: false
+  api_affecting: false
+  highlights:
+  - Invoice Management — download invoice PDFs from the dashboard
+  - CSV upload now supports campaign tags and preferred-agent assignment during import
+  - Faster CSV processing with clearer error reporting and status logs
+  - Mobile calling — streamlined message sending and contact assignment from the dialpad
+  - Mobile messaging — read/unread thread filters, channel filtering, typing indicators
+  - Zendesk integration — consolidated call exports, internal note defaults, embedded recordings
+  - Real-time dashboard now shows internal agent-to-agent calls in the Active Calls tab
+  - Idle status reporting broken down by sub-status (break, lunch, meeting)
+api_change_history:
+  published: false
+  note: >-
+    No per-operation or per-version API change history is published anywhere. The only version signal
+    an integrator has is info.version in the OpenAPI document, which is not dated and carries no
+    diff. Breaking-change notice, deprecation windows and Sunset headers are likewise absent — see
+    lifecycle/cloudtalk-lifecycle.yml.
+gap: >-
+  The highest-leverage operational fix for CloudTalk: publish a dated API changelog on
+  developers.cloudtalk.io. The product changelog exists and is well maintained; the API surface —
+  56 operations that customers build against — has none.
+related:
+- lifecycle/cloudtalk-lifecycle.yml

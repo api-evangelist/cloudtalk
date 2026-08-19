@@ -1,0 +1,410 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CloudTalk Agents Contacts API",
+    "version": "1.7"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Contacts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/contacts/index.json",
+            "params": [
+              {
+                "name": "country_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by country ID"
+              },
+              {
+                "name": "tag_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by tag ID"
+              },
+              {
+                "name": "industry",
+                "value": "",
+                "type": "query",
+                "description": "Filter by industry"
+              },
+              {
+                "name": "keyword",
+                "value": "",
+                "type": "query",
+                "description": "Filter by keyword"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Max. number of items in response data."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Number of page to return."
+              }
+            ]
+          },
+          "docs": "List contacts"
+        },
+        {
+          "info": {
+            "name": "Add contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://my.cloudtalk.io/api/contacts/add.json",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add contact"
+        },
+        {
+          "info": {
+            "name": "Edit contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/contacts/edit/:contactId.json",
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "Contact ID to edit"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Only sent parameters/values will be updated. If you want to clear the value, just set empty string for that attribute. After sending empty string for properties of `ContactNumber`, `ContactEmail`, `ContactsTag` or `ContactAttribute` all data from these properties will be cleared. When you send values for properties of `ContactNumber`, `ContactEmail`, `ContactsTag` or `ContactAttribute` only these data will be updated, all other will be cleared."
+        },
+        {
+          "info": {
+            "name": "Delete contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://my.cloudtalk.io/api/contacts/delete/:contactId.json",
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "Contact ID to delete"
+              }
+            ]
+          },
+          "docs": "Delete contact"
+        },
+        {
+          "info": {
+            "name": "Inspect a contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/contacts/show/:contactId.json",
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "Contact ID to show"
+              }
+            ]
+          },
+          "docs": "Inspect a contact"
+        },
+        {
+          "info": {
+            "name": "Attributes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/contacts/attributes.json"
+          },
+          "docs": "List all attributes which can be assigned to a contact."
+        },
+        {
+          "info": {
+            "name": "Assign Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://my.cloudtalk.io/api/contacts/addTags/:contactId.json",
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "Contact ID for adding tags"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign tags to contact."
+        },
+        {
+          "info": {
+            "name": "Unassign Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://my.cloudtalk.io/api/contacts/removeTags/:contactId.json",
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "Contact ID for deleting tags"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Unassign tags to contact."
+        },
+        {
+          "info": {
+            "name": "List notes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/notes/index.json",
+            "params": [
+              {
+                "name": "contact_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by contact ID"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by agent ID"
+              },
+              {
+                "name": "keyword",
+                "value": "",
+                "type": "query",
+                "description": "Filter by keyword in note content"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Max. number of items in response data."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Number of page to return."
+              }
+            ]
+          },
+          "docs": "List all notes assigned to contacts"
+        },
+        {
+          "info": {
+            "name": "Add note",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://my.cloudtalk.io/api/notes/add/:contactId.json",
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "Contact ID to which note will be assigned"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign a note to existing contact."
+        },
+        {
+          "info": {
+            "name": "Edit note",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/notes/edit/:noteId.json",
+            "params": [
+              {
+                "name": "noteId",
+                "value": "",
+                "type": "path",
+                "description": "Note ID to edit"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit note"
+        },
+        {
+          "info": {
+            "name": "Delete note",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://my.cloudtalk.io/api/notes/delete/:noteId.json",
+            "params": [
+              {
+                "name": "noteId",
+                "value": "",
+                "type": "path",
+                "description": "Note ID to delete"
+              }
+            ]
+          },
+          "docs": "Delete note"
+        },
+        {
+          "info": {
+            "name": "List activities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/activity/index.json",
+            "params": [
+              {
+                "name": "contact_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by contact ID"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by type - check below for possible values"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Max. number of items in response data."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Number of page to return."
+              }
+            ]
+          },
+          "docs": "List all activities assigned to contacts"
+        },
+        {
+          "info": {
+            "name": "Add activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://my.cloudtalk.io/api/activity/add/:contactId.json",
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "Contact ID to which activity will be assigned"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign an activity to existing contact."
+        },
+        {
+          "info": {
+            "name": "Edit activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/activity/edit/:activityId.json",
+            "params": [
+              {
+                "name": "activityId",
+                "value": "",
+                "type": "path",
+                "description": "Activity ID to edit"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit activity"
+        },
+        {
+          "info": {
+            "name": "Delete activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://my.cloudtalk.io/api/activity/delete/:activityId.json",
+            "params": [
+              {
+                "name": "activityId",
+                "value": "",
+                "type": "path",
+                "description": "Activity ID to delete"
+              }
+            ]
+          },
+          "docs": "Delete activity"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

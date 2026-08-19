@@ -1,0 +1,192 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CloudTalk Agents Calls API",
+    "version": "1.7"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Calls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Call history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/calls/index.json",
+            "params": [
+              {
+                "name": "public_internal",
+                "value": "",
+                "type": "query",
+                "description": "Filter by internal number of agent"
+              },
+              {
+                "name": "public_external",
+                "value": "",
+                "type": "query",
+                "description": "Filter by number of caller"
+              },
+              {
+                "name": "date_from",
+                "value": "",
+                "type": "query",
+                "description": "Filter by date from, e.g. 2017-12-24 12:22:00"
+              },
+              {
+                "name": "date_to",
+                "value": "",
+                "type": "query",
+                "description": "Filter by date to, napríklad 2017-12-24 12:22:00"
+              },
+              {
+                "name": "contact_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by assigned contact ID"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by assigned agent ID"
+              },
+              {
+                "name": "agent_extension",
+                "value": "",
+                "type": "query",
+                "description": "Filter by assigned agent's extension."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by call type"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by call status - 'missed' = for only missed calls, 'answered' = for all answered calls"
+              },
+              {
+                "name": "tag_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by assigned call tag ID"
+              },
+              {
+                "name": "call_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by call ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Max. number of items in response data."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Number of page to return."
+              }
+            ]
+          },
+          "docs": "Call history"
+        },
+        {
+          "info": {
+            "name": "Comprehensive information about a call and its flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/calls/:callId",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a call"
+              }
+            ]
+          },
+          "docs": "Comprehensive information about a call and its flow"
+        },
+        {
+          "info": {
+            "name": "Recording media",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/calls/recording/:callId.json",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "Call ID for the requested recording"
+              }
+            ]
+          },
+          "docs": "Api endpoint returns media data of recording for selected call. Media data are returned in WAV format."
+        },
+        {
+          "info": {
+            "name": "Delete call recording",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://my.cloudtalk.io/api/recordings/delete/:callId.json",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "Call ID for recording to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete call recording file for good. Call recording will be deleted from all our systems."
+        },
+        {
+          "info": {
+            "name": "Make a call",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/calls/create.json",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make a call using to any phone numbers. To place a new outbound call, make an HTTP POST request. At first it will initiate a call to an agent. Maximum waiting time for an agent to pick up the call is 20 seconds. After an agent picks up, we will automatically call desired phone number."
+        },
+        {
+          "info": {
+            "name": "Group statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/statistics/realtime/groups.json"
+          },
+          "docs": "Group statistics"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

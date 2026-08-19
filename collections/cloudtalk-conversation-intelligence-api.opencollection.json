@@ -1,0 +1,175 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CloudTalk Agents Conversation Intelligence API",
+    "version": "1.7"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Conversation Intelligence",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/ai/calls/:callId/summary",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "Call ID"
+              }
+            ]
+          },
+          "docs": "Summary"
+        },
+        {
+          "info": {
+            "name": "Overall sentiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/ai/calls/:callId/overall-sentiment",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "Call ID"
+              }
+            ]
+          },
+          "docs": "Overall sentiment"
+        },
+        {
+          "info": {
+            "name": "Talk-listen ratio",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/ai/calls/:callId/talk-listen-ratio",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "Call ID"
+              }
+            ]
+          },
+          "docs": "Talk-listen ratio"
+        },
+        {
+          "info": {
+            "name": "Topics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/ai/calls/:callId/topics",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "Call ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset the list of returned items by this amount"
+              }
+            ]
+          },
+          "docs": "Topics"
+        },
+        {
+          "info": {
+            "name": "Transcription",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/ai/calls/:callId/transcription",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "Call ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset the list of returned items by this amount"
+              }
+            ]
+          },
+          "docs": "Transcription"
+        },
+        {
+          "info": {
+            "name": "Smart notes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/ai/calls/:callId/smart-notes",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "Call ID"
+              }
+            ]
+          },
+          "docs": "Smart notes"
+        },
+        {
+          "info": {
+            "name": "Link to the call details page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://my.cloudtalk.io/api/ai/calls/:callId/details-link",
+            "params": [
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path",
+                "description": "Call ID"
+              }
+            ]
+          },
+          "docs": "Link to the call details page"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,55 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  Registry searches against npm (registry.npmjs.org name lookups + /-/v1/search), PyPI
+  (pypi.org/pypi/<name>/json), RubyGems (rubygems.org/api/v1/gems), Packagist (packagist.org/search.json),
+  crates.io (crates.io/api/v1/crates), plus the CloudTalk developer reference
+  (https://developers.cloudtalk.io/) and the CloudTalk GitHub organization
+  (https://github.com/CloudTalk-io, 14 public repos enumerated via the GitHub API).
+package_count: 0
+official_package_count: 0
+packages: []
+note: >-
+  CloudTalk publishes NO first-party client libraries in any public package registry. Every exact-name
+  lookup returned 404 — npm `cloudtalk`, `@cloudtalk/sdk`, `cloudtalk-api`, `cloudtalk-sdk`; PyPI
+  `cloudtalk`, `cloudtalk-api`, `cloudtalk-sdk`; RubyGems `cloudtalk`; crates.io returned zero matches;
+  Packagist returned only unrelated `laravel-google-cloud-tasks-queue` packages. An npm keyword search
+  for "cloudtalk" surfaced exactly two packages, neither first-party: `@pipedream/cloudtalk` (0.0.3,
+  published 2025-08-19, by Pipedream) and an unrelated marketing package. The CloudTalk GitHub
+  organization (CloudTalk-io) contains no client SDK at all — its 14 public repositories are forks of
+  third-party infrastructure and CI tooling (cakephp-redis, node-notifier, mysqld_exporter,
+  kamailio_exporter, webdis, gitleaks-action, several GitHub Actions) plus two interview-homework
+  repos; most are archived. Integration is therefore direct HTTPS + HTTP Basic Auth against
+  https://my.cloudtalk.io/api, or via a third-party iPaaS (Zapier, Make, Pipedream).
+searched_registries:
+- registry: npm
+  result: no first-party package
+  evidence: 404 on cloudtalk, @cloudtalk/sdk, cloudtalk-api, cloudtalk-sdk; keyword search returned only @pipedream/cloudtalk
+- registry: pypi
+  result: no first-party package
+  evidence: 404 on cloudtalk, cloudtalk-api, cloudtalk-sdk
+- registry: rubygems
+  result: no first-party package
+  evidence: 404 on cloudtalk
+- registry: crates.io
+  result: no first-party package
+  evidence: search returned meta.total 0
+- registry: packagist
+  result: no first-party package
+  evidence: search returned only unrelated Google Cloud Tasks packages
+- registry: github
+  result: no first-party SDK repository
+  evidence: https://api.github.com/orgs/CloudTalk-io/repos returned 14 repos, all forks/CI tooling
+third_party_packages:
+- language: javascript
+  registry: npm
+  name: '@pipedream/cloudtalk'
+  url: https://www.npmjs.com/package/@pipedream/cloudtalk
+  version: 0.0.3
+  published: '2025-08-19'
+  official: false
+  note: Pipedream connector components, not a CloudTalk-authored SDK. Recorded for completeness only.
+gap: >-
+  A provider with 56 published REST operations and no client library in any registry is a real
+  ergonomics gap. Worth raising with CloudTalk — a generated SDK from the OpenAPI 3.0.1 v1.7 document
+  they already publish would be low-cost.

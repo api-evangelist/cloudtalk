@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CloudTalk Agents Bulks API",
+    "version": "1.7"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Bulks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Contact actions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/bulk/contacts.json",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Max 10 actions are available in one request. Only sent parameters/values will be updated. If you want to clear the value, just set empty string for that attribute. After sending empty string for properties of `ContactNumber`, `ContactEmail`, `ContactsTag` or `ContactAttribute` all data from these properties will be cleared. When you send values for properties of `ContactNumber`, `ContactEmail`, `ContactsTag` or `ContactAttribute` only these data will be updated, all other will be cleared."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

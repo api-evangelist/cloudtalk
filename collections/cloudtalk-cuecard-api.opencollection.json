@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CloudTalk Agents CueCard API",
+    "version": "1.7"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "CueCard",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create CueCard request to be displayed to agent during the active call",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/cuecards",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create CueCard request to be displayed to agent during the active call"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

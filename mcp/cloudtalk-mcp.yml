@@ -234,3 +234,66 @@ tools:
   description: Initiate a VoiceAgent call
   tag: VoiceAgent
   source_operation: openapi/cloudtalk-openapi.json#createVoiceAgentCall
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: derived
+  tools: 56
+  checked: '2026-08-14'
+  source: catalog MCP census + live probe (see x-probe below)
+  note: >-
+    mode is `none` because CloudTalk ships NO published MCP server — neither a documented remote
+    endpoint nor a stdio package. The 56 tools above are a CANDIDATE list derived one-per-operation
+    from the published OpenAPI v1.7; nothing in this file is callable by an agent today. See x-probe
+    for an undocumented, auth-gated route we observed but deliberately do NOT claim as an MCP server.
+x-probe:
+  generated: '2026-08-14'
+  method: probed
+  finding: undocumented-auth-gated-route
+  claimed: false
+  detail: >-
+    An undocumented route exists at https://api.cloudtalk.io/mcp. It is route-specific and behaves
+    unlike the rest of that host: POST returns HTTP 401 `{"code":"UNAUTHORIZED"}` (content-type
+    text/plain, with `x-ext-auth-reason: Unauthorized` from an Envoy ext-auth gateway), while HEAD
+    returns HTTP 405 with `allow: POST` — the response shape of an MCP Streamable HTTP transport.
+    /mcp/sse behaves identically. By contrast /v1/mcp, /api/mcp, /graphql, /health and a random
+    control path (/zzz-random-xyz) all return the host's generic CakePHP 404 HTML, so the 401 is NOT
+    a catch-all.
+  why_not_claimed: >-
+    CloudTalk documents no MCP server anywhere — not on developers.cloudtalk.io, not in the help
+    center llms.txt (431 lines, zero MCP mentions), and CloudTalk's own marketing states that
+    because "MCP runs on standard APIs" customers should connect via the public REST API and
+    webhooks. tools/list and initialize both returned 401, so no tool list, no inputSchema and no
+    protocol version could be observed. Per pipeline rule, an MCP endpoint is asserted only when the
+    provider publishes it or a live tools/list confirms it; an undocumented gated route that answers
+    401 is evidence worth recording, not an agent surface worth advertising. No MCPServer endpoint
+    is wired from this observation.
+  evidence:
+  - url: https://api.cloudtalk.io/mcp
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 401
+    content_type: text/plain
+    response: '{"code": "UNAUTHORIZED", "message": "You are not authorized to access this resource."}'
+  - url: https://api.cloudtalk.io/mcp
+    method: HEAD
+    http_status: 405
+    allow: POST
+  - url: https://api.cloudtalk.io/mcp/sse
+    method: GET
+    http_status: 401
+  - url: https://api.cloudtalk.io/zzz-random-xyz
+    method: GET
+    http_status: 404
+    content_type: text/html
+    note: control probe — generic CakePHP 404, proving /mcp is a distinct route
+  - url: https://api.cloudtalk.io/.well-known/oauth-protected-resource
+    method: GET
+    http_status: 404
+    note: no RFC 9728 protected-resource metadata, so the gate's authorization server is not discoverable
+  recheck: >-
+    Re-probe on the next pass. If CloudTalk documents this endpoint, or tools/list ever returns 200,
+    upgrade deployment.mode to `remote` with endpoint https://api.cloudtalk.io/mcp and verified: probed.

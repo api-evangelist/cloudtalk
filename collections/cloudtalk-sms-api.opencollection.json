@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CloudTalk Agents Sms API",
+    "version": "1.7"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sms",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send sms",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://my.cloudtalk.io/api/sms/send.json",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The success response for sms/send.json may include false success attribute, where attribute data is populated with the provider error message"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
