@@ -149,6 +149,8 @@ apis:
   humanURL: https://developers.cloudtalk.io/
   baseURL: https://my.cloudtalk.io/api
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -176,7 +178,8 @@ apis:
   description: All other helper endpoints.
   humanURL: https://developers.cloudtalk.io/
   baseURL: https://my.cloudtalk.io/api
-  tags:
+  tags: []
+  tags_raw:
   - Other
   properties:
   - type: OpenAPI
@@ -191,6 +194,8 @@ apis:
   humanURL: https://developers.cloudtalk.io/
   baseURL: https://my.cloudtalk.io/api
   tags:
+  - SMS
+  tags_raw:
   - Sms
   properties:
   - type: OpenAPI
@@ -219,6 +224,8 @@ apis:
   humanURL: https://developers.cloudtalk.io/
   baseURL: https://my.cloudtalk.io/api
   tags:
+  - Voice Agent
+  tags_raw:
   - VoiceAgent
   properties:
   - type: OpenAPI
