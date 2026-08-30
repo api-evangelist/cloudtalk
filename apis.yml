@@ -236,7 +236,7 @@ apis:
   humanURL: https://developers.cloudtalk.io/
   baseURL: https://my.cloudtalk.io/api
   tags:
-  - Voice Agent
+  - VoiceAgent
   tags_raw:
   - VoiceAgent
   properties:
