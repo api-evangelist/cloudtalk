@@ -399,6 +399,15 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
     ContactEmailArray:
       type: array
       description: Emails assigned to contact
@@ -475,24 +484,33 @@ components:
           description: Created date and time
           format: date-time
       description: Note data
-    command_id:
-      type: string
-      description: Unique action identifier
-    ContactNumberArray:
-      type: array
-      description: Numbers assigned to contact
-      items:
-        type: object
-        properties:
-          public_number:
-            type: string
-            description: Full number in international E.164 format
-    StatusCode:
+    ErrorInvalidData:
       type: object
       properties:
         status:
           type: string
           description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    ExternalUrlArray:
+      type: array
+      maxItems: 3
+      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
+      items:
+        type: object
+        properties:
+          name:
+            maxLength: 30
+            type: string
+            description: Name of external service. Name will be shown to agents while working with contacts.
+          url:
+            type: string
+            description: External URL to contact page
     ContactAttribute:
       type: array
       description: Attributes for contact - can include multiple
@@ -510,28 +528,9 @@ components:
             type: string
             description: Attribute value (max 255 chars per attribute)
             maximum: 255
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
-    ContactsTag:
-      type: array
-      description: Tags for contact - can include multiple
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-            description: Tag
+    command_id:
+      type: string
+      description: Unique action identifier
     ContactsBulkDataResponse:
       type: array
       description: Response data
@@ -548,26 +547,27 @@ components:
             type: object
             properties: {}
             description: Available only in add actions or invalid action data. More data explaining the error or id of new entity.
-    ExternalUrlArray:
-      type: array
-      maxItems: 3
-      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
-      items:
-        type: object
-        properties:
-          name:
-            maxLength: 30
-            type: string
-            description: Name of external service. Name will be shown to agents while working with contacts.
-          url:
-            type: string
-            description: External URL to contact page
-    ErrorData:
+    StatusCode:
       type: object
       properties:
         status:
           type: string
           description: Status code
-        message:
-          type: string
-          description: The error message
+    ContactNumberArray:
+      type: array
+      description: Numbers assigned to contact
+      items:
+        type: object
+        properties:
+          public_number:
+            type: string
+            description: Full number in international E.164 format
+    ContactsTag:
+      type: array
+      description: Tags for contact - can include multiple
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Tag

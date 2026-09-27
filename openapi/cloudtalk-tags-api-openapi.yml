@@ -252,6 +252,19 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
     PaginationData:
       type: object
       properties:
@@ -281,26 +294,13 @@ components:
         message:
           type: string
           description: The error message
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
     SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    StatusCode:
       type: object
       properties:
         status:

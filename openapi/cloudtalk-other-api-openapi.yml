@@ -325,33 +325,7 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    PaginationData:
-      type: object
-      properties:
-        itemsCount:
-          type: integer
-          description: number of resources in the response
-          format: int64
-        pageCount:
-          type: integer
-          description: number of pages found
-          format: int64
-        pageNumber:
-          type: integer
-          description: current page in the response
-          format: int64
-        limit:
-          type: integer
-          description: number of objects sent per page
-          format: int64
-      description: Call data
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    ErrorData:
+    ErrorInvalidData:
       type: object
       properties:
         status:
@@ -360,12 +334,10 @@ components:
         message:
           type: string
           description: The error message
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
     Blacklist:
       type: object
       properties:
@@ -391,7 +363,7 @@ components:
           description: Last modified date and time
           format: date-time
       description: Blacklist data
-    ErrorInvalidData:
+    ErrorData:
       type: object
       properties:
         status:
@@ -400,10 +372,26 @@ components:
         message:
           type: string
           description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
+    PaginationData:
+      type: object
+      properties:
+        itemsCount:
+          type: integer
+          description: number of resources in the response
+          format: int64
+        pageCount:
+          type: integer
+          description: number of pages found
+          format: int64
+        pageNumber:
+          type: integer
+          description: current page in the response
+          format: int64
+        limit:
+          type: integer
+          description: number of objects sent per page
+          format: int64
+      description: Call data
     Country:
       type: object
       properties:
@@ -423,3 +411,15 @@ components:
           type: string
           description: Country calling code
       description: Country data
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    StatusCode:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code

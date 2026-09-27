@@ -111,32 +111,7 @@ paths:
       operationId: postSmsSendJson
       x-operation-id-source: derived
 components:
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: BAD_REQUEST
-              message:
-                type: string
-                description: Error message
-                example: The request could not be understood or was missing required parameters.
   schemas:
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
     Sms:
       type: object
       properties:
@@ -171,3 +146,28 @@ components:
           format: binary
           description: File sent as blob to be send to Whatsapp. MAX 16MB. To send Whatsapp message recipient and sender number must contain prefix "whatsapp:" example "whatsapp:+421...". Field message must be empty.
       description: Sms data
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: BAD_REQUEST
+              message:
+                type: string
+                description: Error message
+                example: The request could not be understood or was missing required parameters.

@@ -74,6 +74,71 @@ paths:
                 - error processing cue card
 components:
   schemas:
+    ContentBlockFile:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+          description: file name to display
+        file_url:
+          type: string
+          description: url path to file
+        icon_url:
+          type: string
+          description: url path to file icon
+    CueCardError:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errors:
+          type: array
+          description: array of errors
+          items:
+            type: string
+    ContentBlock:
+      type: array
+      items:
+        anyOf:
+        - $ref: '#/components/schemas/ContentBlockTextField'
+        - $ref: '#/components/schemas/ContentBlockRichText'
+        - $ref: '#/components/schemas/ContentBlockImage'
+        - $ref: '#/components/schemas/ContentBlockFile'
+    ContentBlockRichText:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+          description: Field name to display
+        value:
+          type: string
+          description: The value as typed in Rich text editor
+    ContentBlockImage:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+          description: image name to display
+        image_url:
+          type: string
+          description: url path to image
+    ContentBlockTextField:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+          description: Field name to display
+        value:
+          type: string
+          description: text field value
     CueCardRequest:
       type: object
       required:
@@ -100,71 +165,6 @@ components:
           oneOf:
           - $ref: '#/components/schemas/ContentHTML'
           - $ref: '#/components/schemas/ContentBlock'
-    ContentBlockTextField:
-      type: object
-      properties:
-        type:
-          type: string
-        name:
-          type: string
-          description: Field name to display
-        value:
-          type: string
-          description: text field value
-    ContentBlockRichText:
-      type: object
-      properties:
-        type:
-          type: string
-        name:
-          type: string
-          description: Field name to display
-        value:
-          type: string
-          description: The value as typed in Rich text editor
-    ContentBlockImage:
-      type: object
-      properties:
-        type:
-          type: string
-        name:
-          type: string
-          description: image name to display
-        image_url:
-          type: string
-          description: url path to image
-    ContentBlock:
-      type: array
-      items:
-        anyOf:
-        - $ref: '#/components/schemas/ContentBlockTextField'
-        - $ref: '#/components/schemas/ContentBlockRichText'
-        - $ref: '#/components/schemas/ContentBlockImage'
-        - $ref: '#/components/schemas/ContentBlockFile'
     ContentHTML:
       type: string
       description: The value as typed in html text editor
-    CueCardError:
-      type: object
-      properties:
-        success:
-          type: boolean
-        errors:
-          type: array
-          description: array of errors
-          items:
-            type: string
-    ContentBlockFile:
-      type: object
-      properties:
-        type:
-          type: string
-        name:
-          type: string
-          description: file name to display
-        file_url:
-          type: string
-          description: url path to file
-        icon_url:
-          type: string
-          description: url path to file icon
