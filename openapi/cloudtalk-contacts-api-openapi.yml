@@ -1251,26 +1251,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ContactNote:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Note ID
-        contact_id:
-          type: integer
-          description: Assigned contact ID
-        user_id:
-          type: integer
-          description: Assigned agent ID
-        note:
-          type: string
-          description: Note content
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-      description: Note data
     PaginationData:
       type: object
       properties:
@@ -1291,25 +1271,81 @@ components:
           description: number of objects sent per page
           format: int64
       description: Call data
-    ErrorData:
+    ContactNote:
       type: object
       properties:
-        status:
+        id:
+          type: integer
+          description: Note ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        user_id:
+          type: integer
+          description: Assigned agent ID
+        note:
           type: string
-          description: Status code
-        message:
+          description: Note content
+        created:
           type: string
-          description: The error message
-    ContactEmailArray:
+          description: Created date and time
+          format: date-time
+      description: Note data
+    ContactActivity:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Activity ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        type:
+          type: string
+          description: Type of activity
+          enum:
+          - order
+          - task
+          - chat
+          - ticket
+          - other
+          - invoice
+          - proforma
+          - estimate
+          - cancel
+        name:
+          type: string
+          description: Name/Title
+        description:
+          type: string
+          description: Detailed description
+        activity_author:
+          type: string
+          description: Author of activity - user name you want to show
+        external_id:
+          type: integer
+          description: Activity ID from external resource - e.g. your order ID
+        external_url:
+          type: string
+          description: External url which can be opened from activity detail
+        activity_date:
+          type: string
+          description: Activity date and time. Set to current company time by default.
+          format: date-time
+        created:
+          type: string
+          description: Created date and time
+          format: date-time
+      description: Activity data
+    ContactNumberArray:
       type: array
-      description: Emails assigned to contact
+      description: Numbers assigned to contact
       items:
         type: object
         properties:
-          email:
+          public_number:
             type: string
-            description: Email address
-            format: email
+            description: Full number in international E.164 format
     Contact:
       type: object
       properties:
@@ -1417,89 +1453,15 @@ components:
                 type: string
                 description: Custom field value (max 255 chars per attribute)
       description: Contact data
-    ContactActivity:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Activity ID
-        contact_id:
-          type: integer
-          description: Assigned contact ID
-        type:
-          type: string
-          description: Type of activity
-          enum:
-          - order
-          - task
-          - chat
-          - ticket
-          - other
-          - invoice
-          - proforma
-          - estimate
-          - cancel
-        name:
-          type: string
-          description: Name/Title
-        description:
-          type: string
-          description: Detailed description
-        activity_author:
-          type: string
-          description: Author of activity - user name you want to show
-        external_id:
-          type: integer
-          description: Activity ID from external resource - e.g. your order ID
-        external_url:
-          type: string
-          description: External url which can be opened from activity detail
-        activity_date:
-          type: string
-          description: Activity date and time. Set to current company time by default.
-          format: date-time
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-      description: Activity data
-    ContactAttribute:
+    ContactsTag:
       type: array
-      description: Attributes for contact - can include multiple
-      items:
-        type: object
-        properties:
-          attribute_id:
-            type: integer
-            description: Attribute ID
-          title:
-            type: string
-            description: Attribute name (max 255 chars per attribute)
-            maximum: 255
-          value:
-            type: string
-            description: Attribute value (max 255 chars per attribute)
-            maximum: 255
-    ExternalUrlArray:
-      type: array
-      maxItems: 3
-      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
+      description: Tags for contact - can include multiple
       items:
         type: object
         properties:
           name:
-            maxLength: 30
             type: string
-            description: Name of external service. Name will be shown to agents while working with contacts.
-          url:
-            type: string
-            description: External URL to contact page
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
+            description: Tag
     ErrorInvalidData:
       type: object
       properties:
@@ -1526,30 +1488,44 @@ components:
           type: string
           description: Company name
       description: Contact data
-    ContactsTag:
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    ContactAttribute:
       type: array
-      description: Tags for contact - can include multiple
+      description: Attributes for contact - can include multiple
       items:
         type: object
         properties:
-          name:
+          attribute_id:
+            type: integer
+            description: Attribute ID
+          title:
             type: string
-            description: Tag
+            description: Attribute name (max 255 chars per attribute)
+            maximum: 255
+          value:
+            type: string
+            description: Attribute value (max 255 chars per attribute)
+            maximum: 255
     StatusCode:
       type: object
       properties:
         status:
           type: string
           description: Status code
-    ContactNumberArray:
-      type: array
-      description: Numbers assigned to contact
-      items:
-        type: object
-        properties:
-          public_number:
-            type: string
-            description: Full number in international E.164 format
     ContactEmail:
       type: object
       properties:
@@ -1565,3 +1541,27 @@ components:
           type: string
           description: Full number in international E.164 format
       description: Number assigned to contact
+    ContactEmailArray:
+      type: array
+      description: Emails assigned to contact
+      items:
+        type: object
+        properties:
+          email:
+            type: string
+            description: Email address
+            format: email
+    ExternalUrlArray:
+      type: array
+      maxItems: 3
+      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
+      items:
+        type: object
+        properties:
+          name:
+            maxLength: 30
+            type: string
+            description: Name of external service. Name will be shown to agents while working with contacts.
+          url:
+            type: string
+            description: External URL to contact page

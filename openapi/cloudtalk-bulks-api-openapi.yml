@@ -399,25 +399,35 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ErrorData:
+    ContactNote:
       type: object
       properties:
-        status:
+        id:
+          type: integer
+          description: Note ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        user_id:
+          type: integer
+          description: Assigned agent ID
+        note:
           type: string
-          description: Status code
-        message:
+          description: Note content
+        created:
           type: string
-          description: The error message
-    ContactEmailArray:
+          description: Created date and time
+          format: date-time
+      description: Note data
+    ContactNumberArray:
       type: array
-      description: Emails assigned to contact
+      description: Numbers assigned to contact
       items:
         type: object
         properties:
-          email:
+          public_number:
             type: string
-            description: Email address
-            format: email
+            description: Full number in international E.164 format
     ContactActivity:
       type: object
       properties:
@@ -464,26 +474,15 @@ components:
           description: Created date and time
           format: date-time
       description: Activity data
-    ContactNote:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Note ID
-        contact_id:
-          type: integer
-          description: Assigned contact ID
-        user_id:
-          type: integer
-          description: Assigned agent ID
-        note:
-          type: string
-          description: Note content
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-      description: Note data
+    ContactsTag:
+      type: array
+      description: Tags for contact - can include multiple
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Tag
     ErrorInvalidData:
       type: object
       properties:
@@ -497,20 +496,24 @@ components:
           type: object
           properties: {}
           description: More data explaining the error
-    ExternalUrlArray:
-      type: array
-      maxItems: 3
-      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
-      items:
-        type: object
-        properties:
-          name:
-            maxLength: 30
-            type: string
-            description: Name of external service. Name will be shown to agents while working with contacts.
-          url:
-            type: string
-            description: External URL to contact page
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    StatusCode:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    command_id:
+      type: string
+      description: Unique action identifier
     ContactAttribute:
       type: array
       description: Attributes for contact - can include multiple
@@ -528,9 +531,16 @@ components:
             type: string
             description: Attribute value (max 255 chars per attribute)
             maximum: 255
-    command_id:
-      type: string
-      description: Unique action identifier
+    ContactEmailArray:
+      type: array
+      description: Emails assigned to contact
+      items:
+        type: object
+        properties:
+          email:
+            type: string
+            description: Email address
+            format: email
     ContactsBulkDataResponse:
       type: array
       description: Response data
@@ -547,27 +557,17 @@ components:
             type: object
             properties: {}
             description: Available only in add actions or invalid action data. More data explaining the error or id of new entity.
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    ContactNumberArray:
+    ExternalUrlArray:
       type: array
-      description: Numbers assigned to contact
-      items:
-        type: object
-        properties:
-          public_number:
-            type: string
-            description: Full number in international E.164 format
-    ContactsTag:
-      type: array
-      description: Tags for contact - can include multiple
+      maxItems: 3
+      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
       items:
         type: object
         properties:
           name:
+            maxLength: 30
             type: string
-            description: Tag
+            description: Name of external service. Name will be shown to agents while working with contacts.
+          url:
+            type: string
+            description: External URL to contact page

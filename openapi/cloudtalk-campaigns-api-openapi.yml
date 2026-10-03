@@ -480,15 +480,6 @@ components:
           type: integer
           description: Hours between attempts
       description: Campaign data
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
     PaginationData:
       type: object
       properties:
@@ -509,6 +500,16 @@ components:
           description: number of objects sent per page
           format: int64
       description: Call data
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Group ID
+        internal_name:
+          type: string
+          description: Group name
+      description: Campaign group
     Button:
       type: object
       properties:
@@ -534,32 +535,16 @@ components:
           type: string
           description: Button description
       description: Campaign button
-    Tag:
+    PdAgent:
       type: object
       properties:
         id:
           type: integer
-          description: Tag ID
-        name:
+          description: Agent ID
+        fullname:
           type: string
-          description: Tag name
-      description: Campaign tag
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    Group:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Group ID
-        internal_name:
-          type: string
-          description: Group name
-      description: Campaign group
+          description: Agent name
+      description: Campaign agent
     ErrorInvalidData:
       type: object
       properties:
@@ -573,16 +558,21 @@ components:
           type: object
           properties: {}
           description: More data explaining the error
-    PdAgent:
+    ErrorData:
       type: object
       properties:
-        id:
-          type: integer
-          description: Agent ID
-        fullname:
+        status:
           type: string
-          description: Agent name
-      description: Campaign agent
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
     StatusCode:
       type: object
       properties:
@@ -648,3 +638,13 @@ components:
           items:
             type: string
       description: Agent data
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Tag ID
+        name:
+          type: string
+          description: Tag name
+      description: Campaign tag

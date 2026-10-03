@@ -198,6 +198,55 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    PaginationData:
+      type: object
+      properties:
+        itemsCount:
+          type: integer
+          description: number of resources in the response
+          format: int64
+        pageCount:
+          type: integer
+          description: number of pages found
+          format: int64
+        pageNumber:
+          type: integer
+          description: current page in the response
+          format: int64
+        limit:
+          type: integer
+          description: number of objects sent per page
+          format: int64
+      description: Call data
+    Groups:
+      type: object
+      properties:
+        agent_id:
+          type: integer
+          description: Agent ID
+        group_id:
+          type: integer
+          description: Group ID
+      description: Agent data
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Group ID
+        internal_name:
+          type: string
+          description: Group name
+      description: Campaign group
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
     ErrorInvalidData:
       type: object
       properties:
@@ -211,6 +260,12 @@ components:
           type: object
           properties: {}
           description: More data explaining the error
+    StatusCode:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
     Agent:
       type: object
       properties:
@@ -270,58 +325,3 @@ components:
           items:
             type: string
       description: Agent data
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-    PaginationData:
-      type: object
-      properties:
-        itemsCount:
-          type: integer
-          description: number of resources in the response
-          format: int64
-        pageCount:
-          type: integer
-          description: number of pages found
-          format: int64
-        pageNumber:
-          type: integer
-          description: current page in the response
-          format: int64
-        limit:
-          type: integer
-          description: number of objects sent per page
-          format: int64
-      description: Call data
-    Groups:
-      type: object
-      properties:
-        agent_id:
-          type: integer
-          description: Agent ID
-        group_id:
-          type: integer
-          description: Group ID
-      description: Agent data
-    Group:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Group ID
-        internal_name:
-          type: string
-          description: Group name
-      description: Campaign group
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
