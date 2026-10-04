@@ -399,35 +399,65 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ContactNote:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Note ID
-        contact_id:
-          type: integer
-          description: Assigned contact ID
-        user_id:
-          type: integer
-          description: Assigned agent ID
-        note:
-          type: string
-          description: Note content
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-      description: Note data
-    ContactNumberArray:
+    ContactEmailArray:
       type: array
-      description: Numbers assigned to contact
+      description: Emails assigned to contact
       items:
         type: object
         properties:
-          public_number:
+          email:
             type: string
-            description: Full number in international E.164 format
+            description: Email address
+            format: email
+    ContactsBulkDataResponse:
+      type: array
+      description: Response data
+      items:
+        type: object
+        properties:
+          command_id:
+            $ref: '#/components/schemas/command_id'
+          status:
+            $ref: '#/components/schemas/StatusCode/properties/status'
+          message:
+            $ref: '#/components/schemas/ErrorInvalidData/properties/message'
+          data:
+            type: object
+            properties: {}
+            description: Available only in add actions or invalid action data. More data explaining the error or id of new entity.
+    ContactAttribute:
+      type: array
+      description: Attributes for contact - can include multiple
+      items:
+        type: object
+        properties:
+          attribute_id:
+            type: integer
+            description: Attribute ID
+          title:
+            type: string
+            description: Attribute name (max 255 chars per attribute)
+            maximum: 255
+          value:
+            type: string
+            description: Attribute value (max 255 chars per attribute)
+            maximum: 255
+    command_id:
+      type: string
+      description: Unique action identifier
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
     ContactActivity:
       type: object
       properties:
@@ -483,19 +513,32 @@ components:
           name:
             type: string
             description: Tag
-    ErrorInvalidData:
+    StatusCode:
       type: object
       properties:
         status:
           type: string
           description: Status code
-        message:
+    ContactNote:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Note ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        user_id:
+          type: integer
+          description: Assigned agent ID
+        note:
           type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
+          description: Note content
+        created:
+          type: string
+          description: Created date and time
+          format: date-time
+      description: Note data
     ErrorData:
       type: object
       properties:
@@ -505,58 +548,6 @@ components:
         message:
           type: string
           description: The error message
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    command_id:
-      type: string
-      description: Unique action identifier
-    ContactAttribute:
-      type: array
-      description: Attributes for contact - can include multiple
-      items:
-        type: object
-        properties:
-          attribute_id:
-            type: integer
-            description: Attribute ID
-          title:
-            type: string
-            description: Attribute name (max 255 chars per attribute)
-            maximum: 255
-          value:
-            type: string
-            description: Attribute value (max 255 chars per attribute)
-            maximum: 255
-    ContactEmailArray:
-      type: array
-      description: Emails assigned to contact
-      items:
-        type: object
-        properties:
-          email:
-            type: string
-            description: Email address
-            format: email
-    ContactsBulkDataResponse:
-      type: array
-      description: Response data
-      items:
-        type: object
-        properties:
-          command_id:
-            $ref: '#/components/schemas/command_id'
-          status:
-            $ref: '#/components/schemas/StatusCode/properties/status'
-          message:
-            $ref: '#/components/schemas/ErrorInvalidData/properties/message'
-          data:
-            type: object
-            properties: {}
-            description: Available only in add actions or invalid action data. More data explaining the error or id of new entity.
     ExternalUrlArray:
       type: array
       maxItems: 3
@@ -571,3 +562,12 @@ components:
           url:
             type: string
             description: External URL to contact page
+    ContactNumberArray:
+      type: array
+      description: Numbers assigned to contact
+      items:
+        type: object
+        properties:
+          public_number:
+            type: string
+            description: Full number in international E.164 format

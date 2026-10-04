@@ -345,31 +345,19 @@ components:
           description: number of objects sent per page
           format: int64
       description: Call data
-    Blacklist:
+    ErrorInvalidData:
       type: object
       properties:
-        id:
-          type: integer
-          description: Blacklist ID
-        type:
+        status:
           type: string
-          description: Type of calls
-          enum:
-          - all
-          - incoming
-          - outgoing
-        public_number:
+          description: Status code
+        message:
           type: string
-          description: Blacklisted number in E.164 format
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-        modified:
-          type: string
-          description: Last modified date and time
-          format: date-time
-      description: Blacklist data
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
     ErrorData:
       type: object
       properties:
@@ -398,26 +386,38 @@ components:
           type: string
           description: Country calling code
       description: Country data
-    SuccessGeneralData:
+    Blacklist:
       type: object
       properties:
-        status:
+        id:
+          type: integer
+          description: Blacklist ID
+        type:
           type: string
-          description: Status code
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
+          description: Type of calls
+          enum:
+          - all
+          - incoming
+          - outgoing
+        public_number:
           type: string
-          description: Status code
-        message:
+          description: Blacklisted number in E.164 format
+        created:
           type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
+          description: Created date and time
+          format: date-time
+        modified:
+          type: string
+          description: Last modified date and time
+          format: date-time
+      description: Blacklist data
     StatusCode:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    SuccessGeneralData:
       type: object
       properties:
         status:

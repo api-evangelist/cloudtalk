@@ -272,21 +272,6 @@ components:
           description: number of objects sent per page
           format: int64
       description: Call data
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
     ErrorInvalidData:
       type: object
       properties:
@@ -306,3 +291,18 @@ components:
         status:
           type: string
           description: Status code
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message

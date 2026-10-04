@@ -1271,81 +1271,16 @@ components:
           description: number of objects sent per page
           format: int64
       description: Call data
-    ContactNote:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Note ID
-        contact_id:
-          type: integer
-          description: Assigned contact ID
-        user_id:
-          type: integer
-          description: Assigned agent ID
-        note:
-          type: string
-          description: Note content
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-      description: Note data
-    ContactActivity:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Activity ID
-        contact_id:
-          type: integer
-          description: Assigned contact ID
-        type:
-          type: string
-          description: Type of activity
-          enum:
-          - order
-          - task
-          - chat
-          - ticket
-          - other
-          - invoice
-          - proforma
-          - estimate
-          - cancel
-        name:
-          type: string
-          description: Name/Title
-        description:
-          type: string
-          description: Detailed description
-        activity_author:
-          type: string
-          description: Author of activity - user name you want to show
-        external_id:
-          type: integer
-          description: Activity ID from external resource - e.g. your order ID
-        external_url:
-          type: string
-          description: External url which can be opened from activity detail
-        activity_date:
-          type: string
-          description: Activity date and time. Set to current company time by default.
-          format: date-time
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-      description: Activity data
-    ContactNumberArray:
+    ContactEmailArray:
       type: array
-      description: Numbers assigned to contact
+      description: Emails assigned to contact
       items:
         type: object
         properties:
-          public_number:
+          email:
             type: string
-            description: Full number in international E.164 format
+            description: Email address
+            format: email
     Contact:
       type: object
       properties:
@@ -1453,56 +1388,26 @@ components:
                 type: string
                 description: Custom field value (max 255 chars per attribute)
       description: Contact data
-    ContactsTag:
-      type: array
-      description: Tags for contact - can include multiple
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-            description: Tag
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
-    ContactList:
+    ContactNote:
       type: object
       properties:
         id:
           type: integer
-          description: Contact ID
-        name:
+          description: Note ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        user_id:
+          type: integer
+          description: Assigned agent ID
+        note:
           type: string
-          description: Name
-        company:
+          description: Note content
+        created:
           type: string
-          description: Company name
-      description: Contact data
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
+          description: Created date and time
+          format: date-time
+      description: Note data
     ContactAttribute:
       type: array
       description: Attributes for contact - can include multiple
@@ -1520,12 +1425,74 @@ components:
             type: string
             description: Attribute value (max 255 chars per attribute)
             maximum: 255
-    StatusCode:
+    ErrorInvalidData:
       type: object
       properties:
         status:
           type: string
           description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    ContactActivity:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Activity ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        type:
+          type: string
+          description: Type of activity
+          enum:
+          - order
+          - task
+          - chat
+          - ticket
+          - other
+          - invoice
+          - proforma
+          - estimate
+          - cancel
+        name:
+          type: string
+          description: Name/Title
+        description:
+          type: string
+          description: Detailed description
+        activity_author:
+          type: string
+          description: Author of activity - user name you want to show
+        external_id:
+          type: integer
+          description: Activity ID from external resource - e.g. your order ID
+        external_url:
+          type: string
+          description: External url which can be opened from activity detail
+        activity_date:
+          type: string
+          description: Activity date and time. Set to current company time by default.
+          format: date-time
+        created:
+          type: string
+          description: Created date and time
+          format: date-time
+      description: Activity data
+    ContactsTag:
+      type: array
+      description: Tags for contact - can include multiple
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Tag
     ContactEmail:
       type: object
       properties:
@@ -1534,23 +1501,40 @@ components:
           description: Email address
           format: email
       description: Email assigned to contact
-    ContactNumber:
+    StatusCode:
       type: object
       properties:
-        public_number:
+        status:
           type: string
-          description: Full number in international E.164 format
-      description: Number assigned to contact
-    ContactEmailArray:
-      type: array
-      description: Emails assigned to contact
-      items:
-        type: object
-        properties:
-          email:
-            type: string
-            description: Email address
-            format: email
+          description: Status code
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    ContactList:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Contact ID
+        name:
+          type: string
+          description: Name
+        company:
+          type: string
+          description: Company name
+      description: Contact data
     ExternalUrlArray:
       type: array
       maxItems: 3
@@ -1565,3 +1549,19 @@ components:
           url:
             type: string
             description: External URL to contact page
+    ContactNumber:
+      type: object
+      properties:
+        public_number:
+          type: string
+          description: Full number in international E.164 format
+      description: Number assigned to contact
+    ContactNumberArray:
+      type: array
+      description: Numbers assigned to contact
+      items:
+        type: object
+        properties:
+          public_number:
+            type: string
+            description: Full number in international E.164 format

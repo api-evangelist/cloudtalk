@@ -230,6 +230,39 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    PaginationData:
+      type: object
+      properties:
+        itemsCount:
+          type: integer
+          description: number of resources in the response
+          format: int64
+        pageCount:
+          type: integer
+          description: number of pages found
+          format: int64
+        pageNumber:
+          type: integer
+          description: current page in the response
+          format: int64
+        limit:
+          type: integer
+          description: number of objects sent per page
+          format: int64
+      description: Call data
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
     CallNumber:
       type: object
       properties:
@@ -258,26 +291,18 @@ components:
           type: integer
           description: Source ID of where is the number located, e.g. Agent ID, Group ID...
       description: Number data
-    PaginationData:
+    StatusCode:
       type: object
       properties:
-        itemsCount:
-          type: integer
-          description: number of resources in the response
-          format: int64
-        pageCount:
-          type: integer
-          description: number of pages found
-          format: int64
-        pageNumber:
-          type: integer
-          description: current page in the response
-          format: int64
-        limit:
-          type: integer
-          description: number of objects sent per page
-          format: int64
-      description: Call data
+        status:
+          type: string
+          description: Status code
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
     ErrorData:
       type: object
       properties:
@@ -287,28 +312,3 @@ components:
         message:
           type: string
           description: The error message
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code

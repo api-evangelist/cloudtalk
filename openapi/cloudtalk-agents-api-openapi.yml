@@ -321,6 +321,19 @@ components:
           description: number of objects sent per page
           format: int64
       description: Call data
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
     Agent:
       type: object
       properties:
@@ -380,6 +393,18 @@ components:
           items:
             type: string
       description: Agent data
+    StatusCode:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
     ErrorData:
       type: object
       properties:
@@ -389,28 +414,3 @@ components:
         message:
           type: string
           description: The error message
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code

@@ -81,36 +81,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: UNAUTHORIZED
-              message:
-                type: string
-                description: Error message
-                example: You are not authorized to access this resource.
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: BAD_REQUEST
-              message:
-                type: string
-                description: Error message
-                example: The request could not be understood or was missing required parameters.
     NoContentResponse:
       description: Operation completed successfully with no content to return
       content:
@@ -127,8 +97,8 @@ components:
                   message:
                     type: string
                     example: No Content
-    InternalServerError:
-      description: Internal server error
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:
@@ -137,11 +107,11 @@ components:
               code:
                 type: string
                 description: Error code
-                example: INTERNAL_SERVER_ERROR
+                example: BAD_REQUEST
               message:
                 type: string
                 description: Error message
-                example: An unexpected error occurred on the server.
+                example: The request could not be understood or was missing required parameters.
     NotFound:
       description: Not found
       content:
@@ -157,3 +127,33 @@ components:
                 type: string
                 description: Error message
                 example: The requested resource was not found.
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: INTERNAL_SERVER_ERROR
+              message:
+                type: string
+                description: Error message
+                example: An unexpected error occurred on the server.
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: UNAUTHORIZED
+              message:
+                type: string
+                description: Error message
+                example: You are not authorized to access this resource.
