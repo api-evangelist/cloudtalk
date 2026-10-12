@@ -1,0 +1,436 @@
+generated: '2026-10-12'
+method: searched
+source:
+- https://zapier.com/apps/cloudtalk/integrations
+checked:
+- https://composio.dev/toolkits/cloudtalk
+- https://monid.ai/tools/cloudtalk
+- https://n8n.io/integrations/cloudtalk/
+- https://zapier.com/apps/cloudtalk/integrations
+summary: null
+marketplace_apps:
+- marketplace: zapier
+  channel: ipaas-listing
+  app: cloudtalk
+  url: https://zapier.com/apps/cloudtalk/integrations
+  external_url: https://www.cloudtalk.io/
+  partner_tier: SILVER
+  triggers:
+  - key: call
+    label: New Call
+  - key: contact
+    label: New Contact
+  - key: sms
+    label: New SMS
+  actions:
+  - key: activity
+    label: Create or Update Activity
+  - key: create_contact
+    label: Create or Update Contact
+  - key: create_contact_strict
+    label: Create Contact
+  - key: send_sms
+    label: Send SMS
+  - key: update_contact_strict
+    label: Update Contact
+  searches:
+  - key: find_contacts
+    label: Find Contact
+edges:
+- partner_name: Pipedrive
+  partner: pipedrive
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/pipedrive
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://pipedrive.com/
+- partner_name: HubSpot
+  partner: hubspot
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/hubspot
+  direction: third-party
+  category: Marketing Automation
+  partner_url: http://www.hubspot.com/
+- partner_name: Airtable
+  partner: airtable
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/airtable
+  direction: third-party
+  category: Databases
+  partner_url: https://airtable.com/
+- partner_name: Coach by Wonderway
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/coach-by-wonderway
+  direction: third-party
+  category: AI Assistants
+  partner_url: https://www.wonderway.io/
+- partner_name: monday.com
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/monday
+  direction: third-party
+  category: Project Management
+  partner_url: https://monday.com/
+- partner_name: ActiveCampaign
+  partner: activecampaign
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/activecampaign
+  direction: third-party
+  category: Marketing Automation
+  partner_url: https://www.activecampaign.com/?utm_source=unpaid_syndication_website&utm_medium=referral&utm_campaign=zapier_listing
+- partner_name: Attio
+  partner: attio
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/attio
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://attio.com/
+- partner_name: Close
+  partner: close
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/close
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://www.close.com/?utm_source=Partner&utm_medium=Integration_Listing&utm_campaign=2025_Partnerships&utm_content=Home
+- partner_name: Recruitee
+  partner: recruitee
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/recruitee
+  direction: third-party
+  category: HR Talent & Recruitment
+  partner_url: https://recruitee.com/
+- partner_name: Google Sheets
+  partner: google-sheets
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/google-sheets
+  direction: third-party
+  category: Google
+  partner_url: http://sheets.google.com/
+- partner_name: Apollo
+  partner: apollo
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/apollo
+  direction: third-party
+  category: Sales & CRM
+  partner_url: https://www.apollo.io/
+- partner_name: Notion
+  partner: notion
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/notion
+  direction: third-party
+  category: Task Management
+  partner_url: https://www.notion.so/
+- partner_name: Capsule CRM
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/capsulecrm
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://capsulecrm.com/
+- partner_name: BigCommerce
+  partner: bigcommerce
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/bigcommerce
+  direction: third-party
+  category: eCommerce
+  partner_url: http://www.bigcommerce.com/
+- partner_name: Calendly
+  partner: calendly
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/calendly
+  direction: third-party
+  category: Scheduling & Booking
+  partner_url: https://calendly.com/?utm_medium=partner&utm_source=zapier&utm_campaign=main_partner_page&utm_content=main_inbound_link
+- partner_name: Google Calendar
+  partner: google-calendar
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/google-calendar
+  direction: third-party
+  category: Calendar
+  partner_url: https://calendar.google.com/
+- partner_name: Bitrix24 CRM
+  partner: bitrix24
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/bitrix24-crm-new
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://www.bitrix24.com/apps/?app=integrations24.zapierbitrix24crm
+- partner_name: Zoho Recruit
+  partner: zoho-recruit
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/zoho-recruit
+  direction: third-party
+  category: HR Talent & Recruitment
+  partner_url: https://go.zoho.com/fbY
+- partner_name: Livespace
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/livespace
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: http://livespace.io/
+- partner_name: Atera
+  partner: atera
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/atera-1
+  direction: third-party
+  category: IT Operations
+  partner_url: https://www.atera.com/
+- partner_name: kvCORE
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/kvcore
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://www.insiderealestate.com/
+- partner_name: MySQL
+  partner: mysql
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/mysql
+  direction: third-party
+  category: Databases
+  partner_url: https://www.mysql.com/
+- partner_name: Geckoboard
+  partner: geckoboard
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/geckoboard
+  direction: third-party
+  category: Dashboards
+  partner_url: https://www.geckoboard.com/
+- partner_name: Stripe (Legacy)
+  partner: stripe
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/stripe-legacy
+  direction: third-party
+  category: Payment Processing
+  partner_url: https://stripe.com/
+- partner_name: LiveChat
+  partner: livechat
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/livechat
+  direction: third-party
+  category: Customer Support
+  partner_url: https://www.livechatinc.com/?utm_source=zapier.com&utm_medium=referral&utm_campaign=zapier_listing
+- partner_name: WebinarJam / EverWebinar
+  partner: webinarjam
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/webinarjam
+  direction: third-party
+  category: Webinars
+  partner_url: http://webinarjam.com/
+- partner_name: Instantly
+  partner: instantly-ai
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/instantly
+  direction: third-party
+  category: Email
+  partner_url: https://instantly.ai/
+- partner_name: Amazon S3
+  partner: amazon-s3
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/amazon-s3
+  direction: third-party
+  category: Amazon
+  partner_url: https://zapier.com/aws.amazon.com
+- partner_name: Vitally
+  partner: vitally
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/vitally
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://vitally.io/
+- partner_name: Canopy
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/canopy
+  direction: third-party
+  category: Accounting
+  partner_url: https://www.canopytax.com/
+templates:
+- title: Send Slack messages for missed CloudTalk calls
+  url: https://zapier.com/apps/cloudtalk/integrations/slack/138256/send-slack-messages-for-missed-cloudtalk-calls
+  apps:
+  - cloudtalk
+  - filter
+  - slack
+- title: Send Slack channel messages for new received SMS messages in CloudTalk
+  url: https://zapier.com/apps/cloudtalk/integrations/slack/198222/send-slack-channel-messages-for-new-received-sms-messages-in-cloudtalk
+  apps:
+  - cloudtalk
+  - filter
+  - slack
+- title: Send emails in Gmail for new calls in CloudTalk
+  url: https://zapier.com/apps/cloudtalk/integrations/gmail/1626110/send-emails-in-gmail-for-new-calls-in-cloudtalk
+  apps:
+  - cloudtalk
+  - gmail
+- title: Process new CloudTalk calls with Wonderway Coach
+  url: https://zapier.com/apps/cloudtalk/integrations/coach-by-wonderway/1633815/process-new-cloudtalk-calls-with-wonderway-coach
+  apps:
+  - cloudtalk
+  - coach-by-wonderway
+- title: Create a CloudTalk contacts from new Copper Person contacts
+  url: https://zapier.com/apps/cloudtalk/integrations/copper/133676/create-a-cloudtalk-contacts-from-new-copper-person-contacts
+  apps:
+  - copper
+  - cloudtalk
+- title: Update CloudTalk contacts when Copper Person contacts are updated
+  url: https://zapier.com/apps/cloudtalk/integrations/copper/137996/update-cloudtalk-contacts-when-copper-person-contacts-are-updated
+  apps:
+  - copper
+  - cloudtalk
+- title: Create Person contacts in Copper when CloudTalk contacts are updated
+  url: https://zapier.com/apps/cloudtalk/integrations/copper/138000/create-person-contacts-in-copper-when-cloudtalk-contacts-are-updated
+  apps:
+  - cloudtalk
+  - formatter
+  - copper
+- title: Log CloudTalk calls as Activities in Copper
+  url: https://zapier.com/apps/cloudtalk/integrations/copper/138004/log-cloudtalk-calls-as-activities-in-copper
+  apps:
+  - cloudtalk
+  - copper
+- title: Update CloudTalk Contacts when noCRM Leads are updated
+  url: https://zapier.com/apps/cloudtalk/integrations/nocrm-io/138106/update-cloudtalk-contacts-when-nocrm-leads-are-updated
+  apps:
+  - nocrm-io
+  - cloudtalk
+- title: Log CloudTalk calls as Activities in noCRM
+  url: https://zapier.com/apps/cloudtalk/integrations/nocrm-io/138110/log-cloudtalk-calls-as-activities-in-nocrm
+  apps:
+  - cloudtalk
+  - nocrm-io
+- title: Log missed CloudTalk Calls as Asana Tasks
+  url: https://zapier.com/apps/asana/integrations/cloudtalk/138172/log-missed-cloudtalk-calls-as-asana-tasks
+  apps:
+  - cloudtalk
+  - filter
+  - asana
+- title: Get push notifications in Pushbullet for new voicemails received in CloudTalk
+  url: https://zapier.com/apps/cloudtalk/integrations/pushbullet/138271/get-push-notifications-in-pushbullet-for-new-voicemails-received-in-cloudtalk
+  apps:
+  - cloudtalk
+  - filter
+  - pushbullet
+template_total: 148
