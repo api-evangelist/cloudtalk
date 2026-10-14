@@ -54,7 +54,6 @@
   arazzo: null
 - slug: cloudtalk-monday-com
   label: monday.com
-  partner: monday-com
   partner_name: monday.com
   category: Project Management
   type: marketplace
@@ -62,7 +61,7 @@
   channel: ipaas-usage
   evidence: https://zapier.com/apps/cloudtalk/integrations/monday
   source: edge
-  status: pending-generation
+  status: pending-partner-spec
   arazzo: null
 - slug: cloudtalk-activecampaign
   label: ActiveCampaign
@@ -110,7 +109,7 @@
   channel: ipaas-usage
   evidence: https://zapier.com/apps/cloudtalk/integrations/recruitee
   source: edge
-  status: pending-partner-spec
+  status: pending-generation
   arazzo: null
 - slug: cloudtalk-google-sheets
   label: Google Sheets
@@ -150,7 +149,6 @@
   arazzo: null
 - slug: cloudtalk-capsule-crm
   label: Capsule CRM
-  partner: capsule-crm
   partner_name: Capsule CRM
   category: CRM (Customer Relationship Management)
   type: marketplace
@@ -158,7 +156,7 @@
   channel: ipaas-usage
   evidence: https://zapier.com/apps/cloudtalk/integrations/capsulecrm
   source: edge
-  status: pending-generation
+  status: pending-partner-spec
   arazzo: null
 - slug: cloudtalk-bigcommerce
   label: BigCommerce
@@ -352,7 +350,6 @@
   arazzo: null
 - slug: cloudtalk-canopy
   label: Canopy
-  partner: canopy
   partner_name: Canopy
   category: Accounting
   type: marketplace
@@ -360,5 +357,17 @@
   channel: ipaas-usage
   evidence: https://zapier.com/apps/cloudtalk/integrations/canopy
   source: edge
-  status: pending-generation
+  status: pending-partner-spec
+  arazzo: null
+- slug: cloudtalk-greenhouse-own
+  label: Greenhouse (own)
+  partner: greenhouse
+  partner_name: Greenhouse (own)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://integrations.greenhouse.com/partners/cloudtalk
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
   arazzo: null

@@ -3,6 +3,7 @@ method: searched
 source:
 - https://zapier.com/apps/cloudtalk/integrations
 checked:
+- greenhouse/integrations/greenhouse-integration-edges.yml
 - https://composio.dev/toolkits/cloudtalk
 - https://monid.ai/tools/cloudtalk
 - https://n8n.io/integrations/cloudtalk/
@@ -367,6 +368,22 @@ edges:
   direction: third-party
   category: Accounting
   partner_url: https://www.canopytax.com/
+- partner_name: Greenhouse (own)
+  partner: greenhouse
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://integrations.greenhouse.com/partners/cloudtalk
+  mirror_of: greenhouse/integrations/greenhouse-integration-edges.yml
+  apps:
+  - CloudTalk
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
 templates:
 - title: Send Slack messages for missed CloudTalk calls
   url: https://zapier.com/apps/cloudtalk/integrations/slack/138256/send-slack-messages-for-missed-cloudtalk-calls
