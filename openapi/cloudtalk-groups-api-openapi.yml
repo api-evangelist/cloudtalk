@@ -198,6 +198,22 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Groups:
+      type: object
+      properties:
+        agent_id:
+          type: integer
+          description: Agent ID
+        group_id:
+          type: integer
+          description: Group ID
+      description: Agent data
+    StatusCode:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
     PaginationData:
       type: object
       properties:
@@ -218,29 +234,6 @@ components:
           description: number of objects sent per page
           format: int64
       description: Call data
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
-    Groups:
-      type: object
-      properties:
-        agent_id:
-          type: integer
-          description: Agent ID
-        group_id:
-          type: integer
-          description: Group ID
-      description: Agent data
     Agent:
       type: object
       properties:
@@ -300,6 +293,28 @@ components:
           items:
             type: string
       description: Agent data
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
     Group:
       type: object
       properties:
@@ -310,18 +325,3 @@ components:
           type: string
           description: Group name
       description: Campaign group
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message

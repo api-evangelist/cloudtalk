@@ -423,26 +423,12 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    PaginationData:
+    StatusCode:
       type: object
       properties:
-        itemsCount:
-          type: integer
-          description: number of resources in the response
-          format: int64
-        pageCount:
-          type: integer
-          description: number of pages found
-          format: int64
-        pageNumber:
-          type: integer
-          description: current page in the response
-          format: int64
-        limit:
-          type: integer
-          description: number of objects sent per page
-          format: int64
-      description: Call data
+        status:
+          type: string
+          description: Status code
     CampaignList:
       type: object
       properties:
@@ -500,16 +486,26 @@ components:
           type: integer
           description: Hours between attempts
       description: Campaign data
-    Group:
+    PaginationData:
       type: object
       properties:
-        id:
+        itemsCount:
           type: integer
-          description: Group ID
-        internal_name:
-          type: string
-          description: Group name
-      description: Campaign group
+          description: number of resources in the response
+          format: int64
+        pageCount:
+          type: integer
+          description: number of pages found
+          format: int64
+        pageNumber:
+          type: integer
+          description: current page in the response
+          format: int64
+        limit:
+          type: integer
+          description: number of objects sent per page
+          format: int64
+      description: Call data
     Button:
       type: object
       properties:
@@ -535,50 +531,6 @@ components:
           type: string
           description: Button description
       description: Campaign button
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Tag ID
-        name:
-          type: string
-          description: Tag name
-      description: Campaign tag
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
     Agent:
       type: object
       properties:
@@ -638,6 +590,54 @@ components:
           items:
             type: string
       description: Agent data
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Tag ID
+        name:
+          type: string
+          description: Tag name
+      description: Campaign tag
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Group ID
+        internal_name:
+          type: string
+          description: Group name
+      description: Campaign group
     PdAgent:
       type: object
       properties:

@@ -223,6 +223,169 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CallSmartNotes:
+      type: object
+      properties:
+        callId:
+          type: number
+          description: ID of the call
+        smartNotes:
+          type: object
+          description: Smart notes of the call
+          properties:
+            callDetails:
+              $ref: '#/components/schemas/CallDetailsNote'
+            actionItems:
+              type: array
+              description: Specific tasks assigned during the call
+              items:
+                type: string
+            decisionsMade:
+              type: array
+              description: Important decisions agreed upon during the call
+              items:
+                type: string
+            openQuestions:
+              type: array
+              description: Questions that need to be addressed after the call
+              items:
+                type: string
+            importantDatesAndDeadlines:
+              $ref: '#/components/schemas/ImportantDatesAndDeadlinesNotes'
+            risksAndIssues:
+              type: array
+              description: Identify potential risks or issues discussed during the call
+              items:
+                type: string
+            customerFeedback:
+              type: array
+              description: Highlight feedback from customers that can inform product development or service improvement
+              items:
+                type: string
+          required:
+          - callDetails
+      required:
+      - callId
+      - smartNotes
+      example:
+        callId: 12345
+        smartNotes:
+          callDetails:
+            callDateTime: '2024-01-01T21:00:00Z'
+            participants:
+            - name: Jone Smith
+              jobPosition: Job position
+              company: Company
+              callerType: agent
+            - name: Tatiana Rogers
+              callerType: contact
+            callMetadata: Reservation number
+          actionItems:
+          - Determine the final price
+          decisionsMade:
+          - Make an order
+          openQuestions:
+          - Final price
+          importantDatesAndDeadlines:
+          - dateMention: '2024-01-11T10:00:00Z'
+            eventDescription: Repeat the call
+          risksAndIssues:
+          - Concern about the cost of the services
+          customerFeedback:
+          - Good service
+    CallTopicSpan:
+      type: object
+      properties:
+        end:
+          type: number
+          description: End time of the span in seconds
+        text:
+          type: string
+          description: Transcription of the span
+        start:
+          type: number
+          description: Start time of the span in seconds
+        caller:
+          type: string
+          description: Caller local identifier
+      required:
+      - end
+      - text
+      - start
+      - caller
+    CallTopic:
+      type: object
+      properties:
+        spans:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallTopicSpan'
+        topic:
+          type: string
+          description: Topic of the call
+        weight:
+          type: number
+          description: Weight of the topic
+      required:
+      - spans
+      - topic
+      - weight
+    Pagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of items to return
+          example: 10
+        offset:
+          type: integer
+          description: Offset of the returned items
+          example: 0
+        total:
+          type: integer
+          description: Total number of items
+          example: 100
+      required:
+      - limit
+      - offset
+      - total
+    CallOverallSentiment:
+      type: object
+      properties:
+        callId:
+          type: number
+          description: ID of the call
+        overallSentiment:
+          type: string
+          description: Overall sentiment of the call
+          enum:
+          - very negative
+          - negative
+          - neutral
+          - positive
+          - very positive
+      required:
+      - callId
+      - overallSentiment
+      example:
+        callId: 12345
+        overallSentiment: positive
+    ImportantDatesAndDeadlinesNotes:
+      type: array
+      description: Capture significant dates mentioned, with clickable links to add them directly to the calendar
+      items:
+        type: object
+        properties:
+          dateMention:
+            type: string
+            description: Date and time of the event
+            format: date-time
+          eventDescription:
+            type: string
+            description: Description of the event
+        required:
+        - dateMention
+        - eventDescription
     CallDetailsNote:
       type: object
       description: Significant updates discussed during the call
@@ -260,6 +423,78 @@ components:
         required:
         - callDateTime
         - participants
+    CallTranscription:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            callId:
+              type: number
+              description: ID of the call
+            segments:
+              type: array
+              items:
+                type: object
+                properties:
+                  start:
+                    type: number
+                    description: Start time of the segment in seconds
+                  end:
+                    type: number
+                    description: End time of the segment in seconds
+                  caller:
+                    type: string
+                    description: Caller local identifier
+                  text:
+                    type: string
+                    description: Transcription text of the segment
+                required:
+                - start
+                - end
+                - caller
+                - text
+            callers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Caller'
+            language:
+              type: string
+              description: Language of the transcription
+          required:
+          - callId
+          - segments
+          - callers
+          - language
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - data
+      - pagination
+      example:
+        data:
+          callId: 12345
+          segments:
+          - start: 1.501
+            end: 4.599
+            caller: caller2
+            text: Hello, I would like to ask for help.
+          - start: 5.173
+            end: 8.599
+            caller: caller1
+            text: Hi. What's your issue?
+          callers:
+          - id: 5000
+            type: contact
+            localIdentifier: caller1
+          - id: 1000
+            type: agent
+            localIdentifier: caller2
+          language: en
+        pagination:
+          limit: 2
+          offset: 0
+          total: 10
     CallTopics:
       type: object
       properties:
@@ -333,208 +568,6 @@ components:
         id: 1000
         type: agent
         localIdentifier: caller1
-    CallOverallSentiment:
-      type: object
-      properties:
-        callId:
-          type: number
-          description: ID of the call
-        overallSentiment:
-          type: string
-          description: Overall sentiment of the call
-          enum:
-          - very negative
-          - negative
-          - neutral
-          - positive
-          - very positive
-      required:
-      - callId
-      - overallSentiment
-      example:
-        callId: 12345
-        overallSentiment: positive
-    CallSmartNotes:
-      type: object
-      properties:
-        callId:
-          type: number
-          description: ID of the call
-        smartNotes:
-          type: object
-          description: Smart notes of the call
-          properties:
-            callDetails:
-              $ref: '#/components/schemas/CallDetailsNote'
-            actionItems:
-              type: array
-              description: Specific tasks assigned during the call
-              items:
-                type: string
-            decisionsMade:
-              type: array
-              description: Important decisions agreed upon during the call
-              items:
-                type: string
-            openQuestions:
-              type: array
-              description: Questions that need to be addressed after the call
-              items:
-                type: string
-            importantDatesAndDeadlines:
-              $ref: '#/components/schemas/ImportantDatesAndDeadlinesNotes'
-            risksAndIssues:
-              type: array
-              description: Identify potential risks or issues discussed during the call
-              items:
-                type: string
-            customerFeedback:
-              type: array
-              description: Highlight feedback from customers that can inform product development or service improvement
-              items:
-                type: string
-          required:
-          - callDetails
-      required:
-      - callId
-      - smartNotes
-      example:
-        callId: 12345
-        smartNotes:
-          callDetails:
-            callDateTime: '2024-01-01T21:00:00Z'
-            participants:
-            - name: Jone Smith
-              jobPosition: Job position
-              company: Company
-              callerType: agent
-            - name: Tatiana Rogers
-              callerType: contact
-            callMetadata: Reservation number
-          actionItems:
-          - Determine the final price
-          decisionsMade:
-          - Make an order
-          openQuestions:
-          - Final price
-          importantDatesAndDeadlines:
-          - dateMention: '2024-01-11T10:00:00Z'
-            eventDescription: Repeat the call
-          risksAndIssues:
-          - Concern about the cost of the services
-          customerFeedback:
-          - Good service
-    CallTranscription:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            callId:
-              type: number
-              description: ID of the call
-            segments:
-              type: array
-              items:
-                type: object
-                properties:
-                  start:
-                    type: number
-                    description: Start time of the segment in seconds
-                  end:
-                    type: number
-                    description: End time of the segment in seconds
-                  caller:
-                    type: string
-                    description: Caller local identifier
-                  text:
-                    type: string
-                    description: Transcription text of the segment
-                required:
-                - start
-                - end
-                - caller
-                - text
-            callers:
-              type: array
-              items:
-                $ref: '#/components/schemas/Caller'
-            language:
-              type: string
-              description: Language of the transcription
-          required:
-          - callId
-          - segments
-          - callers
-          - language
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-      required:
-      - data
-      - pagination
-      example:
-        data:
-          callId: 12345
-          segments:
-          - start: 1.501
-            end: 4.599
-            caller: caller2
-            text: Hello, I would like to ask for help.
-          - start: 5.173
-            end: 8.599
-            caller: caller1
-            text: Hi. What's your issue?
-          callers:
-          - id: 5000
-            type: contact
-            localIdentifier: caller1
-          - id: 1000
-            type: agent
-            localIdentifier: caller2
-          language: en
-        pagination:
-          limit: 2
-          offset: 0
-          total: 10
-    Pagination:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of items to return
-          example: 10
-        offset:
-          type: integer
-          description: Offset of the returned items
-          example: 0
-        total:
-          type: integer
-          description: Total number of items
-          example: 100
-      required:
-      - limit
-      - offset
-      - total
-    CallTopicSpan:
-      type: object
-      properties:
-        end:
-          type: number
-          description: End time of the span in seconds
-        text:
-          type: string
-          description: Transcription of the span
-        start:
-          type: number
-          description: Start time of the span in seconds
-        caller:
-          type: string
-          description: Caller local identifier
-      required:
-      - end
-      - text
-      - start
-      - caller
     CallTalkListenRatio:
       type: object
       properties:
@@ -583,95 +616,7 @@ components:
         - id: 1000
           type: agent
           localIdentifier: caller2
-    ImportantDatesAndDeadlinesNotes:
-      type: array
-      description: Capture significant dates mentioned, with clickable links to add them directly to the calendar
-      items:
-        type: object
-        properties:
-          dateMention:
-            type: string
-            description: Date and time of the event
-            format: date-time
-          eventDescription:
-            type: string
-            description: Description of the event
-        required:
-        - dateMention
-        - eventDescription
-    CallTopic:
-      type: object
-      properties:
-        spans:
-          type: array
-          items:
-            $ref: '#/components/schemas/CallTopicSpan'
-        topic:
-          type: string
-          description: Topic of the call
-        weight:
-          type: number
-          description: Weight of the topic
-      required:
-      - spans
-      - topic
-      - weight
-  parameters:
-    paginationOffset:
-      name: offset
-      in: query
-      description: Offset the list of returned items by this amount
-      required: false
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-    callId:
-      name: callId
-      in: path
-      required: true
-      description: Call ID
-      schema:
-        type: number
-    paginationLimit:
-      name: limit
-      in: query
-      description: Maximum number of items to return
-      required: false
-      schema:
-        type: integer
-        minimum: 1
   responses:
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: NOT_FOUND
-              message:
-                type: string
-                description: Error message
-                example: The requested resource was not found.
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: BAD_REQUEST
-              message:
-                type: string
-                description: Error message
-                example: The request could not be understood or was missing required parameters.
     InternalServerError:
       description: Internal server error
       content:
@@ -687,6 +632,36 @@ components:
                 type: string
                 description: Error message
                 example: An unexpected error occurred on the server.
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: BAD_REQUEST
+              message:
+                type: string
+                description: Error message
+                example: The request could not be understood or was missing required parameters.
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: NOT_FOUND
+              message:
+                type: string
+                description: Error message
+                example: The requested resource was not found.
     Unauthorized:
       description: Unauthorized
       content:
@@ -702,3 +677,28 @@ components:
                 type: string
                 description: Error message
                 example: You are not authorized to access this resource.
+  parameters:
+    paginationOffset:
+      name: offset
+      in: query
+      description: Offset the list of returned items by this amount
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    paginationLimit:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    callId:
+      name: callId
+      in: path
+      required: true
+      description: Call ID
+      schema:
+        type: number

@@ -250,19 +250,12 @@ components:
           description: number of objects sent per page
           format: int64
       description: Call data
-    ErrorInvalidData:
+    StatusCode:
       type: object
       properties:
         status:
           type: string
           description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
     CallNumber:
       type: object
       properties:
@@ -291,18 +284,25 @@ components:
           type: integer
           description: Source ID of where is the number located, e.g. Agent ID, Group ID...
       description: Number data
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
     SuccessGeneralData:
       type: object
       properties:
         status:
           type: string
           description: Status code
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
     ErrorData:
       type: object
       properties:

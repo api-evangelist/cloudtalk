@@ -345,47 +345,12 @@ components:
           description: number of objects sent per page
           format: int64
       description: Call data
-    ErrorInvalidData:
+    StatusCode:
       type: object
       properties:
         status:
           type: string
           description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-    Country:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Country ID
-        name:
-          type: string
-          description: Name
-        country_code:
-          type: string
-          description: Country code by ISO_3166-1 Alpha-2
-        iso3:
-          type: string
-          description: Country code by ISO_3166-1 Alpha-3
-        calling_code:
-          type: string
-          description: Country calling code
-      description: Country data
     Blacklist:
       type: object
       properties:
@@ -411,15 +376,50 @@ components:
           description: Last modified date and time
           format: date-time
       description: Blacklist data
-    StatusCode:
+    Country:
       type: object
       properties:
-        status:
+        id:
+          type: integer
+          description: Country ID
+        name:
           type: string
-          description: Status code
+          description: Name
+        country_code:
+          type: string
+          description: Country code by ISO_3166-1 Alpha-2
+        iso3:
+          type: string
+          description: Country code by ISO_3166-1 Alpha-3
+        calling_code:
+          type: string
+          description: Country calling code
+      description: Country data
     SuccessGeneralData:
       type: object
       properties:
         status:
           type: string
           description: Status code
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
