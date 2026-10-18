@@ -11,6 +11,8 @@ checked:
 - https://n8n.io/integrations/cloudtalk/
 - https://zapier.com/api/v4/apps/
 - https://zapier.com/apps/cloudtalk/integrations
+- microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+- monday-com/integrations/monday-com-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -438,6 +440,44 @@ edges:
     builder: Fivetran
   detected_by: sweep-data-integration.py
   first_seen: '2026-10-18'
+- partner_name: Microsoft Teams (own)
+  partner: microsoft-teams
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appsource.microsoft.com/en-us/product/office/WA200007800
+  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+  apps:
+  - CloudTalk
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Microsoft Teams app
+  publisher_verified:
+  - Microsoft 365 Publisher Attestation
+- partner_name: Monday.com (own)
+  partner: monday-com
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://monday.com/marketplace/listing/10001142
+  mirror_of: monday-com/integrations/monday-com-integration-edges.yml
+  apps:
+  - CloudTalk
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: monday.com app
+  publisher_verified:
+  - monday.com security & compliance flag
 templates:
 - title: Send Slack messages for missed CloudTalk calls
   url: https://zapier.com/apps/cloudtalk/integrations/slack/138256/send-slack-messages-for-missed-cloudtalk-calls
