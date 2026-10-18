@@ -420,7 +420,7 @@
     - connectors/applications/cloudtalk
     vendor_link: https://www.cloudtalk.io/
     builder: Fivetran
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
 - slug: cloudtalk-microsoft-teams-own
   label: Microsoft Teams (own)
