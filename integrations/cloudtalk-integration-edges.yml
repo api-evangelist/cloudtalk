@@ -3,6 +3,7 @@ method: searched
 source:
 - https://zapier.com/apps/cloudtalk/integrations
 checked:
+- gorgias/integrations/gorgias-integration-edges.yml
 - greenhouse/integrations/greenhouse-integration-edges.yml
 - https://composio.dev/toolkits/cloudtalk
 - https://fivetran.com/docs-sitemap.xml
@@ -13,6 +14,7 @@ checked:
 - https://zapier.com/apps/cloudtalk/integrations
 - microsoft-teams/integrations/microsoft-teams-integration-edges.yml
 - monday-com/integrations/monday-com-integration-edges.yml
+- zendesk/integrations/zendesk-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -478,6 +480,39 @@ edges:
   category: monday.com app
   publisher_verified:
   - monday.com security & compliance flag
+- partner_name: Gorgias (own)
+  partner: gorgias
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.gorgias.com/apps/cloudtalk
+  mirror_of: gorgias/integrations/gorgias-integration-edges.yml
+  apps:
+  - Cloudtalk
+  listing_count: 1
+  detected: '2026-10-19'
+  detected_by: mirror-platform-listings.py
+- partner_name: Zendesk (own)
+  partner: zendesk
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.zendesk.com/marketplace/apps/support/280695/cloudtalk-for-support/
+  mirror_of: zendesk/integrations/zendesk-integration-edges.yml
+  apps:
+  - CloudTalk for Support
+  listing_count: 1
+  detected: '2026-10-19'
+  detected_by: mirror-platform-listings.py
+  category: Contact Center
 templates:
 - title: Send Slack messages for missed CloudTalk calls
   url: https://zapier.com/apps/cloudtalk/integrations/slack/138256/send-slack-messages-for-missed-cloudtalk-calls
