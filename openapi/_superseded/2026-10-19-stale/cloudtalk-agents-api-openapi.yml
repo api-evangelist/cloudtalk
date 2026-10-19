@@ -1,0 +1,416 @@
+openapi: 3.2.0
+info:
+  title: CloudTalk Agents API
+  description: '# Introduction
+
+    Welcome to CloudTalk API reference!'
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+tags:
+- name: Agents
+  description: All data you can get about your agents.
+paths:
+  /agents/index.json:
+    get:
+      tags:
+      - Agents
+      summary: List agents
+      parameters:
+      - name: id
+        in: query
+        description: Filter by agent ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Max. number of items in response data.
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - name: page
+        in: query
+        description: Number of page to return.
+        schema:
+          minimum: 1
+          type: integer
+      - name: associated_number
+        in: query
+        description: Filters agents by their assigned number. Please enter a valid  number in e164 format
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Agents data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  itemsCount:
+                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
+                  pageCount:
+                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
+                  pageNumber:
+                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
+                  limit:
+                    $ref: '#/components/schemas/PaginationData/properties/limit'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Agent:
+                          $ref: '#/components/schemas/Agent'
+              example:
+                responseData:
+                  itemsCount: 3
+                  pageCount: 1
+                  pageNumber: 1
+                  limit: 3
+                  data:
+                  - Agent:
+                      id: '99'
+                      name: '123456'
+                      firstname: John
+                      lastname: Doe
+                      email: joh.doe@phoonio.com
+                      is_daily_limit_ok: true
+                      status_outbound: true
+                      availability_status: online
+                      extension: '1001'
+                      call_number_id: 36
+                      default_number: '+421123456789'
+                      associated_numbers:
+                      - '+421123456789'
+                      - '+421987654321'
+      operationId: getAgentsIndexJson
+      x-operation-id-source: derived
+  /agents/add.json:
+    put:
+      tags:
+      - Agents
+      summary: Add an agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              - firstname
+              - lastname
+              - pass
+              type: object
+              properties:
+                firstname:
+                  $ref: '#/components/schemas/Agent/properties/firstname'
+                lastname:
+                  $ref: '#/components/schemas/Agent/properties/lastname'
+                email:
+                  $ref: '#/components/schemas/Agent/properties/email'
+                pass:
+                  $ref: '#/components/schemas/Agent/properties/pass'
+                status_outbound:
+                  $ref: '#/components/schemas/Agent/properties/status_outbound'
+                daily_price_limit:
+                  $ref: '#/components/schemas/Agent/properties/daily_price_limit'
+                extension:
+                  $ref: '#/components/schemas/Agent/properties/extension'
+                call_number_id:
+                  $ref: '#/components/schemas/Agent/properties/call_number_id'
+        required: true
+      responses:
+        '201':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Agent/properties/id'
+              example:
+                responseData:
+                  status: 201
+                  data:
+                    id: '12345'
+        '403':
+          description: Max. number of agents reached
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 403
+                  message: Max. number of agents reached.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    email:
+                    - Please supply a valid email address.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+      operationId: putAgentsAddJson
+      x-operation-id-source: derived
+  /agents/edit/{agentId}.json:
+    post:
+      tags:
+      - Agents
+      summary: Edit an agent
+      parameters:
+      - name: agentId
+        in: path
+        description: Agent ID to edit
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              - firstname
+              - lastname
+              type: object
+              properties:
+                firstname:
+                  $ref: '#/components/schemas/Agent/properties/firstname'
+                lastname:
+                  $ref: '#/components/schemas/Agent/properties/lastname'
+                email:
+                  $ref: '#/components/schemas/Agent/properties/email'
+                status_outbound:
+                  $ref: '#/components/schemas/Agent/properties/status_outbound'
+                daily_price_limit:
+                  $ref: '#/components/schemas/Agent/properties/daily_price_limit'
+                call_number_id:
+                  $ref: '#/components/schemas/Agent/properties/call_number_id'
+        required: true
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    email:
+                    - Please supply a valid email address.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+      operationId: postAgentsEdit{agentId}Json
+      x-operation-id-source: derived
+  /agents/delete/{agentId}.json:
+    delete:
+      tags:
+      - Agents
+      summary: Delete an agent
+      parameters:
+      - name: agentId
+        in: path
+        description: Agent ID to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessGeneralData'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Agent not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+      operationId: deleteAgentsDelete{agentId}Json
+      x-operation-id-source: derived
+components:
+  schemas:
+    PaginationData:
+      type: object
+      properties:
+        itemsCount:
+          type: integer
+          description: number of resources in the response
+          format: int64
+        pageCount:
+          type: integer
+          description: number of pages found
+          format: int64
+        pageNumber:
+          type: integer
+          description: current page in the response
+          format: int64
+        limit:
+          type: integer
+          description: number of objects sent per page
+          format: int64
+      description: Call data
+    StatusCode:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    Agent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Agent ID
+        name:
+          type: string
+          description: Agent\'s Voice ID
+        firstname:
+          type: string
+          description: First name
+        lastname:
+          type: string
+          description: Last name
+        email:
+          type: string
+          description: Email
+          format: email
+        pass:
+          type: string
+          description: Password
+        daily_price_limit:
+          maximum: 200
+          minimum: 1
+          type: integer
+          description: Daily price limit for all calls in EUR. Usually allowed values are from 1 to 200 EUR. Leave empty for using default value.
+        is_daily_limit_ok:
+          type: boolean
+          description: Is daily price limit OK? If not, agent cannot make new calls
+        status_outbound:
+          type: boolean
+          description: Does agent have outbound calls allowed?
+        availability_status:
+          type: string
+          description: Current availability status of the agent
+          enum:
+          - online
+          - offline
+          - paused
+          - calling
+        extension:
+          maximum: 9999
+          minimum: 1000
+          type: integer
+          description: Extension of an agent. Extension must be four digits long and be unique across whole company.
+        call_number_id:
+          minimum: 1
+          type: integer
+          description: Default outbound number ID
+        default_number:
+          type: string
+          description: Default outbound number in E164 format
+        associated_numbers:
+          type: array
+          description: array of e164 numbers that the agent has assigned
+          items:
+            type: string
+      description: Agent data
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message

@@ -3,7 +3,134 @@ info:
   title: CloudTalk Voice Agent API
   description: '# Introduction
 
-    Welcome to CloudTalk API reference!'
+    Welcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk. # API Overview
+
+
+    The API is organized around the following resources:
+
+
+    API Area | Description
+
+    ----------------|-------------
+
+    Calls | Browse your call history, download recordings and access all your calls data. Contacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually. Numbers | Automate Numbers modifications. List all your numbers. Agents | Create or update your Agents, access their settings. Conversation Intelligence | Get Conversation Intelligence data about your calls. VoiceAgent | Initiate VoiceAgent calls
+
+
+    JSON is returned in all responses. XML is not supported. The API also uses common approaches for the following:
+
+
+    Function | Description
+
+    ----------------|-------------
+
+    Data | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects. Errors | 4xx and 5xx responses returning JSON with error codes
+
+    Rate Limiting | Controls how many requests can be made in a time window
+
+    HTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS. ## Authentication
+
+
+    This is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication. Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the CloudTalk Dashboard under Account → Settings → API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys). To try the API via curl on the command-line, the general form used would be:
+
+    ```
+
+    curl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL
+
+    ```
+
+
+    For instance, you would execute:
+
+    ```
+
+    curl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json
+
+    ```
+
+
+    ## Usage
+
+
+    The API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **''429 Too Many Requests''** response code will be returned along with the following headers -
+
+
+    Header name | Description
+
+    ----------------|-------------
+
+    X-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window. X-CloudTalkAPI-Remaining | Number of API requests left in the current window. X-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp. Note that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case. ## Response Envelopes
+
+
+    **Note:** Conversation Intelligence doesn''t follow envelopes. The API returns one of three envelopes depending upon the request issued:
+
+
+    1. Single Item Envelope
+
+    2. Collections Envelope
+
+    3. Error Envelope
+
+
+    ### Single Item Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    }
+
+    }
+
+    ```
+
+
+    ### Collections Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "itemsCount": 65,
+
+    "pageCount": 3,
+
+    "pageNumber": 1,
+
+    "limit": 30,
+
+    "data": [
+
+    {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    },
+
+    {
+
+    "id": 456,
+
+    ... "created": "2017-10-19 09:21:29"
+
+    },
+
+    ...'
   contact:
     name: CloudTalk API Support
     url: https://www.cloudtalk.io/contact
@@ -12,6 +139,8 @@ info:
     url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
 servers:
 - url: https://my.cloudtalk.io/api
+security:
+- basicAuth: []
 tags:
 - name: VoiceAgent
   description: VoiceAgent API ver. 1.0.0
@@ -22,7 +151,7 @@ paths:
       - url: https://api.cloudtalk.io/v1
       tags:
       - VoiceAgent
-      summary: Initiate a VoiceAgent call
+      summary: Initiate VoiceAgent call
       description: Creates a new VoiceAgent call with specified parameters and properties. Call properties are optional and can be used to configure the call.
       operationId: createVoiceAgentCall
       requestBody:
@@ -79,60 +208,1789 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /voice-agent/outbound/kill:
+    post:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Stop outbound VoiceAgent calls
+      description: 'Emergency stop for outbound VoiceAgent dialing.
+
+
+        Queued calls are cancelled and calls already in progress are ended within a few seconds, through the normal call-end path — billing, call records and analytics stay correct. **Inbound calls are unaffected**, as is the outbound traffic of every other company.
+
+
+        The stop **expires on its own** after `duration_seconds`, so a forgotten stop cannot silence an account indefinitely. Sending the request again overwrites the window; sending `duration_seconds: 0` lifts it early.
+
+
+        By default the stop covers all of the company''s outbound calls. Supply `voice_agent_id` to stop a single VoiceAgent while the others keep dialing.
+
+
+        Queued calls cancelled by a stop are **not dialed later** when the window expires — they are marked declined and removed.
+
+
+        This endpoint is rate limited to **10 requests per minute per company**, below the API-wide default of 60 — a single request already stops the whole company.'
+      operationId: killVoiceAgentOutbound
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - duration_seconds
+              properties:
+                duration_seconds:
+                  type: integer
+                  description: How long to stop outbound dialing, in seconds. `0` cancels a stop that is currently active for the same scope. Maximum 86400 (24 hours).
+                  minimum: 0
+                  maximum: 86400
+                  example: 600
+                voice_agent_id:
+                  type: string
+                  description: Restrict the stop to a single VoiceAgent. Omit to stop all of the company's outbound calls. Must be a VoiceAgent belonging to your company.
+                  example: 681b0639876543cfbc3d6b55
+                reason:
+                  type: string
+                  description: Optional free text recorded in the audit log.
+                  maxLength: 256
+                  example: runaway campaign
+      responses:
+        '200':
+          description: Outbound dialing stopped, or resumed when `duration_seconds` was 0.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  killed_until_unix:
+                    type: integer
+                    format: int64
+                    description: Unix timestamp (seconds) at which the stop expires and dialing resumes on its own. This is a point in time, not a duration. `0` after a cancel.
+                    example: 1786966737
+                  drained_count:
+                    type: integer
+                    description: Number of queued outbound calls this request cancelled.
+                    example: 3
+                  cancelled:
+                    type: boolean
+                    description: True when the request lifted an existing stop instead of setting one.
+                    example: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: The VoiceAgent named by `voice_agent_id` was not found. An id that belongs to another company is reported the same way as one that does not exist.
+        '422':
+          description: The request body failed validation — for example `duration_seconds` outside 0–86400, or a property that is not part of this request.
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          description: 'Outbound calling was **not** stopped: the request could not be delivered. Nothing changed, so the call is safe to retry — and must be, since dialing is still running.'
+  /voice-agents:
+    get:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: List voice agents
+      description: Returns one page of the company's voice agents. Pages are ordered by creation and walked with limit and cursor.
+      operationId: public-v1-list-voice-agents
+      parameters:
+      - description: Page size, 1-100; out-of-range values are clamped and the effective value echoed in pagination.limit
+        example: 20
+        explode: false
+        in: query
+        name: limit
+        schema:
+          default: 20
+          description: Page size, 1-100; out-of-range values are clamped and the effective value echoed in pagination.limit
+          example: 20
+          type: integer
+      - description: Opaque cursor from a previous page's pagination.next
+        explode: false
+        in: query
+        name: cursor
+        schema:
+          description: Opaque cursor from a previous page's pagination.next
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionVoiceAgentListAttributes'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+    post:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Create a voice agent
+      description: Creates a voice agent from the attributes object.
+      operationId: public-v1-create-voice-agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceAgentAttributes'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleVoiceAgentAttributes'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '413':
+          description: Request Entity Too Large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /voice-agents/{voiceAgentId}:
+    get:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Get a voice agent
+      description: Returns one voice agent of the company.
+      operationId: public-v1-get-voice-agent
+      parameters:
+      - name: voiceAgentId
+        in: path
+        required: true
+        description: Voice agent identifier
+        schema:
+          description: Voice agent identifier
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleVoiceAgentAttributes'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+    put:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Replace a voice agent
+      description: Replaces the voice agent with the attributes object. An omitted optional attribute is reset to its default, never preserved, except provider, llm and minorVersion, which keep their stored values.
+      operationId: public-v1-replace-voice-agent
+      parameters:
+      - name: voiceAgentId
+        in: path
+        required: true
+        description: Voice agent identifier
+        schema:
+          description: Voice agent identifier
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceAgentAttributes'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleVoiceAgentAttributes'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '413':
+          description: Request Entity Too Large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+    delete:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Delete a voice agent
+      description: Deletes the voice agent. Attached knowledge bases and tools are unlinked, not deleted.
+      operationId: public-v1-delete-voice-agent
+      parameters:
+      - name: voiceAgentId
+        in: path
+        required: true
+        description: Voice agent identifier
+        schema:
+          description: Voice agent identifier
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /voice-agents/{voiceAgentId}/knowledge-bases/{knowledgeBaseId}:
+    put:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Attach a knowledge base to a voice agent
+      description: Links the knowledge base to the agent. Repeating the call changes nothing.
+      operationId: public-v1-attach-voice-agent-knowledge-base
+      parameters:
+      - name: voiceAgentId
+        in: path
+        required: true
+        description: Voice agent identifier
+        schema:
+          description: Voice agent identifier
+          type: string
+      - name: knowledgeBaseId
+        in: path
+        required: true
+        description: Knowledge base identifier
+        schema:
+          description: Knowledge base identifier
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+    delete:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Detach a knowledge base from a voice agent
+      description: Unlinks the knowledge base from the agent; the knowledge base itself is kept.
+      operationId: public-v1-detach-voice-agent-knowledge-base
+      parameters:
+      - name: voiceAgentId
+        in: path
+        required: true
+        description: Voice agent identifier
+        schema:
+          description: Voice agent identifier
+          type: string
+      - name: knowledgeBaseId
+        in: path
+        required: true
+        description: Knowledge base identifier
+        schema:
+          description: Knowledge base identifier
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /knowledge-bases:
+    get:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: List knowledge bases
+      description: Returns one page of the company's knowledge bases. Pages are ordered by identifier and walked with limit and cursor.
+      operationId: public-v1-list-knowledge-bases
+      parameters:
+      - description: Page size, 1-100; out-of-range values are clamped and the effective value echoed in pagination.limit
+        example: 20
+        explode: false
+        in: query
+        name: limit
+        schema:
+          default: 20
+          description: Page size, 1-100; out-of-range values are clamped and the effective value echoed in pagination.limit
+          example: 20
+          type: integer
+      - description: Opaque cursor from a previous page's pagination.next
+        explode: false
+        in: query
+        name: cursor
+        schema:
+          description: Opaque cursor from a previous page's pagination.next
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionKnowledgeBaseAttributes'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+    post:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Create a knowledge base
+      description: Creates a knowledge base from an address or from inline text. A URL source starts SYNCHRONIZING and turns ACTIVE once it has been read. A company may hold at most 100 knowledge bases; at the cap the request answers 409 KNOWLEDGE_BASE_LIMIT_REACHED.
+      operationId: public-v1-create-knowledge-base
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KnowledgeBaseCreateAttributes'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleKnowledgeBaseAttributes'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '413':
+          description: Request Entity Too Large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /knowledge-bases/files:
+    post:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Upload a knowledge base file
+      description: Creates a knowledge base from one uploaded file. The name is derived from the filename. A company may hold at most 100 knowledge bases; at the cap the request answers 409 KNOWLEDGE_BASE_LIMIT_REACHED.
+      operationId: public-v1-upload-knowledge-base-file
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              additionalProperties: false
+              properties:
+                file:
+                  description: The file to ingest as a knowledge base
+                  format: binary
+                  type: string
+              required:
+              - file
+              type: object
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleKnowledgeBaseAttributes'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '413':
+          description: Request Entity Too Large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /knowledge-bases/{knowledgeBaseId}:
+    delete:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Delete a knowledge base
+      description: Deletes the knowledge base. A knowledge base attached to a voice agent must be detached first.
+      operationId: public-v1-delete-knowledge-base
+      parameters:
+      - name: knowledgeBaseId
+        in: path
+        required: true
+        description: Knowledge base identifier
+        schema:
+          description: Knowledge base identifier
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
 components:
+  schemas:
+    VoiceAgentBackgroundSound:
+      additionalProperties: false
+      properties:
+        isCrossfadeLoopEnabled:
+          description: Smooth the seam when the ambience loops
+          type:
+          - boolean
+          - 'null'
+        preset:
+          description: Ambience preset
+          enum:
+          - city
+          - elevator
+          - elevator2
+          - elevator3
+          - elevator4
+          - office
+          - office2
+          - restaurant
+          - typing
+          type: string
+        volume:
+          description: Ambience volume; null uses the provider default
+          format: double
+          maximum: 1
+          minimum: 0
+          type:
+          - number
+          - 'null'
+      required:
+      - preset
+      type:
+      - object
+      - 'null'
+    PublicErrorObject:
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+        details:
+          items:
+            $ref: '#/components/schemas/PublicErrorDetail'
+          type:
+          - array
+          - 'null'
+        message:
+          type: string
+        target:
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    VoiceAgentGuardrail:
+      additionalProperties: false
+      properties:
+        isEnabled:
+          description: Whether the guardrail is active
+          type: boolean
+        reply:
+          description: What the agent answers instead
+          maxLength: 2000
+          type: string
+        when:
+          description: Situation the guardrail covers
+          maxLength: 2000
+          type: string
+      required:
+      - isEnabled
+      type: object
+    VoiceAgentOptimizedChange:
+      additionalProperties: false
+      properties:
+        from:
+          description: The value the agent runs with; null when unset
+        path:
+          description: 'Attribute path of the setting, as a write body spells it: provider, llm, minorVersion, elevenLabsSettings.isVadEnabled, elevenLabsSettings.turnModel, elevenLabsSettings.isSpeculativeTurnEnabled or elevenLabsSettings.turnEagerness'
+          example: llm
+          type: string
+        to:
+          description: The optimized value
+      required:
+      - path
+      - from
+      - to
+      type: object
+    VoiceAgentSkills:
+      additionalProperties: false
+      properties:
+        answerQuestions:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentAnswerQuestionsSkill'
+          description: Answer questions from the agent's knowledge
+        appointmentBooking:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentBookingSkill'
+          description: Book a calendar appointment
+        custom:
+          description: Free-form capabilities described by a prompt
+          items:
+            $ref: '#/components/schemas/VoiceAgentCustomSkill'
+          maxItems: 20
+          type:
+          - array
+          - 'null'
+        extractData:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentExtractDataSkill'
+          description: Collect structured data during the call
+        takeMessage:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentTakeMessageSkill'
+          description: Record a message for the company
+        transferToHuman:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentTransferSkill'
+          description: Hand the call to a human
+      type: object
+    PublicErrorBody:
+      additionalProperties: false
+      properties:
+        error:
+          $ref: '#/components/schemas/PublicErrorObject'
+        requestId:
+          type: string
+      required:
+      - error
+      - requestId
+      type: object
+    KnowledgeBaseAttributes:
+      additionalProperties: false
+      properties:
+        createdAt:
+          description: When the knowledge base was created
+          format: date-time
+          type: string
+        fileExtension:
+          description: 'Extension of the stored file: the upload''s extension, HTML for a custom source, null for a URL source'
+          type:
+          - string
+          - 'null'
+        name:
+          description: Name of the knowledge base; derived from the filename for an uploaded file
+          type: string
+        sourceType:
+          description: Where the content comes from
+          enum:
+          - URL
+          - FILE
+          - CUSTOM
+          type: string
+        sourceUrl:
+          description: Address the content is read from; null unless sourceType is URL
+          type:
+          - string
+          - 'null'
+        status:
+          description: Whether the content is ready to be used by a voice agent
+          enum:
+          - ACTIVE
+          - SYNCHRONIZING
+          - ERROR
+          type: string
+        updatedAt:
+          description: When the knowledge base was last changed
+          format: date-time
+          type: string
+        voiceAgentIds:
+          description: Voice agents the knowledge base is attached to
+          items:
+            type: string
+          type:
+          - array
+          - 'null'
+      required:
+      - name
+      - sourceType
+      - status
+      - sourceUrl
+      - fileExtension
+      - voiceAgentIds
+      - createdAt
+      - updatedAt
+      type: object
+    VoiceAgentTransferSkill:
+      additionalProperties: false
+      properties:
+        customProperties:
+          description: Extra context handed to the human agent
+          items:
+            $ref: '#/components/schemas/VoiceAgentContextProperty'
+          maxItems: 20
+          type:
+          - array
+          - 'null'
+        includeProperties:
+          description: Context handed to the human agent
+          items:
+            enum:
+            - callerName
+            - summary
+            type: string
+          maxItems: 2
+          type:
+          - array
+          - 'null'
+        isConfirmationRequired:
+          description: Ask the caller to confirm before transferring
+          type: boolean
+        isEnabled:
+          description: Whether the skill is active
+          type: boolean
+        rules:
+          description: Routing rules, evaluated in order
+          items:
+            $ref: '#/components/schemas/VoiceAgentTransferRule'
+          maxItems: 50
+          type:
+          - array
+          - 'null'
+      required:
+      - isEnabled
+      - rules
+      type:
+      - object
+      - 'null'
+    VoiceAgentTransferTarget:
+      additionalProperties: false
+      properties:
+        agentExtension:
+          description: Target agent extension
+          maxLength: 32
+          type:
+          - string
+          - 'null'
+        agentId:
+          description: Target agent id
+          format: int64
+          type:
+          - integer
+          - 'null'
+        destination:
+          description: Kind of transfer target
+          enum:
+          - agent
+          - group
+          - call_flow
+          type: string
+        groupExtension:
+          description: Target group extension
+          maxLength: 32
+          type:
+          - string
+          - 'null'
+        groupId:
+          description: Target group id
+          format: int64
+          type:
+          - integer
+          - 'null'
+      required:
+      - destination
+      type:
+      - object
+      - 'null'
+    VoiceAgentBookingSkill:
+      additionalProperties: false
+      properties:
+        calendarEventDescription:
+          description: Body of the created event
+          maxLength: 2000
+          type: string
+        calendarId:
+          description: Calendar the appointment is created in
+          maxLength: 255
+          type: string
+        durationMinutes:
+          description: Length of the booked slot
+          format: int64
+          maximum: 480
+          minimum: 1
+          type: integer
+        eventName:
+          description: Title of the created event
+          maxLength: 255
+          type: string
+        integrationId:
+          description: Calendar integration the agent books in
+          maxLength: 100
+          type: string
+        isEnabled:
+          description: Whether the skill is active
+          type: boolean
+        serviceDescription:
+          description: What is being booked
+          maxLength: 2000
+          type: string
+      required:
+      - isEnabled
+      - integrationId
+      - calendarId
+      - eventName
+      - durationMinutes
+      type:
+      - object
+      - 'null'
+    ResourceVoiceAgentListAttributes:
+      additionalProperties: false
+      properties:
+        attributes:
+          $ref: '#/components/schemas/VoiceAgentListAttributes'
+        id:
+          type: string
+        type:
+          type: string
+      required:
+      - id
+      - type
+      - attributes
+      type: object
+    VoiceAgentExtractDataSkill:
+      additionalProperties: false
+      properties:
+        endpoint:
+          description: HTTPS webhook the collected values are posted to
+          maxLength: 2000
+          type: string
+        isEnabled:
+          description: Whether the skill is active
+          type: boolean
+        properties:
+          description: Values to collect
+          items:
+            $ref: '#/components/schemas/VoiceAgentContextProperty'
+          maxItems: 50
+          type:
+          - array
+          - 'null'
+      required:
+      - isEnabled
+      - properties
+      type:
+      - object
+      - 'null'
+    CollectionKnowledgeBaseAttributes:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ResourceKnowledgeBaseAttributes'
+          type:
+          - array
+          - 'null'
+        pagination:
+          $ref: '#/components/schemas/PublicPagination'
+        requestId:
+          type: string
+      required:
+      - data
+      - pagination
+      - requestId
+      type: object
+    DialerError:
+      type: object
+      description: Error envelope returned by every Dialer API endpoint. Note it differs from the legacy API's error format.
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code
+        message:
+          type: string
+          description: Human-readable error message
+        error:
+          type: string
+          description: HTTP error name
+        correlationId:
+          type: string
+          description: Request correlation ID — include it when contacting support
+          example: YevPQs
+        subErrors:
+          type: array
+          items:
+            type: string
+          description: Field-level validation messages, present on validation failures
+          example:
+          - incorrect email
+      required:
+      - statusCode
+      - message
+      - error
+      - correlationId
+    SingleVoiceAgentAttributes:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/ResourceVoiceAgentAttributes'
+        requestId:
+          type: string
+      required:
+      - data
+      - requestId
+      type: object
+    VoiceAgentListAttributes:
+      additionalProperties: false
+      properties:
+        agentName:
+          description: Name of the agent
+          type: string
+        createdAt:
+          description: When the agent was created
+          format: date-time
+          type: string
+        direction:
+          description: Call direction the agent serves
+          enum:
+          - inbound
+          - outbound
+          type: string
+        language:
+          description: Primary language code
+          type: string
+        status:
+          description: Whether the agent may run
+          enum:
+          - enabled
+          - disabled
+          type: string
+        updatedAt:
+          description: When the agent was last saved
+          format: date-time
+          type: string
+        voiceId:
+          description: Voice the agent speaks with
+          type: string
+      required:
+      - agentName
+      - direction
+      - status
+      - language
+      - voiceId
+      - createdAt
+      - updatedAt
+      type: object
+    CollectionVoiceAgentListAttributes:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ResourceVoiceAgentListAttributes'
+          type:
+          - array
+          - 'null'
+        pagination:
+          $ref: '#/components/schemas/PublicPagination'
+        requestId:
+          type: string
+      required:
+      - data
+      - pagination
+      - requestId
+      type: object
+    ResourceVoiceAgentAttributes:
+      additionalProperties: false
+      properties:
+        attributes:
+          $ref: '#/components/schemas/VoiceAgentAttributes'
+        id:
+          type: string
+        type:
+          type: string
+      required:
+      - id
+      - type
+      - attributes
+      type: object
+    VoiceAgentOptimizedSettings:
+      additionalProperties: false
+      properties:
+        changes:
+          description: Attributes that differ from the optimized values; set each path to its to value and replace the agent to apply them
+          items:
+            $ref: '#/components/schemas/VoiceAgentOptimizedChange'
+          type: array
+        effects:
+          description: 'What applying the changes brings that no attribute holds; backupModels: the agent gains the backup model chain'
+          items:
+            enum:
+            - backupModels
+            type: string
+          type: array
+        isAvailable:
+          description: Whether applying the optimized settings would change anything (changes is not empty)
+          type: boolean
+      required:
+      - isAvailable
+      - changes
+      - effects
+      type:
+      - object
+      - 'null'
+    VoiceAgentElevenLabsSettings:
+      additionalProperties: false
+      properties:
+        asrKeywords:
+          description: Phrases speech recognition should favour
+          items:
+            type: string
+          maxItems: 100
+          type:
+          - array
+          - 'null'
+        backgroundSound:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentBackgroundSound'
+          description: Ambience played under the conversation
+        interruptionIgnoreTermLanguages:
+          description: Languages the ignored terms are given in
+          items:
+            type: string
+          maxItems: 20
+          type:
+          - array
+          - 'null'
+        interruptionIgnoreTerms:
+          description: Words that must not count as an interruption
+          items:
+            type: string
+          maxItems: 100
+          type:
+          - array
+          - 'null'
+        isSpeculativeTurnEnabled:
+          description: Let the agent prepare a reply before the caller stops speaking
+          type:
+          - boolean
+          - 'null'
+        isVadEnabled:
+          description: Filter background noise with voice activity detection
+          type:
+          - boolean
+          - 'null'
+        turnEagerness:
+          description: How soon the agent takes a turn
+          enum:
+          - patient
+          - normal
+          - eager
+          type: string
+        turnModel:
+          description: Turn-taking model
+          enum:
+          - turn_v2
+          - turn_v3
+          type: string
+      type:
+      - object
+      - 'null'
+    PublicPagination:
+      additionalProperties: false
+      properties:
+        limit:
+          format: int64
+          type: integer
+        next:
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next
+      type: object
+    VoiceAgentTakeMessageSkill:
+      additionalProperties: false
+      properties:
+        isEnabled:
+          description: Whether the skill is active
+          type: boolean
+        prompt:
+          description: Instructions for taking the message
+          maxLength: 5000
+          type: string
+      required:
+      - isEnabled
+      type:
+      - object
+      - 'null'
+    VoiceAgentAnswerQuestionsSkill:
+      additionalProperties: false
+      properties:
+        action:
+          description: What to do when the agent cannot answer
+          enum:
+          - admitUncertainty
+          - offerAlternative
+          - transferToHuman
+          type: string
+        isEnabled:
+          description: Whether the skill is active
+          type: boolean
+        transferConfig:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentTransferTarget'
+          description: Destination used when action is transferToHuman
+      required:
+      - isEnabled
+      - action
+      type:
+      - object
+      - 'null'
+    SingleKnowledgeBaseAttributes:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/ResourceKnowledgeBaseAttributes'
+        requestId:
+          type: string
+      required:
+      - data
+      - requestId
+      type: object
+    PublicErrorDetail:
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    KnowledgeBaseCreateAttributes:
+      additionalProperties: false
+      properties:
+        name:
+          description: Name of the knowledge base
+          example: returns-policy
+          maxLength: 50
+          minLength: 1
+          type: string
+        sourceType:
+          description: Where the content comes from; upload a file through POST /knowledge-bases/files
+          enum:
+          - URL
+          - CUSTOM
+          example: URL
+          type: string
+        text:
+          description: Content of the knowledge base; required when sourceType is CUSTOM, rejected otherwise
+          example: We accept returns within 30 days.
+          type: string
+        url:
+          description: Address to read the content from; required when sourceType is URL, rejected otherwise
+          example: https://example.com/returns
+          type: string
+      required:
+      - sourceType
+      - name
+      type: object
+    VoiceAgentCustomSkill:
+      additionalProperties: false
+      properties:
+        isEnabled:
+          description: Whether the skill is active
+          type: boolean
+        name:
+          description: Skill name
+          maxLength: 100
+          type: string
+        prompt:
+          description: What the agent should do
+          maxLength: 5000
+          type: string
+      required:
+      - isEnabled
+      - name
+      - prompt
+      type: object
+    VoiceAgentTransferRule:
+      additionalProperties: false
+      properties:
+        agentExtension:
+          description: Target agent extension
+          maxLength: 32
+          type:
+          - string
+          - 'null'
+        agentId:
+          description: Target agent id; required together with agentExtension when destination is agent
+          format: int64
+          type:
+          - integer
+          - 'null'
+        condition:
+          description: When the call should be transferred
+          maxLength: 1000
+          type: string
+        destination:
+          description: Kind of transfer target
+          enum:
+          - agent
+          - group
+          - call_flow
+          type: string
+        groupExtension:
+          description: Target group extension
+          maxLength: 32
+          type:
+          - string
+          - 'null'
+        groupId:
+          description: Target group id; required together with groupExtension when destination is group
+          format: int64
+          type:
+          - integer
+          - 'null'
+      required:
+      - condition
+      - destination
+      type: object
+    VoiceAgentAttributes:
+      additionalProperties: false
+      properties:
+        agentName:
+          description: Name of the agent
+          example: Receptionist
+          maxLength: 255
+          type: string
+        createdAt:
+          description: When the agent was created
+          format: date-time
+          readOnly: true
+          type: string
+        defaultOutboundNumberId:
+          description: Outbound caller id; null selects Automatic Outbound and then requires failoverOutboundNumberId
+          example: 73836
+          format: int64
+          type:
+          - integer
+          - 'null'
+        dialTimeoutSeconds:
+          description: Ring timeout; null uses the provider default
+          format: int64
+          maximum: 120
+          minimum: 5
+          type:
+          - integer
+          - 'null'
+        direction:
+          description: Call direction the agent serves
+          enum:
+          - inbound
+          - outbound
+          example: inbound
+          type: string
+        elevenLabsSettings:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentElevenLabsSettings'
+          description: Provider turn-taking and audio tuning
+        failoverOutboundNumberId:
+          description: Number used when Automatic Outbound cannot pick one; required with, and only allowed with, Automatic Outbound (defaultOutboundNumberId null)
+          example: 73836
+          format: int64
+          type:
+          - integer
+          - 'null'
+        goalPrompt:
+          description: What the agent is supposed to achieve
+          maxLength: 20000
+          type: string
+        greeting:
+          description: Opening line; required for inbound agents
+          maxLength: 2000
+          type: string
+        guardrails:
+          description: Topics the agent must avoid
+          items:
+            $ref: '#/components/schemas/VoiceAgentGuardrail'
+          maxItems: 50
+          type:
+          - array
+          - 'null'
+        isAgentSpeakingFirst:
+          description: Whether the agent speaks first; omitted means true for inbound and false for outbound
+          type:
+          - boolean
+          - 'null'
+        knowledgeBaseIds:
+          description: Knowledge bases the agent answers from
+          items:
+            type: string
+          maxItems: 100
+          type:
+          - array
+          - 'null'
+        language:
+          description: Primary language code; rejected with 422 and the detail code LANGUAGE_NOT_SUPPORTED when no provider serves it or the agent's provider (the sent one, or the stored one on replace) does not
+          example: en
+          maxLength: 16
+          type: string
+        llm:
+          description: Model the agent runs on, by canonical id; null on a read when the agent has none set. Omitted on create means the optimized one; omitted on replace keeps the stored value. A model the provider does not offer is rejected with 422 and the detail code LLM_OVERRIDE_NOT_AVAILABLE_FOR_PROVIDER at target llm
+          enum:
+          - openai - gpt-4o-mini
+          - openai - gpt-4o
+          - openai - gpt-4.1
+          - openai - gpt-4.1-mini
+          - openai - gpt-4.1-nano
+          - openai - gpt-5
+          - openai - gpt-5-mini
+          - openai - gpt-5-nano
+          - openai - gpt-5.1
+          - openai - gpt-5.2
+          - openai - gpt-5.4
+          - openai - gpt-5.4-mini
+          - openai - gpt-5.4-nano
+          - openai - gpt-5.5
+          - anthropic - claude-haiku-4-5
+          - anthropic - claude-sonnet-4-5
+          - anthropic - claude-sonnet-4-6
+          - google - gemini-2.5-flash
+          - google - gemini-2.5-flash-lite
+          - google - gemini-3-flash-preview
+          - google - gemini-3.1-flash-lite
+          - google - gemini-3.5-flash
+          - google - gemini-3.6-flash
+          - qwen - qwen36-35b-a3b
+          - qwen - qwen35-397b-a17b
+          - null
+          example: openai - gpt-4o-mini
+          maxLength: 100
+          type:
+          - string
+          - 'null'
+        llmOverride:
+          deprecated: true
+          description: Deprecated alias of llm. On a read, the agent's legacy pinned model until its next save moves it into llm, else null. On a write it wins over llm when both are sent
+          enum:
+          - openai - gpt-4o-mini
+          - openai - gpt-4o
+          - openai - gpt-4.1
+          - openai - gpt-4.1-mini
+          - openai - gpt-4.1-nano
+          - openai - gpt-5
+          - openai - gpt-5-mini
+          - openai - gpt-5-nano
+          - openai - gpt-5.1
+          - openai - gpt-5.2
+          - openai - gpt-5.4
+          - openai - gpt-5.4-mini
+          - openai - gpt-5.4-nano
+          - openai - gpt-5.5
+          - anthropic - claude-haiku-4-5
+          - anthropic - claude-sonnet-4-5
+          - anthropic - claude-sonnet-4-6
+          - google - gemini-2.5-flash
+          - google - gemini-2.5-flash-lite
+          - google - gemini-3-flash-preview
+          - google - gemini-3.1-flash-lite
+          - google - gemini-3.5-flash
+          - google - gemini-3.6-flash
+          - qwen - qwen36-35b-a3b
+          - qwen - qwen35-397b-a17b
+          - null
+          maxLength: 100
+          type:
+          - string
+          - 'null'
+        maxCallDurationMinutes:
+          description: Hard cap on one call
+          example: 30
+          format: int64
+          maximum: 180
+          minimum: 1
+          type: integer
+        minorVersion:
+          description: Generation of the agent's tuned defaults. Omitted on create means the latest; omitted on replace keeps the stored value. A create takes 0 to the latest (send the source's value when duplicating an agent); a replace takes the stored value or the latest, and any other value is rejected with 422. Moving it to the latest applies the minorVersion change optimizedSettings lists
+          format: int64
+          type: integer
+        optimizeStreamingLatency:
+          description: Latency optimisation level
+          format: int64
+          maximum: 4
+          minimum: 0
+          type: integer
+        optimizedSettings:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentOptimizedSettings'
+          description: What applying the platform's optimized values for the agent's current setup would change. The server never applies them on its own; set each change's path to its to value and replace the agent
+          readOnly: true
+        provider:
+          description: Speech provider the agent runs on; null on a read when the agent has none set. Omitted on create means the optimized one; omitted on replace keeps the stored value
+          enum:
+          - elevenlabs
+          - deepgram
+          - null
+          example: elevenlabs
+          type:
+          - string
+          - 'null'
+        providerOverride:
+          deprecated: true
+          description: Deprecated alias of provider. On a read, the agent's legacy pinned provider until its next save moves it into provider, else null. On a write it wins over provider when both are sent
+          enum:
+          - elevenlabs
+          - deepgram
+          - null
+          type:
+          - string
+          - 'null'
+        scenarios:
+          description: Situational instructions
+          items:
+            $ref: '#/components/schemas/VoiceAgentScenario'
+          maxItems: 50
+          type:
+          - array
+          - 'null'
+        secondaryLanguages:
+          description: Additional languages; the write is rejected with 422 and the detail code LANGUAGE_NOT_SUPPORTED, never trimmed, when the agent's provider does not serve a code, Deepgram included. A blank or repeated code is dropped. A Deepgram agent with secondary languages Deepgram serves is saved, and optimizedSettings then proposes ElevenLabs
+          items:
+            type: string
+          maxItems: 20
+          type:
+          - array
+          - 'null'
+        similarity:
+          description: Voice similarity boost
+          format: double
+          maximum: 1
+          minimum: 0
+          type: number
+        skills:
+          allOf:
+          - $ref: '#/components/schemas/VoiceAgentSkills'
+          description: Capabilities the agent may use
+        stability:
+          description: Voice stability
+          format: double
+          maximum: 1
+          minimum: 0
+          type: number
+        status:
+          description: Whether the agent may run; omitted on write means enabled
+          enum:
+          - enabled
+          - disabled
+          example: enabled
+          type: string
+        temperature:
+          description: Creativity of the agent's replies
+          format: double
+          maximum: 1
+          minimum: 0
+          type: number
+        tone:
+          description: Tone presets the agent blends
+          items:
+            enum:
+            - professional
+            - friendly
+            - casual
+            - calm
+            - empathetic
+            - direct
+            type: string
+          maxItems: 6
+          type:
+          - array
+          - 'null'
+        updatedAt:
+          description: When the agent was last saved
+          format: date-time
+          readOnly: true
+          type: string
+        verbosity:
+          description: How much the agent elaborates; omitted means standard
+          enum:
+          - concise
+          - standard
+          - thorough
+          type: string
+        voiceId:
+          description: Voice the agent speaks with
+          example: cgSgspJ2msm6clMCkdW9
+          maxLength: 64
+          type: string
+      required:
+      - agentName
+      - direction
+      - defaultOutboundNumberId
+      - language
+      - maxCallDurationMinutes
+      - voiceId
+      - temperature
+      - stability
+      - similarity
+      - optimizeStreamingLatency
+      - goalPrompt
+      type: object
+    ResourceKnowledgeBaseAttributes:
+      additionalProperties: false
+      properties:
+        attributes:
+          $ref: '#/components/schemas/KnowledgeBaseAttributes'
+        id:
+          type: string
+        type:
+          type: string
+      required:
+      - id
+      - type
+      - attributes
+      type: object
+    VoiceAgentScenario:
+      additionalProperties: false
+      properties:
+        action:
+          description: Action performed when the scenario fires; null means the scenario only replies
+          enum:
+          - toolCall
+          - sendSms
+          - hangup
+          - null
+          type:
+          - string
+          - 'null'
+        actionParameters:
+          additionalProperties: {}
+          description: Action inputs; sendSms takes senderNumber and message
+          type: object
+        isEnabled:
+          description: Whether the scenario is active
+          type: boolean
+        reply:
+          description: What the agent says when the scenario fires
+          maxLength: 2000
+          type: string
+        toolId:
+          description: Tool invoked when action is toolCall; must be one of the company's tools
+          maxLength: 64
+          type:
+          - string
+          - 'null'
+        triggerType:
+          description: What activates the scenario; defaults to custom
+          enum:
+          - custom
+          - booking_confirmed
+          type: string
+        when:
+          description: Trigger text; required and used only when triggerType is custom
+          maxLength: 2000
+          type: string
+      required:
+      - isEnabled
+      - reply
+      type: object
+    VoiceAgentContextProperty:
+      additionalProperties: false
+      properties:
+        description:
+          description: What the agent should put in the property
+          maxLength: 1000
+          type: string
+        name:
+          description: Property name
+          example: callerName
+          maxLength: 100
+          type: string
+        type:
+          description: Value type
+          enum:
+          - STRING
+          - NUMBER
+          - BOOLEAN
+          - ARRAY
+          example: STRING
+          type: string
+      required:
+      - name
+      - type
+      - description
+      type: object
   responses:
-    BadRequest:
-      description: Bad request
+    TooManyRequests:
+      description: Too many requests
+      headers:
+        X-CloudTalkAPI-Limit:
+          description: Maximum number of API requests allowed in the current time window.
+          schema:
+            type: integer
+        X-CloudTalkAPI-Remaining:
+          description: Number of API requests left in the current window.
+          schema:
+            type: integer
+        X-CloudTalkAPI-ResetTime:
+          description: Time when the rate-limit window resets, as a Unix timestamp.
+          schema:
+            type: integer
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: BAD_REQUEST
-              message:
-                type: string
-                description: Error message
-                example: The request could not be understood or was missing required parameters.
+            $ref: '#/components/schemas/DialerError'
+          example:
+            statusCode: 429
+            message: Too Many Requests
+            error: Too Many Requests
+            correlationId: YevPQs
     NotFound:
       description: Not found
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: NOT_FOUND
-              message:
-                type: string
-                description: Error message
-                example: The requested resource was not found.
+            $ref: '#/components/schemas/DialerError'
+          example:
+            statusCode: 404
+            message: Not Found
+            error: Not Found
+            correlationId: YevPQs
     NoContentResponse:
-      description: Operation completed successfully with no content to return
+      description: Operation completed successfully. A 204 response has an empty body.
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              responseData:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    example: 204
-                  message:
-                    type: string
-                    example: No Content
+            $ref: '#/components/schemas/DialerError'
+          example:
+            statusCode: 400
+            message: Validation error
+            error: Bad Request
+            correlationId: YevPQs
+            subErrors:
+            - incorrect email
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
             type: object
+            description: Error envelope returned by the authentication layer in front of the `api.cloudtalk.io/v1` surface. It differs from the per-service error shapes used for other statuses.
             properties:
               code:
                 type: string
@@ -142,18 +2000,25 @@ components:
                 type: string
                 description: Error message
                 example: You are not authorized to access this resource.
+            required:
+            - code
+            - message
+          example:
+            code: UNAUTHORIZED
+            message: You are not authorized to access this resource.
     InternalServerError:
       description: Internal server error
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: INTERNAL_SERVER_ERROR
-              message:
-                type: string
-                description: Error message
-                example: An unexpected error occurred on the server.
+            $ref: '#/components/schemas/DialerError'
+          example:
+            statusCode: 500
+            message: Internal Server Error
+            error: Internal Server Error
+            correlationId: YevPQs
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your API Access Key ID as the username and your API Access Key Secret as the password. Generate keys in the CloudTalk Dashboard under Account -> Settings -> API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys).

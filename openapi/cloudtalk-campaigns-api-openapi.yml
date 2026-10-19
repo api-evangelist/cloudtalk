@@ -3,7 +3,134 @@ info:
   title: CloudTalk Campaigns API
   description: '# Introduction
 
-    Welcome to CloudTalk API reference!'
+    Welcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk. # API Overview
+
+
+    The API is organized around the following resources:
+
+
+    API Area | Description
+
+    ----------------|-------------
+
+    Calls | Browse your call history, download recordings and access all your calls data. Contacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually. Numbers | Automate Numbers modifications. List all your numbers. Agents | Create or update your Agents, access their settings. Conversation Intelligence | Get Conversation Intelligence data about your calls. VoiceAgent | Initiate VoiceAgent calls
+
+
+    JSON is returned in all responses. XML is not supported. The API also uses common approaches for the following:
+
+
+    Function | Description
+
+    ----------------|-------------
+
+    Data | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects. Errors | 4xx and 5xx responses returning JSON with error codes
+
+    Rate Limiting | Controls how many requests can be made in a time window
+
+    HTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS. ## Authentication
+
+
+    This is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication. Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the CloudTalk Dashboard under Account → Settings → API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys). To try the API via curl on the command-line, the general form used would be:
+
+    ```
+
+    curl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL
+
+    ```
+
+
+    For instance, you would execute:
+
+    ```
+
+    curl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json
+
+    ```
+
+
+    ## Usage
+
+
+    The API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **''429 Too Many Requests''** response code will be returned along with the following headers -
+
+
+    Header name | Description
+
+    ----------------|-------------
+
+    X-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window. X-CloudTalkAPI-Remaining | Number of API requests left in the current window. X-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp. Note that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case. ## Response Envelopes
+
+
+    **Note:** Conversation Intelligence doesn''t follow envelopes. The API returns one of three envelopes depending upon the request issued:
+
+
+    1. Single Item Envelope
+
+    2. Collections Envelope
+
+    3. Error Envelope
+
+
+    ### Single Item Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    }
+
+    }
+
+    ```
+
+
+    ### Collections Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "itemsCount": 65,
+
+    "pageCount": 3,
+
+    "pageNumber": 1,
+
+    "limit": 30,
+
+    "data": [
+
+    {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    },
+
+    {
+
+    "id": 456,
+
+    ... "created": "2017-10-19 09:21:29"
+
+    },
+
+    ...'
   contact:
     name: CloudTalk API Support
     url: https://www.cloudtalk.io/contact
@@ -12,6 +139,8 @@ info:
     url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
 servers:
 - url: https://my.cloudtalk.io/api
+security:
+- basicAuth: []
 tags:
 - name: Campaigns
   description: All data you can get about your campaigns.
@@ -21,6 +150,10 @@ paths:
       tags:
       - Campaigns
       summary: List campaigns
+      description: 'Returns the account''s campaigns. Pass `id` to fetch a single campaign, or page through them with `limit` and `page`.
+
+
+        These are the campaigns of the original CloudTalk dialer. The newer sales dialer is a separate surface with its own host, authentication and response shape — see the Dialer endpoints.'
       parameters:
       - name: id
         in: query
@@ -48,29 +181,42 @@ paths:
               schema:
                 type: object
                 properties:
-                  itemsCount:
-                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
-                  pageCount:
-                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
-                  pageNumber:
-                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
-                  limit:
-                    $ref: '#/components/schemas/PaginationData/properties/limit'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Campaign:
-                          $ref: '#/components/schemas/CampaignList'
-                        Button:
-                          $ref: '#/components/schemas/Button'
-                        Tag:
-                          $ref: '#/components/schemas/Tag'
-                        Group:
-                          $ref: '#/components/schemas/Group'
-                        Agent:
-                          $ref: '#/components/schemas/PdAgent'
+                  responseData:
+                    type: object
+                    properties:
+                      itemsCount:
+                        type: integer
+                        description: number of resources in the response
+                        format: int64
+                      pageCount:
+                        type: integer
+                        description: number of pages found
+                        format: int64
+                      pageNumber:
+                        type: integer
+                        description: current page in the response
+                        format: int64
+                      limit:
+                        type: integer
+                        description: number of objects sent per page
+                        format: int64
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            Campaign:
+                              $ref: '#/components/schemas/CampaignList'
+                            Button:
+                              $ref: '#/components/schemas/Button'
+                            Tag:
+                              $ref: '#/components/schemas/Tag'
+                            Group:
+                              $ref: '#/components/schemas/Group'
+                            Agent:
+                              $ref: '#/components/schemas/PdAgent'
+                required:
+                - responseData
               example:
                 responseData:
                   itemsCount: 3
@@ -112,6 +258,10 @@ paths:
       tags:
       - Campaigns
       summary: Add campaign
+      description: 'Creates a campaign. `name` and the `Button` array are required; everything else is optional and configures scheduling (`has_schedule_date`, `schedule_start_date`, `schedule_start_time`), dialing behaviour (`answer_wait_time`, `after_call_dialing_auto`, `after_call_time`, `attempts`, `attempts_interval`), predictive mode (`is_predictive`, `calls_percentage`), call recording, and which contacts, agents and groups the campaign covers. Returns `201`.
+
+
+        Note the core API creates with `PUT`, not `POST`.'
       requestBody:
         content:
           application/json:
@@ -122,50 +272,78 @@ paths:
               type: object
               properties:
                 name:
-                  $ref: '#/components/schemas/CampaignList/properties/name'
+                  type: string
+                  description: Campaign name
                 status:
-                  $ref: '#/components/schemas/CampaignList/properties/status'
+                  type: string
+                  description: Campaign status (active/inactive)
                 has_schedule_date:
-                  $ref: '#/components/schemas/CampaignList/properties/has_schedule_date'
+                  type: boolean
+                  description: Is campaign scheduled?
                 schedule_start_date:
-                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_date'
+                  type: string
+                  description: Campaign start date
+                  format: date
                 schedule_start_time:
-                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_time'
+                  type: string
+                  description: Campaign start time
+                  format: time
                 answer_wait_time:
-                  $ref: '#/components/schemas/CampaignList/properties/answer_wait_time'
+                  type: integer
+                  description: Maximum number of seconds we will wait for the call to be answered.
                 after_call_dialing_auto:
-                  $ref: '#/components/schemas/CampaignList/properties/after_call_dialing_auto'
+                  type: boolean
+                  description: Automatically dial next contact after a call ends true/false
                 after_call_time:
-                  $ref: '#/components/schemas/CampaignList/properties/after_call_time'
+                  type: integer
+                  description: After call time (in seconds)
                 is_recording:
-                  $ref: '#/components/schemas/CampaignList/properties/is_recording'
+                  type: boolean
+                  description: Calls recording true/false
                 call_number_id:
-                  $ref: '#/components/schemas/CampaignList/properties/call_number_id'
+                  type: integer
+                  description: Outbound caller id
                 call_script_id:
-                  $ref: '#/components/schemas/CampaignList/properties/call_script_id'
+                  type: integer
+                  description: Call script ID
                 survey_id:
-                  $ref: '#/components/schemas/CampaignList/properties/survey_id'
+                  type: integer
+                  description: Survey ID
                 is_predictive:
-                  $ref: '#/components/schemas/CampaignList/properties/is_predictive'
+                  type: integer
+                  description: Is predictive dialer campaign 0/1
                 calls_percentage:
-                  $ref: '#/components/schemas/CampaignList/properties/calls_percentage'
+                  type: integer
+                  description: Agents utilization
                 attempts:
-                  $ref: '#/components/schemas/CampaignList/properties/attempts'
+                  type: integer
+                  description: Attempts per contact
                 attempts_interval:
-                  $ref: '#/components/schemas/CampaignList/properties/attempts_interval'
+                  type: integer
+                  description: Hours between attempts
                 Button:
                   type: array
                   items:
                     type: object
                     properties:
                       title:
-                        $ref: '#/components/schemas/Button/properties/title'
+                        type: string
+                        description: Button title
                       type:
-                        $ref: '#/components/schemas/Button/properties/type'
+                        type: string
+                        enum:
+                        - successful_positive
+                        - successful_negative
+                        - rescheduled
+                        - unsuccessful_call_again
+                        - unsuccessful_do_not_call
+                        description: Button type
                       color:
-                        $ref: '#/components/schemas/Button/properties/color'
+                        type: string
+                        description: Button color (hex code)
                       description:
-                        $ref: '#/components/schemas/Button/properties/description'
+                        type: string
+                        description: Button description
                 ContactsTag:
                   type: array
                   items:
@@ -180,14 +358,16 @@ paths:
                     type: object
                     properties:
                       id:
-                        $ref: '#/components/schemas/Agent/properties/id'
+                        type: integer
+                        description: Agent ID
                 Group:
                   type: array
                   items:
                     type: object
                     properties:
                       id:
-                        $ref: '#/components/schemas/Group/properties/id'
+                        type: integer
+                        description: Group ID
         required: true
       responses:
         '201':
@@ -197,13 +377,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
-                  data:
+                  responseData:
                     type: object
                     properties:
-                      id:
-                        $ref: '#/components/schemas/CampaignList/properties/id'
+                      status:
+                        type: integer
+                        description: Status code
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Campaign ID
+                required:
+                - responseData
               example:
                 responseData:
                   status: 201
@@ -258,37 +445,55 @@ paths:
               type: object
               properties:
                 name:
-                  $ref: '#/components/schemas/CampaignList/properties/name'
+                  type: string
+                  description: Campaign name
                 status:
-                  $ref: '#/components/schemas/CampaignList/properties/status'
+                  type: string
+                  description: Campaign status (active/inactive)
                 has_schedule_date:
-                  $ref: '#/components/schemas/CampaignList/properties/has_schedule_date'
+                  type: boolean
+                  description: Is campaign scheduled?
                 schedule_start_date:
-                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_date'
+                  type: string
+                  description: Campaign start date
+                  format: date
                 schedule_start_time:
-                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_time'
+                  type: string
+                  description: Campaign start time
+                  format: time
                 answer_wait_time:
-                  $ref: '#/components/schemas/CampaignList/properties/answer_wait_time'
+                  type: integer
+                  description: Maximum number of seconds we will wait for the call to be answered.
                 after_call_dialing_auto:
-                  $ref: '#/components/schemas/CampaignList/properties/after_call_dialing_auto'
+                  type: boolean
+                  description: Automatically dial next contact after a call ends true/false
                 after_call_time:
-                  $ref: '#/components/schemas/CampaignList/properties/after_call_time'
+                  type: integer
+                  description: After call time (in seconds)
                 is_recording:
-                  $ref: '#/components/schemas/CampaignList/properties/is_recording'
+                  type: boolean
+                  description: Calls recording true/false
                 call_number_id:
-                  $ref: '#/components/schemas/CampaignList/properties/call_number_id'
+                  type: integer
+                  description: Outbound caller id
                 call_script_id:
-                  $ref: '#/components/schemas/CampaignList/properties/call_script_id'
+                  type: integer
+                  description: Call script ID
                 survey_id:
-                  $ref: '#/components/schemas/CampaignList/properties/survey_id'
+                  type: integer
+                  description: Survey ID
                 is_predictive:
-                  $ref: '#/components/schemas/CampaignList/properties/is_predictive'
+                  type: integer
+                  description: Is predictive dialer campaign 0/1
                 calls_percentage:
-                  $ref: '#/components/schemas/CampaignList/properties/calls_percentage'
+                  type: integer
+                  description: Agents utilization
                 attempts:
-                  $ref: '#/components/schemas/CampaignList/properties/attempts'
+                  type: integer
+                  description: Attempts per contact
                 attempts_interval:
-                  $ref: '#/components/schemas/CampaignList/properties/attempts_interval'
+                  type: integer
+                  description: Hours between attempts
                 Button:
                   type: array
                   items:
@@ -298,13 +503,23 @@ paths:
                         type: integer
                         description: Button id
                       title:
-                        $ref: '#/components/schemas/Button/properties/title'
+                        type: string
+                        description: Button title
                       type:
-                        $ref: '#/components/schemas/Button/properties/type'
+                        type: string
+                        enum:
+                        - successful_positive
+                        - successful_negative
+                        - rescheduled
+                        - unsuccessful_call_again
+                        - unsuccessful_do_not_call
+                        description: Button type
                       color:
-                        $ref: '#/components/schemas/Button/properties/color'
+                        type: string
+                        description: Button color (hex code)
                       description:
-                        $ref: '#/components/schemas/Button/properties/description'
+                        type: string
+                        description: Button description
                 ContactsTag:
                   type: array
                   items:
@@ -319,14 +534,16 @@ paths:
                     type: object
                     properties:
                       id:
-                        $ref: '#/components/schemas/Agent/properties/id'
+                        type: integer
+                        description: Agent ID
                 Group:
                   type: array
                   items:
                     type: object
                     properties:
                       id:
-                        $ref: '#/components/schemas/Group/properties/id'
+                        type: integer
+                        description: Group ID
         required: true
       responses:
         '200':
@@ -336,8 +553,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  responseData:
+                    type: object
+                    properties:
+                      status:
+                        type: integer
+                        description: Status code
+                required:
+                - responseData
               example:
                 responseData:
                   status: 200
@@ -382,6 +605,7 @@ paths:
       tags:
       - Campaigns
       summary: Delete campaign
+      description: Deletes the campaign identified by `id`. Returns `404` if no campaign has that ID.
       parameters:
       - name: id
         in: path
@@ -423,12 +647,28 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    StatusCode:
+    SuccessGeneralData:
+      type: object
+      description: Success envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
+      properties:
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: Status code
+      required:
+      - responseData
+    Tag:
       type: object
       properties:
-        status:
+        id:
+          type: integer
+          description: Tag ID
+        name:
           type: string
-          description: Status code
+          description: Tag name
+      description: Campaign tag
     CampaignList:
       type: object
       properties:
@@ -486,26 +726,38 @@ components:
           type: integer
           description: Hours between attempts
       description: Campaign data
-    PaginationData:
+    Group:
       type: object
       properties:
-        itemsCount:
+        id:
           type: integer
-          description: number of resources in the response
-          format: int64
-        pageCount:
-          type: integer
-          description: number of pages found
-          format: int64
-        pageNumber:
-          type: integer
-          description: current page in the response
-          format: int64
-        limit:
-          type: integer
-          description: number of objects sent per page
-          format: int64
-      description: Call data
+          description: Group ID
+        internal_name:
+          type: string
+          description: Group name
+      description: Campaign group
+    ErrorInvalidData:
+      type: object
+      description: Validation-error envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
+      properties:
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code
+            message:
+              type: string
+              description: The error message
+            data:
+              type: object
+              properties: {}
+              description: Field-level detail explaining the error
+          required:
+          - status
+          - message
+      required:
+      - responseData
     Button:
       type: object
       properties:
@@ -531,113 +783,6 @@ components:
           type: string
           description: Button description
       description: Campaign button
-    Agent:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Agent ID
-        name:
-          type: string
-          description: Agent\'s Voice ID
-        firstname:
-          type: string
-          description: First name
-        lastname:
-          type: string
-          description: Last name
-        email:
-          type: string
-          description: Email
-          format: email
-        pass:
-          type: string
-          description: Password
-        daily_price_limit:
-          maximum: 200
-          minimum: 1
-          type: integer
-          description: Daily price limit for all calls in EUR. Usually allowed values are from 1 to 200 EUR. Leave empty for using default value.
-        is_daily_limit_ok:
-          type: boolean
-          description: Is daily price limit OK? If not, agent cannot make new calls
-        status_outbound:
-          type: boolean
-          description: Does agent have outbound calls allowed?
-        availability_status:
-          type: string
-          description: Current availability status of the agent
-          enum:
-          - online
-          - offline
-          - paused
-          - calling
-        extension:
-          maximum: 9999
-          minimum: 1000
-          type: integer
-          description: Extension of an agent. Extension must be four digits long and be unique across whole company.
-        call_number_id:
-          minimum: 1
-          type: integer
-          description: Default outbound number ID
-        default_number:
-          type: string
-          description: Default outbound number in E164 format
-        associated_numbers:
-          type: array
-          description: array of e164 numbers that the agent has assigned
-          items:
-            type: string
-      description: Agent data
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Tag ID
-        name:
-          type: string
-          description: Tag name
-      description: Campaign tag
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
-    Group:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Group ID
-        internal_name:
-          type: string
-          description: Group name
-      description: Campaign group
     PdAgent:
       type: object
       properties:
@@ -648,3 +793,26 @@ components:
           type: string
           description: Agent name
       description: Campaign agent
+    ErrorData:
+      type: object
+      description: Error envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
+      properties:
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code
+            message:
+              type: string
+              description: The error message
+          required:
+          - status
+          - message
+      required:
+      - responseData
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your API Access Key ID as the username and your API Access Key Secret as the password. Generate keys in the CloudTalk Dashboard under Account -> Settings -> API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys).

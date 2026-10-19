@@ -8,15 +8,17 @@
     "cloudtalk-bulks-api-openapi.yml",
     "cloudtalk-calls-api-openapi.yml",
     "cloudtalk-campaigns-api-openapi.yml",
+    "cloudtalk-contact-tags-api-openapi.yml",
     "cloudtalk-contacts-api-openapi.yml",
     "cloudtalk-conversation-intelligence-api-openapi.yml",
     "cloudtalk-cuecard-api-openapi.yml",
+    "cloudtalk-dialer-api-openapi.yml",
     "cloudtalk-groups-api-openapi.yml",
     "cloudtalk-numbers-api-openapi.yml",
-    "cloudtalk-other-api-openapi.yml",
     "cloudtalk-sms-api-openapi.yml",
-    "cloudtalk-tags-api-openapi.yml",
-    "cloudtalk-voiceagent-api-openapi.yml"
+    "cloudtalk-utilities-api-openapi.yml",
+    "cloudtalk-voiceagent-api-openapi.yml",
+    "cloudtalk-webhooks-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
@@ -25,21 +27,7 @@
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "cloudtalk-openapi.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
     "cloudtalk-openapi.json: declared missing tag: Groups",
-    "apis.yml register: already-registered"
+    "apis.yml register: written (+4 apis, 15 total)"
   ],
-  "skipped": [
-    "cloudtalk-agents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-bulks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-calls-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-campaigns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-contacts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-conversation-intelligence-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-cuecard-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-groups-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-numbers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-other-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-sms-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-tags-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloudtalk-voiceagent-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

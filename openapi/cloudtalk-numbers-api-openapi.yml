@@ -3,7 +3,134 @@ info:
   title: CloudTalk Numbers API
   description: '# Introduction
 
-    Welcome to CloudTalk API reference!'
+    Welcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk. # API Overview
+
+
+    The API is organized around the following resources:
+
+
+    API Area | Description
+
+    ----------------|-------------
+
+    Calls | Browse your call history, download recordings and access all your calls data. Contacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually. Numbers | Automate Numbers modifications. List all your numbers. Agents | Create or update your Agents, access their settings. Conversation Intelligence | Get Conversation Intelligence data about your calls. VoiceAgent | Initiate VoiceAgent calls
+
+
+    JSON is returned in all responses. XML is not supported. The API also uses common approaches for the following:
+
+
+    Function | Description
+
+    ----------------|-------------
+
+    Data | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects. Errors | 4xx and 5xx responses returning JSON with error codes
+
+    Rate Limiting | Controls how many requests can be made in a time window
+
+    HTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS. ## Authentication
+
+
+    This is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication. Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the CloudTalk Dashboard under Account → Settings → API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys). To try the API via curl on the command-line, the general form used would be:
+
+    ```
+
+    curl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL
+
+    ```
+
+
+    For instance, you would execute:
+
+    ```
+
+    curl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json
+
+    ```
+
+
+    ## Usage
+
+
+    The API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **''429 Too Many Requests''** response code will be returned along with the following headers -
+
+
+    Header name | Description
+
+    ----------------|-------------
+
+    X-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window. X-CloudTalkAPI-Remaining | Number of API requests left in the current window. X-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp. Note that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case. ## Response Envelopes
+
+
+    **Note:** Conversation Intelligence doesn''t follow envelopes. The API returns one of three envelopes depending upon the request issued:
+
+
+    1. Single Item Envelope
+
+    2. Collections Envelope
+
+    3. Error Envelope
+
+
+    ### Single Item Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    }
+
+    }
+
+    ```
+
+
+    ### Collections Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "itemsCount": 65,
+
+    "pageCount": 3,
+
+    "pageNumber": 1,
+
+    "limit": 30,
+
+    "data": [
+
+    {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    },
+
+    {
+
+    "id": 456,
+
+    ... "created": "2017-10-19 09:21:29"
+
+    },
+
+    ...'
   contact:
     name: CloudTalk API Support
     url: https://www.cloudtalk.io/contact
@@ -12,6 +139,8 @@ info:
     url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
 servers:
 - url: https://my.cloudtalk.io/api
+security:
+- basicAuth: []
 tags:
 - name: Numbers
   description: All data you can get about your numbers.
@@ -21,6 +150,7 @@ paths:
       tags:
       - Numbers
       summary: List numbers
+      description: Returns the phone numbers assigned to the account. Filter by `id`, `country_code`, `area_code`, what the number is `connected_to`, or `is_free` to show only numbers with no routing configured; page with `limit` and `page`.
       parameters:
       - name: id
         in: query
@@ -76,21 +206,34 @@ paths:
               schema:
                 type: object
                 properties:
-                  itemsCount:
-                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
-                  pageCount:
-                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
-                  pageNumber:
-                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
-                  limit:
-                    $ref: '#/components/schemas/PaginationData/properties/limit'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        CallNumber:
-                          $ref: '#/components/schemas/CallNumber'
+                  responseData:
+                    type: object
+                    properties:
+                      itemsCount:
+                        type: integer
+                        description: number of resources in the response
+                        format: int64
+                      pageCount:
+                        type: integer
+                        description: number of pages found
+                        format: int64
+                      pageNumber:
+                        type: integer
+                        description: current page in the response
+                        format: int64
+                      limit:
+                        type: integer
+                        description: number of objects sent per page
+                        format: int64
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            CallNumber:
+                              $ref: '#/components/schemas/CallNumber'
+                required:
+                - responseData
               example:
                 responseData:
                   itemsCount: 3
@@ -114,6 +257,10 @@ paths:
       tags:
       - Numbers
       summary: Edit a number
+      description: 'Updates the number identified by `id`. All three fields are optional: `internal_name` sets the number''s internal label, and `connected_to` with `source_id` set what it routes to. To strip a number''s routing entirely, use Unregister a number instead. Returns `404` if no number has that ID.
+
+
+        Note the core API updates with `POST`, not `PUT`.'
       parameters:
       - name: id
         in: path
@@ -128,11 +275,14 @@ paths:
               type: object
               properties:
                 internal_name:
-                  $ref: '#/components/schemas/CallNumber/properties/internal_name'
+                  type: string
+                  description: Internal name
                 connected_to:
-                  $ref: '#/components/schemas/CallNumber/properties/connected_to'
+                  type: integer
+                  description: Routing type. Where is the number connected. `0 = 'group'`, `1 = 'agent'`, `2 = 'conference room'`, `3 = 'fax'`
                 source_id:
-                  $ref: '#/components/schemas/CallNumber/properties/source_id'
+                  type: integer
+                  description: Source ID of where is the number located, e.g. Agent ID, Group ID...
         required: true
       responses:
         '200':
@@ -142,8 +292,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  responseData:
+                    type: object
+                    properties:
+                      status:
+                        type: integer
+                        description: Status code
+                required:
+                - responseData
               example:
                 responseData:
                   status: 200
@@ -230,32 +386,58 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    PaginationData:
+    ErrorInvalidData:
       type: object
+      description: Validation-error envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
       properties:
-        itemsCount:
-          type: integer
-          description: number of resources in the response
-          format: int64
-        pageCount:
-          type: integer
-          description: number of pages found
-          format: int64
-        pageNumber:
-          type: integer
-          description: current page in the response
-          format: int64
-        limit:
-          type: integer
-          description: number of objects sent per page
-          format: int64
-      description: Call data
-    StatusCode:
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code
+            message:
+              type: string
+              description: The error message
+            data:
+              type: object
+              properties: {}
+              description: Field-level detail explaining the error
+          required:
+          - status
+          - message
+      required:
+      - responseData
+    SuccessGeneralData:
       type: object
+      description: Success envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
       properties:
-        status:
-          type: string
-          description: Status code
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: Status code
+      required:
+      - responseData
+    ErrorData:
+      type: object
+      description: Error envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
+      properties:
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code
+            message:
+              type: string
+              description: The error message
+          required:
+          - status
+          - message
+      required:
+      - responseData
     CallNumber:
       type: object
       properties:
@@ -284,31 +466,8 @@ components:
           type: integer
           description: Source ID of where is the number located, e.g. Agent ID, Group ID...
       description: Number data
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    ErrorInvalidData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
-          type: object
-          properties: {}
-          description: More data explaining the error
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your API Access Key ID as the username and your API Access Key Secret as the password. Generate keys in the CloudTalk Dashboard under Account -> Settings -> API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys).

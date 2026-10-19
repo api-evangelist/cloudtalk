@@ -188,21 +188,6 @@ apis:
     url: https://developers.cloudtalk.io/
   - type: Authentication
     url: authentication/cloudtalk-authentication.yml
-- aid: cloudtalk:cloudtalk-other-api
-  name: CloudTalk Other API
-  description: All other helper endpoints.
-  humanURL: https://developers.cloudtalk.io/
-  baseURL: https://my.cloudtalk.io/api
-  tags: []
-  tags_raw:
-  - Other
-  properties:
-  - type: OpenAPI
-    url: openapi/cloudtalk-other-api-openapi.yml
-  - type: Documentation
-    url: https://developers.cloudtalk.io/
-  - type: Authentication
-    url: authentication/cloudtalk-authentication.yml
 - aid: cloudtalk:cloudtalk-sms-api
   name: CloudTalk Sms API
   description: Sms handling.
@@ -219,20 +204,6 @@ apis:
     url: https://developers.cloudtalk.io/
   - type: Authentication
     url: authentication/cloudtalk-authentication.yml
-- aid: cloudtalk:cloudtalk-tags-api
-  name: CloudTalk Tags API
-  description: All data you can get about your tags.
-  humanURL: https://developers.cloudtalk.io/
-  baseURL: https://my.cloudtalk.io/api
-  tags:
-  - Tags
-  properties:
-  - type: OpenAPI
-    url: openapi/cloudtalk-tags-api-openapi.yml
-  - type: Documentation
-    url: https://developers.cloudtalk.io/
-  - type: Authentication
-    url: authentication/cloudtalk-authentication.yml
 - aid: cloudtalk:cloudtalk-voiceagent-api
   name: CloudTalk VoiceAgent API
   description: VoiceAgent API ver. 1.0.0
@@ -245,6 +216,91 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/cloudtalk-voiceagent-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-contact-tags-api
+  name: CloudTalk Contact tags API
+  description: The tags you create and assign to your contacts.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Contact tags
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-contact-tags-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-dialer-api
+  name: CloudTalk Dialer API
+  description: >-
+    Partner API for the CloudTalk sales dialer — campaigns, campaign contacts, call scripts, surveys,
+    disposition buttons, statistics and data exports.
+
+
+    The Dialer is a newly released product surface: depending on your account's rollout stage, campaigns
+    managed through this API may not yet be visible in your CloudTalk Dashboard. The legacy campaigns
+    API under `/campaigns` is a different product and is not affected.
+
+
+    Authentication is the same HTTP Basic scheme as the rest of the API — your API Access Key ID as the
+    username and API Access Key Secret as the password. This surface differs from the rest of the CloudTalk
+    API in three ways:
+
+
+    - **Base URL** `https://api.cloudtalk.io/v1` (not `my.cloudtalk.io/api`).
+
+    - **Responses** never use the `responseData` envelope: list endpoints return `{ data, meta }` with
+    cursor pagination (`meta.nextCursor` — pass it back as `cursor` to page forward), single resources
+    return the object directly, and some sub-collections return plain arrays.
+
+    - **Errors** return `{ statusCode, message, error, correlationId, subErrors? }` — except `401`, which
+    is answered by the authentication layer in front of the host as `{ code, message }`. Quote the `correlationId`
+    when contacting support.
+
+
+    Rate limiting is per company in a dedicated budget of 60 requests per minute, separate from the core
+    API's quota.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Dialer
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-dialer-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-utilities-api
+  name: CloudTalk Utilities API
+  description: All other helper endpoints.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Utilities
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-utilities-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudtalk.io/
+  - type: Authentication
+    url: authentication/cloudtalk-authentication.yml
+- aid: cloudtalk:cloudtalk-webhooks-api
+  name: CloudTalk Webhooks API
+  description: >-
+    Manage webhook endpoints: subscriptions, signing secrets, test events and the delivery log. Endpoints
+    created here and in the Dashboard are the same endpoints.
+  humanURL: https://developers.cloudtalk.io/
+  baseURL: https://my.cloudtalk.io/api
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudtalk-webhooks-api-openapi.yml
   - type: Documentation
     url: https://developers.cloudtalk.io/
   - type: Authentication

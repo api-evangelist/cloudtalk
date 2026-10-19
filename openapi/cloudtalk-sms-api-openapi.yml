@@ -3,7 +3,134 @@ info:
   title: CloudTalk Sms API
   description: '# Introduction
 
-    Welcome to CloudTalk API reference!'
+    Welcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk. # API Overview
+
+
+    The API is organized around the following resources:
+
+
+    API Area | Description
+
+    ----------------|-------------
+
+    Calls | Browse your call history, download recordings and access all your calls data. Contacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually. Numbers | Automate Numbers modifications. List all your numbers. Agents | Create or update your Agents, access their settings. Conversation Intelligence | Get Conversation Intelligence data about your calls. VoiceAgent | Initiate VoiceAgent calls
+
+
+    JSON is returned in all responses. XML is not supported. The API also uses common approaches for the following:
+
+
+    Function | Description
+
+    ----------------|-------------
+
+    Data | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects. Errors | 4xx and 5xx responses returning JSON with error codes
+
+    Rate Limiting | Controls how many requests can be made in a time window
+
+    HTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS. ## Authentication
+
+
+    This is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication. Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the CloudTalk Dashboard under Account → Settings → API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys). To try the API via curl on the command-line, the general form used would be:
+
+    ```
+
+    curl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL
+
+    ```
+
+
+    For instance, you would execute:
+
+    ```
+
+    curl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json
+
+    ```
+
+
+    ## Usage
+
+
+    The API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **''429 Too Many Requests''** response code will be returned along with the following headers -
+
+
+    Header name | Description
+
+    ----------------|-------------
+
+    X-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window. X-CloudTalkAPI-Remaining | Number of API requests left in the current window. X-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp. Note that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case. ## Response Envelopes
+
+
+    **Note:** Conversation Intelligence doesn''t follow envelopes. The API returns one of three envelopes depending upon the request issued:
+
+
+    1. Single Item Envelope
+
+    2. Collections Envelope
+
+    3. Error Envelope
+
+
+    ### Single Item Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    }
+
+    }
+
+    ```
+
+
+    ### Collections Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "itemsCount": 65,
+
+    "pageCount": 3,
+
+    "pageNumber": 1,
+
+    "limit": 30,
+
+    "data": [
+
+    {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    },
+
+    {
+
+    "id": 456,
+
+    ... "created": "2017-10-19 09:21:29"
+
+    },
+
+    ...'
   contact:
     name: CloudTalk API Support
     url: https://www.cloudtalk.io/contact
@@ -12,6 +139,8 @@ info:
     url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
 servers:
 - url: https://my.cloudtalk.io/api
+security:
+- basicAuth: []
 tags:
 - name: SMS
   description: Sms handling.
@@ -33,21 +162,35 @@ paths:
               type: object
               properties:
                 recipient:
-                  $ref: '#/components/schemas/Sms/properties/recipient'
+                  type: string
+                  description: Recipient number in E.164 format. To send Whatsapp message include prefix "whatsapp:+421..." to both sender and recipient numbers.
                 message:
-                  $ref: '#/components/schemas/Sms/properties/message'
+                  type: string
+                  description: Message body/content.
                 sender:
-                  $ref: '#/components/schemas/Sms/properties/sender'
+                  type: string
+                  description: Sender number in E.164 format. To send Whatsapp message include prefix "whatsapp:+421..." to both sender and recipient numbers.
                 country_code:
-                  $ref: '#/components/schemas/Sms/properties/country_code'
+                  type: string
+                  description: Country code of recipient number.
                 images_by_url:
-                  $ref: '#/components/schemas/Sms/properties/images_by_url'
+                  type: array
+                  items:
+                    type: string
+                  description: Image to be send as MMS. Will be downloaded from URL. MAX 5MB. Can contain up to 5 urls.
                 images:
-                  $ref: '#/components/schemas/Sms/properties/images'
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Image sent as blob to be send as MMS. MAX 5MB. Can contain up to 5 images.
                 file_by_url:
-                  $ref: '#/components/schemas/Sms/properties/file_by_url'
+                  type: string
+                  description: File to be send to Whatsapp. Will be downloaded from URL. MAX 16MB. To send Whatsapp message recipient and sender number must contain prefix "whatsapp:" example "whatsapp:+421...". Field message must be empty.
                 file:
-                  $ref: '#/components/schemas/Sms/properties/file'
+                  type: string
+                  format: binary
+                  description: File sent as blob to be send to Whatsapp. MAX 16MB. To send Whatsapp message recipient and sender number must contain prefix "whatsapp:" example "whatsapp:+421...". Field message must be empty.
         required: true
       responses:
         '200':
@@ -57,12 +200,17 @@ paths:
               schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
-                    description: Success result
-                  data:
+                  responseData:
                     type: object
-                    description: 'If success is true, data contains object with properties : recipent,message, sender and country_code, else if success is false, data contains error message'
+                    properties:
+                      success:
+                        type: boolean
+                        description: Success result
+                      data:
+                        type: object
+                        description: 'If success is true, data contains object with properties : recipent,message, sender and country_code, else if success is false, data contains error message'
+                required:
+                - responseData
               example:
                 responseData:
                   success: true|false
@@ -72,7 +220,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/BadRequest'
+                $ref: '#/components/schemas/ErrorData'
               example:
                 responseData:
                   status: 400
@@ -112,62 +260,26 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Sms:
-      type: object
-      properties:
-        recipient:
-          type: string
-          description: Recipient number in E.164 format. To send Whatsapp message include prefix "whatsapp:+421..." to both sender and recipient numbers.
-        message:
-          type: string
-          description: Message body/content.
-        sender:
-          type: string
-          description: Sender number in E.164 format. To send Whatsapp message include prefix "whatsapp:+421..." to both sender and recipient numbers.
-        country_code:
-          type: string
-          description: Country code of recipient number.
-        images_by_url:
-          type: array
-          items:
-            type: string
-          description: Image to be send as MMS. Will be downloaded from URL. MAX 5MB. Can contain up to 5 urls.
-        images:
-          type: array
-          items:
-            type: string
-            format: binary
-          description: Image sent as blob to be send as MMS. MAX 5MB. Can contain up to 5 images.
-        file_by_url:
-          type: string
-          description: File to be send to Whatsapp. Will be downloaded from URL. MAX 16MB. To send Whatsapp message recipient and sender number must contain prefix "whatsapp:" example "whatsapp:+421...". Field message must be empty.
-        file:
-          type: string
-          format: binary
-          description: File sent as blob to be send to Whatsapp. MAX 16MB. To send Whatsapp message recipient and sender number must contain prefix "whatsapp:" example "whatsapp:+421...". Field message must be empty.
-      description: Sms data
     ErrorData:
       type: object
+      description: Error envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
       properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: BAD_REQUEST
-              message:
-                type: string
-                description: Error message
-                example: The request could not be understood or was missing required parameters.
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code
+            message:
+              type: string
+              description: The error message
+          required:
+          - status
+          - message
+      required:
+      - responseData
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your API Access Key ID as the username and your API Access Key Secret as the password. Generate keys in the CloudTalk Dashboard under Account -> Settings -> API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys).

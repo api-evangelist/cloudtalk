@@ -1,0 +1,327 @@
+openapi: 3.2.0
+info:
+  title: CloudTalk Groups API
+  description: '# Introduction
+
+    Welcome to CloudTalk API reference!'
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+tags:
+- name: Groups
+paths:
+  /groups/index.json:
+    get:
+      tags:
+      - Groups
+      summary: List groups
+      parameters:
+      - name: limit
+        in: query
+        description: Max. number of items in response data.
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - name: page
+        in: query
+        description: Number of page to return.
+        schema:
+          minimum: 1
+          type: integer
+      responses:
+        '200':
+          description: Groups data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  itemsCount:
+                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
+                  pageCount:
+                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
+                  pageNumber:
+                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
+                  limit:
+                    $ref: '#/components/schemas/PaginationData/properties/limit'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Groups:
+                          $ref: '#/components/schemas/Group'
+              example:
+                responseData:
+                  itemsCount: 9
+                  pageCount: 1
+                  pageNumber: 1
+                  limit: 9
+                  data:
+                  - Group:
+                      id: '568'
+                      internal_name: Operátori
+      operationId: getGroupsIndexJson
+      x-operation-id-source: derived
+  /groups/add.json:
+    put:
+      tags:
+      - Groups
+      summary: Add an agent to a group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - group_id
+              - agent_id
+              type: object
+              properties:
+                group_id:
+                  $ref: '#/components/schemas/Groups/properties/group_id'
+                agent_id:
+                  $ref: '#/components/schemas/Groups/properties/agent_id'
+        required: true
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Agent/properties/id'
+              example:
+                responseData:
+                  status: 200
+                  data:
+                    message: Agent added successfully.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+      operationId: putGroupsAddJson
+      x-operation-id-source: derived
+  /groups/delete/{agent_id}.json:
+    delete:
+      tags:
+      - Groups
+      summary: Delete an agent
+      parameters:
+      - name: agent_id
+        in: path
+        description: Agent ID to delete
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - group_id
+              type: object
+              properties:
+                group_id:
+                  $ref: '#/components/schemas/Groups/properties/group_id'
+        required: true
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Agent/properties/id'
+              example:
+                responseData:
+                  status: 200
+                  data:
+                    message: Agent deleted successfully.
+        '404':
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      operationId: deleteGroupsDelete{agentId}Json
+      x-operation-id-source: derived
+components:
+  schemas:
+    Groups:
+      type: object
+      properties:
+        agent_id:
+          type: integer
+          description: Agent ID
+        group_id:
+          type: integer
+          description: Group ID
+      description: Agent data
+    StatusCode:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    PaginationData:
+      type: object
+      properties:
+        itemsCount:
+          type: integer
+          description: number of resources in the response
+          format: int64
+        pageCount:
+          type: integer
+          description: number of pages found
+          format: int64
+        pageNumber:
+          type: integer
+          description: current page in the response
+          format: int64
+        limit:
+          type: integer
+          description: number of objects sent per page
+          format: int64
+      description: Call data
+    Agent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Agent ID
+        name:
+          type: string
+          description: Agent\'s Voice ID
+        firstname:
+          type: string
+          description: First name
+        lastname:
+          type: string
+          description: Last name
+        email:
+          type: string
+          description: Email
+          format: email
+        pass:
+          type: string
+          description: Password
+        daily_price_limit:
+          maximum: 200
+          minimum: 1
+          type: integer
+          description: Daily price limit for all calls in EUR. Usually allowed values are from 1 to 200 EUR. Leave empty for using default value.
+        is_daily_limit_ok:
+          type: boolean
+          description: Is daily price limit OK? If not, agent cannot make new calls
+        status_outbound:
+          type: boolean
+          description: Does agent have outbound calls allowed?
+        availability_status:
+          type: string
+          description: Current availability status of the agent
+          enum:
+          - online
+          - offline
+          - paused
+          - calling
+        extension:
+          maximum: 9999
+          minimum: 1000
+          type: integer
+          description: Extension of an agent. Extension must be four digits long and be unique across whole company.
+        call_number_id:
+          minimum: 1
+          type: integer
+          description: Default outbound number ID
+        default_number:
+          type: string
+          description: Default outbound number in E164 format
+        associated_numbers:
+          type: array
+          description: array of e164 numbers that the agent has assigned
+          items:
+            type: string
+      description: Agent data
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Group ID
+        internal_name:
+          type: string
+          description: Group name
+      description: Campaign group

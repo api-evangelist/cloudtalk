@@ -3,7 +3,134 @@ info:
   title: CloudTalk Conversation Intelligence API
   description: '# Introduction
 
-    Welcome to CloudTalk API reference!'
+    Welcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk. # API Overview
+
+
+    The API is organized around the following resources:
+
+
+    API Area | Description
+
+    ----------------|-------------
+
+    Calls | Browse your call history, download recordings and access all your calls data. Contacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually. Numbers | Automate Numbers modifications. List all your numbers. Agents | Create or update your Agents, access their settings. Conversation Intelligence | Get Conversation Intelligence data about your calls. VoiceAgent | Initiate VoiceAgent calls
+
+
+    JSON is returned in all responses. XML is not supported. The API also uses common approaches for the following:
+
+
+    Function | Description
+
+    ----------------|-------------
+
+    Data | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects. Errors | 4xx and 5xx responses returning JSON with error codes
+
+    Rate Limiting | Controls how many requests can be made in a time window
+
+    HTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS. ## Authentication
+
+
+    This is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication. Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the CloudTalk Dashboard under Account → Settings → API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys). To try the API via curl on the command-line, the general form used would be:
+
+    ```
+
+    curl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL
+
+    ```
+
+
+    For instance, you would execute:
+
+    ```
+
+    curl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json
+
+    ```
+
+
+    ## Usage
+
+
+    The API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **''429 Too Many Requests''** response code will be returned along with the following headers -
+
+
+    Header name | Description
+
+    ----------------|-------------
+
+    X-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window. X-CloudTalkAPI-Remaining | Number of API requests left in the current window. X-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp. Note that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case. ## Response Envelopes
+
+
+    **Note:** Conversation Intelligence doesn''t follow envelopes. The API returns one of three envelopes depending upon the request issued:
+
+
+    1. Single Item Envelope
+
+    2. Collections Envelope
+
+    3. Error Envelope
+
+
+    ### Single Item Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    }
+
+    }
+
+    ```
+
+
+    ### Collections Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "itemsCount": 65,
+
+    "pageCount": 3,
+
+    "pageNumber": 1,
+
+    "limit": 30,
+
+    "data": [
+
+    {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    },
+
+    {
+
+    "id": 456,
+
+    ... "created": "2017-10-19 09:21:29"
+
+    },
+
+    ...'
   contact:
     name: CloudTalk API Support
     url: https://www.cloudtalk.io/contact
@@ -12,6 +139,8 @@ info:
     url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
 servers:
 - url: https://my.cloudtalk.io/api
+security:
+- basicAuth: []
 tags:
 - name: Conversation Intelligence
   description: Conversation Intelligence data about your calls.
@@ -23,6 +152,10 @@ paths:
       tags:
       - Conversation Intelligence
       summary: Summary
+      description: 'Returns the AI-generated summary of a completed call.
+
+
+        Conversation Intelligence runs on `api.cloudtalk.io/v1` and returns its payload at the top level — these responses are **not** wrapped in the core API''s `responseData` envelope.'
       parameters:
       - $ref: '#/components/parameters/callId'
       responses:
@@ -62,6 +195,10 @@ paths:
       tags:
       - Conversation Intelligence
       summary: Overall sentiment
+      description: 'Returns the sentiment scored across a completed call as a whole — one of `very negative`, `negative`, `neutral`, `positive` or `very positive`.
+
+
+        Conversation Intelligence runs on `api.cloudtalk.io/v1` and returns its payload at the top level — these responses are **not** wrapped in the core API''s `responseData` envelope.'
       parameters:
       - $ref: '#/components/parameters/callId'
       responses:
@@ -88,6 +225,10 @@ paths:
       tags:
       - Conversation Intelligence
       summary: Talk-listen ratio
+      description: 'Returns how much each participant spoke during a completed call: talking time in seconds and a talk-to-listen percentage per caller, alongside the list of callers the identifiers refer to.
+
+
+        Conversation Intelligence runs on `api.cloudtalk.io/v1` and returns its payload at the top level — these responses are **not** wrapped in the core API''s `responseData` envelope.'
       parameters:
       - $ref: '#/components/parameters/callId'
       responses:
@@ -114,6 +255,10 @@ paths:
       tags:
       - Conversation Intelligence
       summary: Topics
+      description: 'Returns the topics detected in a completed call, each with a weight and the transcript spans it was drawn from. Page through the result with `limit` and `offset`.
+
+
+        Conversation Intelligence runs on `api.cloudtalk.io/v1` and returns its payload at the top level — these responses are **not** wrapped in the core API''s `responseData` envelope.'
       parameters:
       - $ref: '#/components/parameters/callId'
       - $ref: '#/components/parameters/paginationLimit'
@@ -142,6 +287,10 @@ paths:
       tags:
       - Conversation Intelligence
       summary: Transcription
+      description: 'Returns the transcript of a completed call as time-stamped segments, each attributed to a caller, together with the detected language. Page through the segments with `limit` and `offset`.
+
+
+        Conversation Intelligence runs on `api.cloudtalk.io/v1` and returns its payload at the top level — these responses are **not** wrapped in the core API''s `responseData` envelope.'
       parameters:
       - $ref: '#/components/parameters/callId'
       - $ref: '#/components/parameters/paginationLimit'
@@ -170,6 +319,10 @@ paths:
       tags:
       - Conversation Intelligence
       summary: Smart notes
+      description: 'Returns the structured notes generated for a completed call — call details, action items, decisions made, open questions and any dates or deadlines mentioned.
+
+
+        Conversation Intelligence runs on `api.cloudtalk.io/v1` and returns its payload at the top level — these responses are **not** wrapped in the core API''s `responseData` envelope.'
       parameters:
       - $ref: '#/components/parameters/callId'
       responses:
@@ -195,7 +348,11 @@ paths:
       - url: https://api.cloudtalk.io/v1
       tags:
       - Conversation Intelligence
-      summary: Link to the call details page
+      summary: Call details link
+      description: 'Returns a link to the call''s detail page in CloudTalk analytics.
+
+
+        Conversation Intelligence runs on `api.cloudtalk.io/v1` and returns its payload at the top level — these responses are **not** wrapped in the core API''s `responseData` envelope.'
       parameters:
       - $ref: '#/components/parameters/callId'
       responses:
@@ -223,6 +380,25 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of items to return
+          example: 10
+        offset:
+          type: integer
+          description: Offset of the returned items
+          example: 0
+        total:
+          type: integer
+          description: Total number of items
+          example: 100
+      required:
+      - limit
+      - offset
+      - total
     CallSmartNotes:
       type: object
       properties:
@@ -313,63 +489,6 @@ components:
       - text
       - start
       - caller
-    CallTopic:
-      type: object
-      properties:
-        spans:
-          type: array
-          items:
-            $ref: '#/components/schemas/CallTopicSpan'
-        topic:
-          type: string
-          description: Topic of the call
-        weight:
-          type: number
-          description: Weight of the topic
-      required:
-      - spans
-      - topic
-      - weight
-    Pagination:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of items to return
-          example: 10
-        offset:
-          type: integer
-          description: Offset of the returned items
-          example: 0
-        total:
-          type: integer
-          description: Total number of items
-          example: 100
-      required:
-      - limit
-      - offset
-      - total
-    CallOverallSentiment:
-      type: object
-      properties:
-        callId:
-          type: number
-          description: ID of the call
-        overallSentiment:
-          type: string
-          description: Overall sentiment of the call
-          enum:
-          - very negative
-          - negative
-          - neutral
-          - positive
-          - very positive
-      required:
-      - callId
-      - overallSentiment
-      example:
-        callId: 12345
-        overallSentiment: positive
     ImportantDatesAndDeadlinesNotes:
       type: array
       description: Capture significant dates mentioned, with clickable links to add them directly to the calendar
@@ -386,6 +505,54 @@ components:
         required:
         - dateMention
         - eventDescription
+    CallTopics:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            callId:
+              type: number
+              description: ID of the call
+            topics:
+              type: array
+              items:
+                $ref: '#/components/schemas/CallTopic'
+            callers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Caller'
+          required:
+          - callId
+          - topics
+          - callers
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - data
+      - pagination
+      example:
+        data:
+          callId: 12345
+          topics:
+          - spans:
+            - end: 3.182
+              text: Let's start the discussion in this group.
+              start: 1.867
+              caller: caller1
+            topic: Group Call
+            weight: 0.5
+          callers:
+          - id: 5000
+            type: contact
+            localIdentifier: caller1
+          - id: 1000
+            type: agent
+            localIdentifier: caller2
+        pagination:
+          limit: 1
+          offset: 0
+          total: 10
     CallDetailsNote:
       type: object
       description: Significant updates discussed during the call
@@ -420,9 +587,55 @@ components:
         callMetadata:
           type: string
           description: Metadata such as location, reservation number, etc
-        required:
-        - callDateTime
-        - participants
+      required:
+      - callDateTime
+      - participants
+    CallTopic:
+      type: object
+      properties:
+        spans:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallTopicSpan'
+        topic:
+          type: string
+          description: Topic of the call
+        weight:
+          type: number
+          description: Weight of the topic
+      required:
+      - spans
+      - topic
+      - weight
+    DialerError:
+      type: object
+      description: Error envelope returned by every Dialer API endpoint. Note it differs from the legacy API's error format.
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code
+        message:
+          type: string
+          description: Human-readable error message
+        error:
+          type: string
+          description: HTTP error name
+        correlationId:
+          type: string
+          description: Request correlation ID — include it when contacting support
+          example: YevPQs
+        subErrors:
+          type: array
+          items:
+            type: string
+          description: Field-level validation messages, present on validation failures
+          example:
+          - incorrect email
+      required:
+      - statusCode
+      - message
+      - error
+      - correlationId
     CallTranscription:
       type: object
       properties:
@@ -495,79 +708,6 @@ components:
           limit: 2
           offset: 0
           total: 10
-    CallTopics:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            callId:
-              type: number
-              description: ID of the call
-            topics:
-              type: array
-              items:
-                $ref: '#/components/schemas/CallTopic'
-            callers:
-              type: array
-              items:
-                $ref: '#/components/schemas/Caller'
-          required:
-          - callId
-          - topics
-          - callers
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-      required:
-      - data
-      - pagination
-      example:
-        data:
-          callId: 12345
-          topics:
-          - spans:
-            - end: 3.182
-              text: Let's start the discussion in this group.
-              start: 1.867
-              caller: caller1
-            topic: Group Call
-            weight: 0.5
-          callers:
-          - id: 5000
-            type: contact
-            localIdentifier: caller1
-          - id: 1000
-            type: agent
-            localIdentifier: caller2
-        pagination:
-          limit: 1
-          offset: 0
-          total: 10
-    Caller:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - agent
-          - contact
-          description: Type of caller
-        id:
-          type:
-          - integer
-          - 'null'
-          description: Caller ID if exists in the system
-        localIdentifier:
-          type: string
-          description: Local identifier of the caller
-      required:
-      - id
-      - type
-      - localIdentifier
-      example:
-        id: 1000
-        type: agent
-        localIdentifier: caller1
     CallTalkListenRatio:
       type: object
       properties:
@@ -616,68 +756,68 @@ components:
         - id: 1000
           type: agent
           localIdentifier: caller2
-  responses:
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: INTERNAL_SERVER_ERROR
-              message:
-                type: string
-                description: Error message
-                example: An unexpected error occurred on the server.
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: BAD_REQUEST
-              message:
-                type: string
-                description: Error message
-                example: The request could not be understood or was missing required parameters.
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: NOT_FOUND
-              message:
-                type: string
-                description: Error message
-                example: The requested resource was not found.
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-                example: UNAUTHORIZED
-              message:
-                type: string
-                description: Error message
-                example: You are not authorized to access this resource.
+    CallOverallSentiment:
+      type: object
+      properties:
+        callId:
+          type: number
+          description: ID of the call
+        overallSentiment:
+          type: string
+          description: Overall sentiment of the call
+          enum:
+          - very negative
+          - negative
+          - neutral
+          - positive
+          - very positive
+      required:
+      - callId
+      - overallSentiment
+      example:
+        callId: 12345
+        overallSentiment: positive
+    Caller:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - agent
+          - contact
+          description: Type of caller
+        id:
+          type:
+          - integer
+          - 'null'
+          description: Caller ID if exists in the system
+        localIdentifier:
+          type: string
+          description: Local identifier of the caller
+      required:
+      - id
+      - type
+      - localIdentifier
+      example:
+        id: 1000
+        type: agent
+        localIdentifier: caller1
   parameters:
+    callId:
+      name: callId
+      in: path
+      required: true
+      description: Call ID
+      schema:
+        type: number
+    paginationLimit:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      required: false
+      schema:
+        type: integer
+        minimum: 1
     paginationOffset:
       name: offset
       in: query
@@ -687,18 +827,66 @@ components:
         type: integer
         minimum: 0
         default: 0
-    paginationLimit:
-      name: limit
-      in: query
-      description: Maximum number of items to return
-      required: false
-      schema:
-        type: integer
-        minimum: 1
-    callId:
-      name: callId
-      in: path
-      required: true
-      description: Call ID
-      schema:
-        type: number
+  responses:
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DialerError'
+          example:
+            statusCode: 404
+            message: Not Found
+            error: Not Found
+            correlationId: YevPQs
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DialerError'
+          example:
+            statusCode: 400
+            message: Validation error
+            error: Bad Request
+            correlationId: YevPQs
+            subErrors:
+            - incorrect email
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error envelope returned by the authentication layer in front of the `api.cloudtalk.io/v1` surface. It differs from the per-service error shapes used for other statuses.
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: UNAUTHORIZED
+              message:
+                type: string
+                description: Error message
+                example: You are not authorized to access this resource.
+            required:
+            - code
+            - message
+          example:
+            code: UNAUTHORIZED
+            message: You are not authorized to access this resource.
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DialerError'
+          example:
+            statusCode: 500
+            message: Internal Server Error
+            error: Internal Server Error
+            correlationId: YevPQs
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your API Access Key ID as the username and your API Access Key Secret as the password. Generate keys in the CloudTalk Dashboard under Account -> Settings -> API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys).

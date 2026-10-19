@@ -3,7 +3,134 @@ info:
   title: CloudTalk Calls API
   description: '# Introduction
 
-    Welcome to CloudTalk API reference!'
+    Welcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk. # API Overview
+
+
+    The API is organized around the following resources:
+
+
+    API Area | Description
+
+    ----------------|-------------
+
+    Calls | Browse your call history, download recordings and access all your calls data. Contacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually. Numbers | Automate Numbers modifications. List all your numbers. Agents | Create or update your Agents, access their settings. Conversation Intelligence | Get Conversation Intelligence data about your calls. VoiceAgent | Initiate VoiceAgent calls
+
+
+    JSON is returned in all responses. XML is not supported. The API also uses common approaches for the following:
+
+
+    Function | Description
+
+    ----------------|-------------
+
+    Data | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects. Errors | 4xx and 5xx responses returning JSON with error codes
+
+    Rate Limiting | Controls how many requests can be made in a time window
+
+    HTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS. ## Authentication
+
+
+    This is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication. Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the CloudTalk Dashboard under Account → Settings → API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys). To try the API via curl on the command-line, the general form used would be:
+
+    ```
+
+    curl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL
+
+    ```
+
+
+    For instance, you would execute:
+
+    ```
+
+    curl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json
+
+    ```
+
+
+    ## Usage
+
+
+    The API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **''429 Too Many Requests''** response code will be returned along with the following headers -
+
+
+    Header name | Description
+
+    ----------------|-------------
+
+    X-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window. X-CloudTalkAPI-Remaining | Number of API requests left in the current window. X-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp. Note that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case. ## Response Envelopes
+
+
+    **Note:** Conversation Intelligence doesn''t follow envelopes. The API returns one of three envelopes depending upon the request issued:
+
+
+    1. Single Item Envelope
+
+    2. Collections Envelope
+
+    3. Error Envelope
+
+
+    ### Single Item Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    }
+
+    }
+
+    ```
+
+
+    ### Collections Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "itemsCount": 65,
+
+    "pageCount": 3,
+
+    "pageNumber": 1,
+
+    "limit": 30,
+
+    "data": [
+
+    {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    },
+
+    {
+
+    "id": 456,
+
+    ... "created": "2017-10-19 09:21:29"
+
+    },
+
+    ...'
   contact:
     name: CloudTalk API Support
     url: https://www.cloudtalk.io/contact
@@ -12,6 +139,8 @@ info:
     url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
 servers:
 - url: https://my.cloudtalk.io/api
+security:
+- basicAuth: []
 tags:
 - name: Calls
   description: All data you can get about your calls.
@@ -21,6 +150,7 @@ paths:
       tags:
       - Calls
       summary: Call history
+      description: Returns call history. Filter by the numbers involved (`public_internal`, `public_external`), a date range (`date_from`, `date_to`), `contact_id`, `user_id`, `agent_extension`, call `type` or `status`, `tag_id`, or a specific `call_id`; page through the result with `limit` and `page`.
       parameters:
       - name: public_internal
         in: query
@@ -107,81 +237,154 @@ paths:
               schema:
                 type: object
                 properties:
-                  itemsCount:
-                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
-                  pageCount:
-                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
-                  pageNumber:
-                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
-                  limit:
-                    $ref: '#/components/schemas/PaginationData/properties/limit'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Cdr:
-                          $ref: '#/components/schemas/Cdr'
-                        Contact:
+                  responseData:
+                    type: object
+                    properties:
+                      itemsCount:
+                        type: integer
+                        description: number of resources in the response
+                        format: int64
+                      pageCount:
+                        type: integer
+                        description: number of pages found
+                        format: int64
+                      pageNumber:
+                        type: integer
+                        description: current page in the response
+                        format: int64
+                      limit:
+                        type: integer
+                        description: number of objects sent per page
+                        format: int64
+                      data:
+                        type: array
+                        items:
                           type: object
                           properties:
-                            id:
-                              $ref: '#/components/schemas/Contact/properties/id'
-                            name:
-                              $ref: '#/components/schemas/Contact/properties/name'
-                            title:
-                              $ref: '#/components/schemas/Contact/properties/title'
-                            company:
-                              $ref: '#/components/schemas/Contact/properties/company'
-                            industry:
-                              $ref: '#/components/schemas/Contact/properties/industry'
-                            address:
-                              $ref: '#/components/schemas/Contact/properties/address'
-                            city:
-                              $ref: '#/components/schemas/Contact/properties/city'
-                            zip:
-                              $ref: '#/components/schemas/Contact/properties/zip'
-                            state:
-                              $ref: '#/components/schemas/Contact/properties/state'
-                            type:
-                              $ref: '#/components/schemas/Contact/properties/type'
-                            contact_numbers:
-                              $ref: '#/components/schemas/Contact/properties/contact_numbers'
-                            contact_emails:
-                              $ref: '#/components/schemas/Contact/properties/contact_emails'
-                            tags:
-                              $ref: '#/components/schemas/Contact/properties/tags'
-                            external_urls:
-                              $ref: '#/components/schemas/Contact/properties/external_urls'
-                            custom_fields:
-                              $ref: '#/components/schemas/Contact/properties/custom_fields'
-                            favorite_agent:
-                              $ref: '#/components/schemas/FavoriteAgent'
-                          description: Contact assigned to this call
-                        CallNumber:
-                          type: object
-                          properties:
-                            id:
-                              $ref: '#/components/schemas/CallNumber/properties/id'
-                            internal_name:
-                              $ref: '#/components/schemas/CallNumber/properties/internal_name'
-                            caller_id_e164:
-                              $ref: '#/components/schemas/CallNumber/properties/caller_id_e164'
-                            country_code:
-                              $ref: '#/components/schemas/CallNumber/properties/country_code'
-                            area_code:
-                              $ref: '#/components/schemas/CallNumber/properties/area_code'
-                          description: Internal number assigned to this call
-                        BillingData:
-                          $ref: '#/components/schemas/BillingData'
-                        Agent:
-                          $ref: '#/components/schemas/AgentCall'
-                        Notes:
-                          $ref: '#/components/schemas/CallNote'
-                        Tags:
-                          $ref: '#/components/schemas/CallTag'
-                        Ratings:
-                          $ref: '#/components/schemas/CallRating'
+                            Cdr:
+                              $ref: '#/components/schemas/Cdr'
+                            Contact:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                  description: Contact ID
+                                name:
+                                  type: string
+                                  description: Name
+                                  maxLength: 150
+                                title:
+                                  type: string
+                                  description: Title
+                                  maxLength: 255
+                                company:
+                                  type: string
+                                  description: Company name
+                                  maxLength: 100
+                                industry:
+                                  type: string
+                                  description: Industry
+                                  maxLength: 100
+                                address:
+                                  type: string
+                                  description: Address
+                                  maxLength: 255
+                                city:
+                                  type: string
+                                  description: City
+                                  maxLength: 255
+                                zip:
+                                  type: string
+                                  description: ZIP code
+                                  maxLength: 15
+                                state:
+                                  type: string
+                                  description: State
+                                  maxLength: 255
+                                type:
+                                  type: string
+                                  description: Type of contact (contact/lead)
+                                contact_numbers:
+                                  type: array
+                                  description: Array of contact numbers
+                                  items:
+                                    type: string
+                                contact_emails:
+                                  type: array
+                                  description: Array of contact emails
+                                  items:
+                                    type: string
+                                tags:
+                                  type: array
+                                  description: Array of contact tags
+                                  items:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: integer
+                                        description: Tag ID
+                                      name:
+                                        type: string
+                                        description: Tag name
+                                external_urls:
+                                  type: array
+                                  description: Array of contact external urls
+                                  items:
+                                    type: object
+                                    properties:
+                                      external_system:
+                                        type: string
+                                        description: Name of external service. Name will be shown to agents while working with contacts.
+                                      external_url:
+                                        type: string
+                                        description: External URL to contact page
+                                custom_fields:
+                                  type: array
+                                  description: Array of contact emails
+                                  items:
+                                    type: object
+                                    maximum: 255
+                                    properties:
+                                      key:
+                                        type: string
+                                        description: Custom field key (max 255 chars per attribute)
+                                      value:
+                                        type: string
+                                        description: Custom field value (max 255 chars per attribute)
+                                favorite_agent:
+                                  $ref: '#/components/schemas/FavoriteAgent'
+                              description: Contact assigned to this call
+                            CallNumber:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                  description: Number ID
+                                internal_name:
+                                  type: string
+                                  description: Internal name
+                                caller_id_e164:
+                                  type: string
+                                  description: Full number in international E.164 format
+                                country_code:
+                                  type: integer
+                                  description: Country calling code
+                                area_code:
+                                  type: integer
+                                  description: Local area code
+                              description: Internal number assigned to this call
+                            BillingData:
+                              $ref: '#/components/schemas/BillingData'
+                            Agent:
+                              $ref: '#/components/schemas/AgentCall'
+                            Notes:
+                              $ref: '#/components/schemas/CallNote'
+                            Tags:
+                              $ref: '#/components/schemas/CallTag'
+                            Ratings:
+                              $ref: '#/components/schemas/CallRating'
+                required:
+                - responseData
               example:
                 responseData:
                   itemsCount: 3
@@ -209,7 +412,7 @@ paths:
                       ended_at: '2017-10-04T06:33:49.000Z'
                       waiting_time: 2
                       wrapup_time: 5
-                      recording_link: https://my.cloudtalk.io/r/play/27
+                      recording_link: https://analytics.cloudtalk.io/call-details/27
                     Contact:
                       id: '1234'
                       name: Jon Doe
@@ -290,7 +493,11 @@ paths:
       - url: https://analytics-api.cloudtalk.io/api/
       tags:
       - Calls
-      summary: Comprehensive information about a call and its flow
+      summary: Get call details
+      description: 'Returns everything recorded about a single call — its timings, the steps it took through the call flow, the agents and contacts involved, tags, rating and notes.
+
+
+        This endpoint is served by `analytics-api.cloudtalk.io`, not the main API host. Returns `400` if `callId` is malformed and `404` if no such call exists.'
       parameters:
       - name: callId
         in: path
@@ -575,8 +782,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  responseData:
+                    type: object
+                    properties:
+                      status:
+                        type: integer
+                        description: Status code
+                required:
+                - responseData
               example:
                 responseData:
                   status: 200
@@ -638,6 +851,7 @@ paths:
       tags:
       - Calls
       summary: Group statistics
+      description: 'Returns today''s live call statistics for every group: agents in the group, answered and unanswered calls, abandon rate, average call duration, and average and maximum waiting times — plus a `real_time` block giving the current queue length and waiting times. Takes no parameters.'
       responses:
         '200':
           description: Group stats data
@@ -646,55 +860,63 @@ paths:
               schema:
                 type: object
                 properties:
-                  groups:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          description: Group name.
-                        id:
-                          type: integer
-                          description: Group ID.
-                        operators:
-                          type: integer
-                          description: Number of agents in group.
-                        answered:
-                          type: integer
-                          description: Answered calls to group today.
-                        unanswered:
-                          type: integer
-                          description: Unanswered calls to group today.
-                        abandon_rate:
-                          type: number
-                          description: Abandon rate.
-                          format: float
-                        avg_waiting_time:
-                          type: integer
-                          description: Average waiting time today.
-                        max_waiting_time:
-                          type: integer
-                          description: Max waiting time today.
-                        avg_call_duration:
-                          type: integer
-                          description: Average call duration today.
-                        real_time:
-                          type: object
-                          properties:
-                            waiting_queue:
-                              type: integer
-                              description: Waiting calls
-                            avg_waiting_time:
-                              type: integer
-                              description: Average waiting time
-                            max_waiting_time:
-                              type: integer
-                              description: Max waiting time.
-                            avg_abandonment_time:
-                              type: integer
-                              description: Average abandonment time.
-                          description: Real time stats
+                  responseData:
+                    type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          groups:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                  description: Group name.
+                                id:
+                                  type: integer
+                                  description: Group ID.
+                                operators:
+                                  type: integer
+                                  description: Number of agents in group.
+                                answered:
+                                  type: integer
+                                  description: Answered calls to group today.
+                                unanswered:
+                                  type: integer
+                                  description: Unanswered calls to group today.
+                                abandon_rate:
+                                  type: number
+                                  description: Abandon rate.
+                                  format: float
+                                avg_waiting_time:
+                                  type: integer
+                                  description: Average waiting time today.
+                                max_waiting_time:
+                                  type: integer
+                                  description: Max waiting time today.
+                                avg_call_duration:
+                                  type: integer
+                                  description: Average call duration today.
+                                real_time:
+                                  type: object
+                                  properties:
+                                    waiting_queue:
+                                      type: integer
+                                      description: Waiting calls
+                                    avg_waiting_time:
+                                      type: integer
+                                      description: Average waiting time
+                                    max_waiting_time:
+                                      type: integer
+                                      description: Max waiting time.
+                                    avg_abandonment_time:
+                                      type: integer
+                                      description: Average abandonment time.
+                                  description: Real time stats
+                required:
+                - responseData
               example:
                 responseData:
                   data:
@@ -731,167 +953,157 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Contact:
+    CallTag:
+      type: array
+      description: Tags assigned to this call - can include multiple
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: Tag ID
+          name:
+            type: string
+            description: Tag
+    AgentCall:
       type: object
       properties:
         id:
           type: integer
-          description: Contact ID
-        name:
+          description: Agent ID
+        firstname:
           type: string
-          maximum: 150
-          description: Name
-        title:
+          description: First name
+        lastname:
           type: string
-          maximum: 255
-          description: Title
-        company:
+          description: Last name
+        fullname:
           type: string
-          maximum: 100
-          description: Company name
-        industry:
+          description: Full name
+        email:
           type: string
-          maximum: 100
-          description: Industry
-        website:
+          description: Email
+          format: email
+        language:
           type: string
-          maximum: 100
-          description: Website
-        address:
+          description: Language
+        role:
           type: string
-          maximum: 255
-          description: Address
-        city:
-          type: string
-          maximum: 255
-          description: City
-        zip:
-          type: string
-          maximum: 15
-          description: ZIP code
-        state:
-          type: string
-          maximum: 255
-          description: State
-        country_id:
-          type: integer
-          description: Country ID
-        favorite_agent:
-          type: integer
-          description: Favorite agent ID
-        type:
-          type: string
-          description: Type of contact (contact/lead)
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-        modified:
-          type: string
-          description: Last modified date and time
-          format: date-time
-        contact_numbers:
-          type: array
-          description: Array of contact numbers
-          items:
-            type: string
-        contact_emails:
-          type: array
-          description: Array of contact emails
-          items:
-            type: string
-        tags:
-          type: array
-          description: Array of contact tags
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-                description: Tag ID
-              name:
-                type: string
-                description: Tag name
-        external_urls:
-          type: array
-          description: Array of contact external urls
-          items:
-            type: object
-            properties:
-              external_system:
-                type: string
-                description: Name of external service. Name will be shown to agents while working with contacts.
-              external_url:
-                type: string
-                description: External URL to contact page
-        custom_fields:
-          type: array
-          description: Array of contact emails
-          items:
-            type: object
-            maximum: 255
-            properties:
-              key:
-                type: string
-                description: Custom field key (max 255 chars per attribute)
-              value:
-                type: string
-                description: Custom field value (max 255 chars per attribute)
-      description: Contact data
-    StatusCode:
-      type: object
-      properties:
+          description: Role
         status:
           type: string
-          description: Status code
-    PaginationData:
+          description: Online status
+        default_outbound_number:
+          type: string
+          description: Default outbound number in E164 format
+        associated_numbers:
+          type: array
+          description: Array of associated numbers
+          items:
+            type: string
+        groups:
+          type: array
+          description: Array of assigned groups
+          items:
+            type: string
+      description: Agent data
+    CallNote:
+      type: array
+      description: Notes assigned to this call
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: Note ID
+          name:
+            type: string
+            description: Note
+    ErrorInvalidData:
+      type: object
+      description: Validation-error envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
+      properties:
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code
+            message:
+              type: string
+              description: The error message
+            data:
+              type: object
+              properties: {}
+              description: Field-level detail explaining the error
+          required:
+          - status
+          - message
+      required:
+      - responseData
+    QueueStep:
       type: object
       properties:
-        itemsCount:
-          type: integer
-          description: number of resources in the response
-          format: int64
-        pageCount:
-          type: integer
-          description: number of pages found
-          format: int64
-        pageNumber:
-          type: integer
-          description: current page in the response
-          format: int64
-        limit:
-          type: integer
-          description: number of objects sent per page
-          format: int64
-      description: Call data
-    CallNumber:
-      type: object
-      properties:
+        type:
+          type: string
+          enum:
+          - queue
         id:
-          type: integer
-          description: Number ID
-        country_code:
-          type: integer
-          description: Country calling code
-        area_code:
-          type: integer
-          description: Local area code
-        internal_name:
+          type:
+          - number
+          - 'null'
+          description: ID of a queue
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of a queue
+        date:
+          format: date-time
           type: string
-          description: Internal name
-        caller_id_e164:
+          description: Date when the call was calling the queue
+        call_times:
+          $ref: '#/components/schemas/CallTimes'
+        status:
           type: string
-          description: Full number in international E.164 format
-        is_redirected:
-          type: boolean
-          description: Is number redirected?
-        connected_to:
-          type: integer
-          description: Routing type. Where is the number connected. `0 = 'group'`, `1 = 'agent'`, `2 = 'conference room'`, `3 = 'fax'`
-        source_id:
-          type: integer
-          description: Source ID of where is the number located, e.g. Agent ID, Group ID...
-      description: Number data
+          enum:
+          - answered
+          - missed
+          - cold_transfer
+          description: Status of the queue call step
+        reason:
+          type: string
+          enum:
+          - no_agents_online
+          - no_agents_available
+          - no_agents_picked_up
+          - canceled
+          description: Reason why the queue missed the call
+        resolved_by:
+          type:
+          - number
+          - 'null'
+          description: ID of a call that resolved this call
+        resolved_by_call:
+          $ref: '#/components/schemas/ResolvedByCall'
+        strategy:
+          type: string
+          enum:
+          - ringall
+          - rrmemory
+          - random
+          description: Strategy used by the queue
+        agent_calls:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentStep'
+    BillingData:
+      type: object
+      properties:
+        price:
+          type: number
+          description: Price of the call
+      description: Billing data of the call
     CallRating:
       type: array
       description: Ratings assigned to this call
@@ -910,12 +1122,301 @@ components:
           rating:
             type: integer
             description: Rating value 1 to 5 (from worst to best)
-    SuccessGeneralData:
+    ResolvedByCall:
       type: object
       properties:
+        id:
+          type:
+          - number
+          - 'null'
+          description: ID of a call that resolved this call
+        date:
+          format: date-time
+          type: string
+          description: Date when the call was resolved
+        agent:
+          type: object
+          properties:
+            id:
+              type:
+              - number
+              - 'null'
+              description: ID of an agent that resolved this call
+            name:
+              type:
+              - string
+              - 'null'
+              description: Name of an agent that resolved this call
+    IVRStep:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - ivr
+        id:
+          type:
+          - number
+          - 'null'
+          description: ID of an IVR
+        date:
+          format: date-time
+          type: string
+          description: Date when the call was on the IVR step
+        total_time:
+          type:
+          - number
+          - 'null'
+          description: Total time spent in IVR
+        option:
+          type:
+          - string
+          - 'null'
+          description: Option pressed by the caller
+    Cdr:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Call ID
+        billsec:
+          type: integer
+          description: Duration of the call in seconds
+        type:
+          type: string
+          description: Type of call
+          enum:
+          - incoming
+          - outgoing
+          - internal
+        public_external:
+          type: string
+          description: The number of the caller in E.164 format
+        public_internal:
+          type: string
+          description: The internal number of agent in E.164 format
+        recorded:
+          type: boolean
+          description: Was call recorded?
+        is_voicemail:
+          type: boolean
+          description: Is voicemail call?
+        fax_email:
+          type: string
+          description: If present, call was made to fax using this email
+        is_redirected:
+          type: string
+          description: Was call redirected?
+        redirected_from:
+          type: string
+          description: If the call was redirected, here is the number from which it was redirected
+        transferred_from:
+          type: string
+          description: Where did the call was transferred from?
+        is_local:
+          type: boolean
+          description: Is local or international call?
+        user_id:
+          type: integer
+          description: Agent ID assigned to this call
+        talking_time:
+          type: integer
+          description: Duration of the connection between agent and customer
+        started_at:
+          type: string
+          description: Date and time when the call started
+          format: date-time
+        answered_at:
+          type: string
+          description: Date and time when the call was answered
+          format: date-time
+        ended_at:
+          type: string
+          description: Date and time when the call finished
+          format: date-time
+        waiting_time:
+          type: integer
+          description: Duration before connection between agent and customer
+        wrapup_time:
+          type: integer
+          description: Duration of wrap up time
+        recording_link:
+          type: string
+          description: Link to the analytics call-detail page for the call, which hosts the recording. Present only for recorded calls with a non-zero billed duration.
+      description: Call data
+    AgentStep:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - agent
+        id:
+          type:
+          - number
+          - 'null'
+          description: ID of an agent
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of an agent
+        date:
+          format: date-time
+          type: string
+          description: Date when the agent answered/missed the call
+        call_id:
+          type: number
+          description: ID of a call that was answered/missed by an agent
+        call_times:
+          $ref: '#/components/schemas/CallTimes'
+        group_ids:
+          type: array
+          items:
+            type: number
+          description: IDs of groups that the agent belongs to
         status:
           type: string
-          description: Status code
+          enum:
+          - answered
+          - missed
+          - cold_transfer
+          description: Status of the agent call step
+        reason:
+          type: string
+          enum:
+          - busy
+          - not_picked_up
+          - offline
+          - idle
+          - canceled
+          description: Reason why agent missed the call
+        resolved_by:
+          type:
+          - number
+          - 'null'
+          description: ID of a call that resolved this call
+        resolved_by_call:
+          $ref: '#/components/schemas/ResolvedByCall'
+    CallTimes:
+      type: object
+      properties:
+        total_time:
+          type:
+          - number
+          - 'null'
+          description: Total time spent in a call
+        talking_time:
+          type:
+          - number
+          - 'null'
+          description: Time spent talking to agent/customer
+        wrap_up_time:
+          type:
+          - number
+          - 'null'
+          description: Time spent in wrap-up screen
+        ringing_time:
+          type:
+          - number
+          - 'null'
+          description: Time spent ringing on an agent
+        waiting_time:
+          type:
+          - number
+          - 'null'
+          description: Time from after leaving IVR to getting answered/missed by agent
+        holding_time:
+          type:
+          - number
+          - 'null'
+          description: Time spent on hold during a call
+    ErrorData:
+      type: object
+      description: Error envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
+      properties:
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code
+            message:
+              type: string
+              description: The error message
+          required:
+          - status
+          - message
+      required:
+      - responseData
+    FavoriteAgent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Agent ID
+        firstname:
+          type: string
+          description: First name
+        lastname:
+          type: string
+          description: Last name
+        fullname:
+          type: string
+          description: Full name
+        email:
+          type: string
+          description: Email
+          format: email
+        language:
+          type: string
+          description: Language
+        role:
+          type: string
+          description: Role
+        status:
+          type: string
+          description: Online status
+        default_outbound_number:
+          type: string
+          description: Default outbound number in E164 format
+        associated_numbers:
+          type: array
+          description: Array of associated numbers
+          items:
+            type: string
+        groups:
+          type: array
+          description: Array of assigned groups
+          items:
+            type: string
+      description: Agent data
+    PlaybackStep:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - playback
+        id:
+          type:
+          - number
+          - 'null'
+          description: ID of a playback
+        date:
+          format: date-time
+          type: string
+          description: Date when the call was on the playback step
+        file:
+          type:
+          - string
+          - 'null'
+          description: File played
+        total_time:
+          type:
+          - number
+          - 'null'
+          description: Total time spent in playback
     Call:
       type: object
       properties:
@@ -1028,35 +1529,18 @@ components:
         out_of_office:
           type: boolean
           description: Indicates if the call was made in the out of office hours
-    ErrorInvalidData:
+    SuccessGeneralData:
       type: object
+      description: Success envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
       properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
+        responseData:
           type: object
-          properties: {}
-          description: More data explaining the error
-    BillingData:
-      type: object
-      properties:
-        price:
-          type: number
-          description: Price of the call
-      description: Billing data of the call
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
+          properties:
+            status:
+              type: integer
+              description: Status code
+      required:
+      - responseData
     TransferStep:
       type: object
       properties:
@@ -1087,402 +1571,8 @@ components:
     BinaryData:
       type: string
       format: binary
-    CallTag:
-      type: array
-      description: Tags assigned to this call - can include multiple
-      items:
-        type: object
-        properties:
-          id:
-            type: integer
-            description: Tag ID
-          name:
-            type: string
-            description: Tag
-    PlaybackStep:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - playback
-        id:
-          type:
-          - number
-          - 'null'
-          description: ID of a playback
-        date:
-          format: date-time
-          type: string
-          description: Date when the call was on the playback step
-        file:
-          type:
-          - string
-          - 'null'
-          description: File played
-        total_time:
-          type:
-          - number
-          - 'null'
-          description: Total time spent in playback
-    FavoriteAgent:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Agent ID
-        firstname:
-          type: string
-          description: First name
-        lastname:
-          type: string
-          description: Last name
-        fullname:
-          type: string
-          description: Full name
-        email:
-          type: string
-          description: Email
-          format: email
-        language:
-          type: string
-          description: Language
-        role:
-          type: string
-          description: Role
-        status:
-          type: string
-          description: Online status
-        default_outbound_number:
-          type: string
-          description: Default outbound number in E164 format
-        associated_numbers:
-          type: array
-          description: Array of associated numbers
-          items:
-            type: string
-        groups:
-          type: array
-          description: Array of assigned groups
-          items:
-            type: string
-      description: Agent data
-    Cdr:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Call ID
-        billsec:
-          type: integer
-          description: Duration of the call in seconds
-        type:
-          type: string
-          description: Type of call
-          enum:
-          - incoming
-          - outgoing
-          - internal
-        public_external:
-          type: string
-          description: The number of the caller in E.164 format
-        public_internal:
-          type: string
-          description: The internal number of agent in E.164 format
-        recorded:
-          type: boolean
-          description: Was call recorded?
-        is_voicemail:
-          type: boolean
-          description: Is voicemail call?
-        fax_email:
-          type: string
-          description: If present, call was made to fax using this email
-        is_redirected:
-          type: string
-          description: Was call redirected?
-        redirected_from:
-          type: string
-          description: If the call was redirected, here is the number from which it was redirected
-        transferred_from:
-          type: string
-          description: Where did the call was transferred from?
-        is_local:
-          type: boolean
-          description: Is local or international call?
-        user_id:
-          type: integer
-          description: Agent ID assigned to this call
-        talking_time:
-          type: integer
-          description: Duration of the connection between agent and customer
-        started_at:
-          type: string
-          description: Date and time when the call started
-          format: date-time
-        answered_at:
-          type: string
-          description: Date and time when the call was answered
-          format: date-time
-        ended_at:
-          type: string
-          description: Date and time when the call finished
-          format: date-time
-        waiting_time:
-          type: integer
-          description: Duration before connection between agent and customer
-        wrapup_time:
-          type: integer
-          description: Duration of wrap up time
-        recording_link:
-          type: integer
-          description: Link to the call detail with recording
-      description: Call data
-    QueueStep:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - queue
-        id:
-          type:
-          - number
-          - 'null'
-          description: ID of a queue
-        name:
-          type:
-          - string
-          - 'null'
-          description: Name of a queue
-        date:
-          format: date-time
-          type: string
-          description: Date when the call was calling the queue
-        call_times:
-          $ref: '#/components/schemas/CallTimes'
-        status:
-          type: string
-          enum:
-          - answered
-          - missed
-          - cold_transfer
-          description: Status of the queue call step
-        reason:
-          type: string
-          enum:
-          - no_agents_online
-          - no_agents_available
-          - no_agents_picked_up
-          - canceled
-          description: Reason why the queue missed the call
-        resolved_by:
-          type:
-          - number
-          - 'null'
-          description: ID of a call that resolved this call
-        resolved_by_call:
-          $ref: '#/components/schemas/ResolvedByCall'
-        strategy:
-          type: string
-          enum:
-          - ringall
-          - rrmemory
-          - random
-          description: Strategy used by the queue
-        agent_calls:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentStep'
-    CallTimes:
-      type: object
-      properties:
-        total_time:
-          type:
-          - number
-          - 'null'
-          description: Total time spent in a call
-        talking_time:
-          type:
-          - number
-          - 'null'
-          description: Time spent talking to agent/customer
-        wrap_up_time:
-          type:
-          - number
-          - 'null'
-          description: Time spent in wrap-up screen
-        ringing_time:
-          type:
-          - number
-          - 'null'
-          description: Time spent ringing on an agent
-        waiting_time:
-          type:
-          - number
-          - 'null'
-          description: Time from after leaving IVR to getting answered/missed by agent
-        holding_time:
-          type:
-          - number
-          - 'null'
-          description: Time spent on hold during a call
-    AgentCall:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Agent ID
-        firstname:
-          type: string
-          description: First name
-        lastname:
-          type: string
-          description: Last name
-        fullname:
-          type: string
-          description: Full name
-        email:
-          type: string
-          description: Email
-          format: email
-        language:
-          type: string
-          description: Language
-        role:
-          type: string
-          description: Role
-        status:
-          type: string
-          description: Online status
-        default_outbound_number:
-          type: string
-          description: Default outbound number in E164 format
-        associated_numbers:
-          type: array
-          description: Array of associated numbers
-          items:
-            type: string
-        groups:
-          type: array
-          description: Array of assigned groups
-          items:
-            type: string
-      description: Agent data
-    CallNote:
-      type: array
-      description: Notes assigned to this call
-      items:
-        type: object
-        properties:
-          id:
-            type: integer
-            description: Note ID
-          name:
-            type: string
-            description: Note
-    IVRStep:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - ivr
-        id:
-          type:
-          - number
-          - 'null'
-          description: ID of an IVR
-        date:
-          format: date-time
-          type: string
-          description: Date when the call was on the IVR step
-        total_time:
-          type:
-          - number
-          - 'null'
-          description: Total time spent in IVR
-        option:
-          type:
-          - string
-          - 'null'
-          description: Option pressed by the caller
-    ResolvedByCall:
-      type: object
-      properties:
-        id:
-          type:
-          - number
-          - 'null'
-          description: ID of a call that resolved this call
-        date:
-          format: date-time
-          type: string
-          description: Date when the call was resolved
-        agent:
-          type: object
-          properties:
-            id:
-              type:
-              - number
-              - 'null'
-              description: ID of an agent that resolved this call
-            name:
-              type:
-              - string
-              - 'null'
-              description: Name of an agent that resolved this call
-    AgentStep:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - agent
-        id:
-          type:
-          - number
-          - 'null'
-          description: ID of an agent
-        name:
-          type:
-          - string
-          - 'null'
-          description: Name of an agent
-        date:
-          format: date-time
-          type: string
-          description: Date when the agent answered/missed the call
-        call_id:
-          type: number
-          description: ID of a call that was answered/missed by an agent
-        call_times:
-          $ref: '#/components/schemas/CallTimes'
-        group_ids:
-          type: array
-          items:
-            type: number
-          description: IDs of groups that the agent belongs to
-        status:
-          type: string
-          enum:
-          - answered
-          - missed
-          - cold_transfer
-          description: Status of the agent call step
-        reason:
-          type: string
-          enum:
-          - busy
-          - not_picked_up
-          - offline
-          - idle
-          - canceled
-          description: Reason why agent missed the call
-        resolved_by:
-          type:
-          - number
-          - 'null'
-          description: ID of a call that resolved this call
-        resolved_by_call:
-          $ref: '#/components/schemas/ResolvedByCall'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your API Access Key ID as the username and your API Access Key Secret as the password. Generate keys in the CloudTalk Dashboard under Account -> Settings -> API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys).

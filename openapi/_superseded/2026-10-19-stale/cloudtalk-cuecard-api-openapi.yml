@@ -1,0 +1,170 @@
+openapi: 3.2.0
+info:
+  title: CloudTalk Cue Card API
+  description: '# Introduction
+
+    Welcome to CloudTalk API reference!'
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+tags:
+- name: CueCard
+  description: CueCards API ver. 1.0.2
+paths:
+  /cuecards:
+    post:
+      servers:
+      - url: https://platform-api.cloudtalk.io/api/
+      summary: Create CueCard request to be displayed to agent during the active call
+      operationId: postCueCard
+      tags:
+      - CueCard
+      requestBody:
+        description: Cue Card request definition
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CueCardRequest'
+      responses:
+        '200':
+          description: CueCard request processed correctly
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        '400':
+          description: Request body not matching definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CueCardError'
+              example:
+                success: false
+                errors:
+                - field validation for 'CallUUID' failed (required)
+        '424':
+          description: No active call matching call id was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CueCardError'
+              example:
+                success: false
+                errors:
+                - 'no such active call - call_uuid: aa-bb-cc'
+        '500':
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CueCardError'
+              example:
+                success: false
+                errors:
+                - error processing cue card
+components:
+  schemas:
+    CueCardRequest:
+      type: object
+      required:
+      - title
+      - call_uuid
+      - type
+      - content
+      properties:
+        call_uuid:
+          type: string
+          description: unique id of the active call
+        type:
+          type: string
+        title:
+          type: string
+          description: Cue card Title
+        subtitle:
+          type: string
+          description: Cue card Subtitle
+        icon_url:
+          type: string
+          description: Url path to the cue card icon
+        content:
+          oneOf:
+          - $ref: '#/components/schemas/ContentHTML'
+          - $ref: '#/components/schemas/ContentBlock'
+    ContentBlockFile:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+          description: file name to display
+        file_url:
+          type: string
+          description: url path to file
+        icon_url:
+          type: string
+          description: url path to file icon
+    ContentBlockImage:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+          description: image name to display
+        image_url:
+          type: string
+          description: url path to image
+    ContentBlockTextField:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+          description: Field name to display
+        value:
+          type: string
+          description: text field value
+    CueCardError:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errors:
+          type: array
+          description: array of errors
+          items:
+            type: string
+    ContentBlock:
+      type: array
+      items:
+        anyOf:
+        - $ref: '#/components/schemas/ContentBlockTextField'
+        - $ref: '#/components/schemas/ContentBlockRichText'
+        - $ref: '#/components/schemas/ContentBlockImage'
+        - $ref: '#/components/schemas/ContentBlockFile'
+    ContentHTML:
+      type: string
+      description: The value as typed in html text editor
+    ContentBlockRichText:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+          description: Field name to display
+        value:
+          type: string
+          description: The value as typed in Rich text editor

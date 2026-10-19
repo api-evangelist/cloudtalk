@@ -1,0 +1,1477 @@
+openapi: 3.2.0
+info:
+  title: CloudTalk Webhooks API
+  description: '# Introduction
+
+    Welcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk. # API Overview
+
+
+    The API is organized around the following resources:
+
+
+    API Area | Description
+
+    ----------------|-------------
+
+    Calls | Browse your call history, download recordings and access all your calls data. Contacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually. Numbers | Automate Numbers modifications. List all your numbers. Agents | Create or update your Agents, access their settings. Conversation Intelligence | Get Conversation Intelligence data about your calls. VoiceAgent | Initiate VoiceAgent calls
+
+
+    JSON is returned in all responses. XML is not supported. The API also uses common approaches for the following:
+
+
+    Function | Description
+
+    ----------------|-------------
+
+    Data | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects. Errors | 4xx and 5xx responses returning JSON with error codes
+
+    Rate Limiting | Controls how many requests can be made in a time window
+
+    HTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS. ## Authentication
+
+
+    This is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication. Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the CloudTalk Dashboard under Account → Settings → API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys). To try the API via curl on the command-line, the general form used would be:
+
+    ```
+
+    curl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL
+
+    ```
+
+
+    For instance, you would execute:
+
+    ```
+
+    curl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json
+
+    ```
+
+
+    ## Usage
+
+
+    The API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **''429 Too Many Requests''** response code will be returned along with the following headers -
+
+
+    Header name | Description
+
+    ----------------|-------------
+
+    X-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window. X-CloudTalkAPI-Remaining | Number of API requests left in the current window. X-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp. Note that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case. ## Response Envelopes
+
+
+    **Note:** Conversation Intelligence doesn''t follow envelopes. The API returns one of three envelopes depending upon the request issued:
+
+
+    1. Single Item Envelope
+
+    2. Collections Envelope
+
+    3. Error Envelope
+
+
+    ### Single Item Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    }
+
+    }
+
+    ```
+
+
+    ### Collections Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "itemsCount": 65,
+
+    "pageCount": 3,
+
+    "pageNumber": 1,
+
+    "limit": 30,
+
+    "data": [
+
+    {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    },
+
+    {
+
+    "id": 456,
+
+    ... "created": "2017-10-19 09:21:29"
+
+    },
+
+    ...'
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+security:
+- basicAuth: []
+tags:
+- name: Webhooks
+  description: 'Manage webhook endpoints: subscriptions, signing secrets, test events and the delivery log. Endpoints created here and in the Dashboard are the same endpoints.'
+paths:
+  /webhooks/event-types:
+    get:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: List webhook event types
+      description: Returns every event type an endpoint can subscribe to. Deprecated and internal types are not listed. Readable without a webhooks-enabled plan, so you can see what you would receive before enabling it.
+      operationId: public-v1-list-webhook-event-types
+      parameters:
+      - name: include
+        in: query
+        required: false
+        description: '`schema` adds the JSON Schema of the full webhook body for every version of each type.'
+        schema:
+          type: string
+          enum:
+          - schema
+      responses:
+        '200':
+          description: The event types.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEventTypeList'
+              example:
+                data:
+                - name: call.ended
+                  description: A call ended.
+                  groupName: call
+                requestId: c9856b94-db55-402b-a6ba-adb130351158
+        '400':
+          description: '`include` has a value other than `schema` (code VALIDATION.INVALID_PARAMETER).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /webhooks/endpoints:
+    get:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: List webhook endpoints
+      description: Returns one page of the company's webhook endpoints, newest first, including endpoints created in the Dashboard.
+      operationId: public-v1-list-webhook-endpoints
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        description: Page size, 1-100. Out-of-range values are clamped and the effective value is echoed in `pagination.limit`.
+        schema:
+          type: integer
+          default: 20
+          example: 20
+      - name: cursor
+        in: query
+        required: false
+        description: Opaque cursor from a previous page's `pagination.next`. Pass it back unchanged. A cursor this API cannot use is rejected with `400 PAGINATION.INVALID_CURSOR`.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: One page of endpoints.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpointList'
+              example:
+                data:
+                - id: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+                  url: https://hooks.example.com/cloudtalk
+                  description: CRM sync
+                  eventTypes:
+                  - call.ended
+                  - dialer.disposition_created
+                  status: enabled
+                  createdAt: '2026-10-13T09:12:44Z'
+                  updatedAt: '2026-10-13T09:12:44Z'
+                pagination:
+                  limit: 20
+                  next: null
+                requestId: c9856b94-db55-402b-a6ba-adb130351158
+        '400':
+          description: Invalid `limit` or `cursor` (codes VALIDATION.INVALID_PARAMETER, PAGINATION.INVALID_CURSOR).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+    post:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: Create a webhook endpoint
+      description: 'Creates an endpoint and returns it with its signing secret. This response is the only time the secret is part of the resource; read it again with `GET /webhooks/endpoints/{endpointId}/secret`.
+
+
+        The URL must be `https://` and point at a public host: private, loopback and other non-public addresses, internal names and non-ASCII hosts are rejected. A company can have at most 50 endpoints, Dashboard-created ones included.
+
+
+        Send an `Idempotency-Key` to make retries safe. A retry with the same key and the same body returns the endpoint the first request created (201), even when the company has since reached the endpoint limit. The same key with a different body is rejected with 422. After the endpoint is deleted, the key creates a new one.'
+      operationId: public-v1-create-webhook-endpoint
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        description: Free text up to 255 characters naming this create. See the operation description.
+        schema:
+          type: string
+          maxLength: 255
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEndpointCreate'
+            example:
+              url: https://hooks.example.com/cloudtalk
+              description: CRM sync
+              eventTypes:
+              - call.ended
+      responses:
+        '201':
+          description: The created endpoint, with its signing secret.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpoint'
+              example:
+                id: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+                url: https://hooks.example.com/cloudtalk
+                description: CRM sync
+                eventTypes:
+                - call.ended
+                status: enabled
+                createdAt: '2026-10-13T09:12:44Z'
+                updatedAt: '2026-10-13T09:12:44Z'
+                secret: whsec_EXAMPLE_SIGNING_SECRET
+        '400':
+          description: The body is not valid JSON for this operation, or `Idempotency-Key` is longer than 255 characters (codes VALIDATION.INVALID_BODY, VALIDATION.INVALID_PARAMETER).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '409':
+          description: The company already has the maximum number of endpoints (code WEBHOOKS.ENDPOINT_LIMIT_REACHED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '415':
+          description: The body is not declared `application/json` (code UNSUPPORTED_MEDIA_TYPE).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '422':
+          description: 'Invalid field: `url` (code WEBHOOKS.INVALID_URL), `eventTypes` with unknown types or empty (codes WEBHOOKS.UNKNOWN_EVENT_TYPE, VALIDATION.INVALID_FIELD), `description` over 500 characters, or an `Idempotency-Key` already used for a different body (code IDEMPOTENCY.KEY_REUSED).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /webhooks/endpoints/{endpointId}:
+    get:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: Get a webhook endpoint
+      description: Returns one endpoint. The signing secret is not included.
+      operationId: public-v1-get-webhook-endpoint
+      parameters:
+      - name: endpointId
+        in: path
+        required: true
+        description: Webhook endpoint id (`ep_...`).
+        schema:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+      responses:
+        '200':
+          description: The endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpoint'
+              example:
+                id: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+                url: https://hooks.example.com/cloudtalk
+                description: CRM sync
+                eventTypes:
+                - call.ended
+                - dialer.disposition_created
+                status: enabled
+                createdAt: '2026-10-13T09:12:44Z'
+                updatedAt: '2026-10-13T09:12:44Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '404':
+          description: No endpoint with this id in this company (code WEBHOOKS.ENDPOINT_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+    patch:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: Update a webhook endpoint
+      description: 'Changes any of `url`, `description`, `eventTypes` and `enabled`; fields you omit stay as they are. `eventTypes: null` subscribes the endpoint to every event type, including future ones. `url`, `description` and `enabled` cannot be null.
+
+
+        `enabled: false` turns the endpoint off and its `status` becomes `disabled`; CloudTalk will not re-enable it automatically. `enabled: true` turns it back on, including an endpoint that was disabled automatically after repeated delivery failures (`status: failing`).'
+      operationId: public-v1-update-webhook-endpoint
+      parameters:
+      - name: endpointId
+        in: path
+        required: true
+        description: Webhook endpoint id (`ep_...`).
+        schema:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEndpointUpdate'
+            example:
+              enabled: false
+      responses:
+        '200':
+          description: The updated endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpoint'
+              example:
+                id: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+                url: https://hooks.example.com/cloudtalk
+                description: CRM sync
+                eventTypes:
+                - call.ended
+                - dialer.disposition_created
+                status: disabled
+                createdAt: '2026-10-13T09:12:44Z'
+                updatedAt: '2026-10-13T09:12:44Z'
+        '400':
+          description: The body is not valid JSON for this operation (code VALIDATION.INVALID_BODY).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '404':
+          description: No endpoint with this id in this company (code WEBHOOKS.ENDPOINT_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '415':
+          description: The body is not declared `application/json` (code UNSUPPORTED_MEDIA_TYPE).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '422':
+          description: Nothing to update, an explicit null for `url`, `description` or `enabled`, or an invalid field (codes VALIDATION.INVALID_FIELD, WEBHOOKS.INVALID_URL, WEBHOOKS.UNKNOWN_EVENT_TYPE).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+    delete:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: Delete a webhook endpoint
+      description: 'Deletes the endpoint and stops delivery to it. This cannot be undone: the endpoint, its signing secret and its delivery history are gone.'
+      operationId: public-v1-delete-webhook-endpoint
+      parameters:
+      - name: endpointId
+        in: path
+        required: true
+        description: Webhook endpoint id (`ep_...`).
+        schema:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+      responses:
+        '204':
+          description: Deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '404':
+          description: No endpoint with this id in this company (code WEBHOOKS.ENDPOINT_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /webhooks/endpoints/{endpointId}/secret:
+    get:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: Get the signing secret
+      description: Returns the endpoint's current signing secret, used to verify webhook signatures.
+      operationId: public-v1-get-webhook-endpoint-secret
+      parameters:
+      - name: endpointId
+        in: path
+        required: true
+        description: Webhook endpoint id (`ep_...`).
+        schema:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+      responses:
+        '200':
+          description: The secret.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSecret'
+              example:
+                secret: whsec_EXAMPLE_SIGNING_SECRET
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '404':
+          description: No endpoint with this id in this company (code WEBHOOKS.ENDPOINT_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /webhooks/endpoints/{endpointId}/secret/rotate:
+    post:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: Rotate the signing secret
+      description: Replaces the signing secret and returns the new one. For the next 24 hours deliveries are signed with both the old and the new secret, so you can roll the new one out without dropping events.
+      operationId: public-v1-rotate-webhook-endpoint-secret
+      parameters:
+      - name: endpointId
+        in: path
+        required: true
+        description: Webhook endpoint id (`ep_...`).
+        schema:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+      responses:
+        '200':
+          description: The new secret, and when the previous one stops signing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookRotatedSecret'
+              example:
+                secret: whsec_EXAMPLE_NEW_SIGNING_SECRET
+                previousSecretExpiresAt: '2026-10-15T09:30:12Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '404':
+          description: No endpoint with this id in this company (code WEBHOOKS.ENDPOINT_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /webhooks/endpoints/{endpointId}/test:
+    post:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: Send a test event
+      description: 'Sends a sample payload of one event type to the endpoint. The payload has the real structure of that event with placeholder values. Delivery is asynchronous: use the returned `deliveryId` with the delivery endpoints; it appears there from the first delivery attempt, usually within seconds.
+
+
+        The event type must be one the endpoint is subscribed to (an endpoint subscribed to every type accepts any), and the endpoint must be enabled. Test events and delivery retries share a limit of 10 per minute per company.'
+      operationId: public-v1-send-webhook-test-event
+      parameters:
+      - name: endpointId
+        in: path
+        required: true
+        description: Webhook endpoint id (`ep_...`).
+        schema:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookTestRequest'
+            example:
+              eventType: call.ended
+      responses:
+        '202':
+          description: The test event is queued.
+          headers:
+            X-CloudTalkAPI-Send-Limit:
+              description: Test and retry requests allowed per company in the current one-minute window.
+              schema:
+                type: integer
+            X-CloudTalkAPI-Send-Remaining:
+              description: Test and retry requests left in the current window.
+              schema:
+                type: integer
+            X-CloudTalkAPI-Send-ResetTime:
+              description: Unix timestamp (seconds) when the current window resets.
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookAcceptedDelivery'
+              example:
+                deliveryId: msg_2nJ5bQw1pX7cT4aZsY8vHk0dLr3
+        '400':
+          description: The body is not valid JSON for this operation (code VALIDATION.INVALID_BODY).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '404':
+          description: No endpoint with this id in this company (code WEBHOOKS.ENDPOINT_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '409':
+          description: The endpoint is disabled (code WEBHOOKS.ENDPOINT_DISABLED). Enable it first.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '415':
+          description: The body is not declared `application/json` (code UNSUPPORTED_MEDIA_TYPE).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '422':
+          description: '`eventType` is missing, unknown, or not one the endpoint is subscribed to (codes VALIDATION.INVALID_FIELD, WEBHOOKS.UNKNOWN_EVENT_TYPE, WEBHOOKS.EVENT_TYPE_NOT_SUBSCRIBED).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          description: Too many test or retry requests for this company in the current minute (code RATE_LIMIT.EXCEEDED), with the X-CloudTalkAPI-Send-* headers. A 429 can also come from the gateway's API rate limit; that one carries X-CloudTalkAPI-Limit, -Remaining and -ResetTime instead and no error body.
+          headers:
+            X-CloudTalkAPI-Send-Limit:
+              description: Test and retry requests allowed per company in the current one-minute window.
+              schema:
+                type: integer
+            X-CloudTalkAPI-Send-Remaining:
+              description: Test and retry requests left in the current window.
+              schema:
+                type: integer
+            X-CloudTalkAPI-Send-ResetTime:
+              description: Unix timestamp (seconds) when the current window resets.
+              schema:
+                type: integer
+            Retry-After:
+              description: Seconds until the window resets.
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /webhooks/endpoints/{endpointId}/deliveries:
+    get:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: List deliveries
+      description: Returns one page of the events sent to the endpoint, newest first, without payloads. A delivery is listed from its first attempt. Payloads are kept for 30 days.
+      operationId: public-v1-list-webhook-deliveries
+      parameters:
+      - name: endpointId
+        in: path
+        required: true
+        description: Webhook endpoint id (`ep_...`).
+        schema:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+      - name: limit
+        in: query
+        required: false
+        description: Page size, 1-100. Out-of-range values are clamped and the effective value is echoed in `pagination.limit`.
+        schema:
+          type: integer
+          default: 20
+          example: 20
+      - name: cursor
+        in: query
+        required: false
+        description: Opaque cursor from a previous page's `pagination.next`. Pass it back unchanged. A cursor this API cannot use is rejected with `400 PAGINATION.INVALID_CURSOR`.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Only deliveries with this final outcome. `failed` excludes deliveries that are still retrying.
+        schema:
+          type: string
+          enum:
+          - succeeded
+          - failed
+      - name: eventType
+        in: query
+        required: false
+        description: Comma-separated event types to include.
+        schema:
+          type: string
+          example: call.ended,call.started
+      - name: since
+        in: query
+        required: false
+        description: Only deliveries created after this time (RFC 3339).
+        schema:
+          type: string
+          format: date-time
+      - name: until
+        in: query
+        required: false
+        description: Only deliveries created before this time (RFC 3339). Must be later than `since`.
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: One page of deliveries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookDeliveryList'
+              example:
+                data:
+                - id: msg_2nJ5bQw1pX7cT4aZsY8vHk0dLr3
+                  eventType: call.ended
+                  eventId: 01929c4e-7a3b-7c1d-9f2e-5b6a8c0d1e2f
+                  status: retrying
+                  nextAttemptAt: '2026-10-13T09:46:02Z'
+                  createdAt: '2026-10-13T09:12:44Z'
+                pagination:
+                  limit: 20
+                  next: null
+                requestId: c9856b94-db55-402b-a6ba-adb130351158
+        '400':
+          description: Invalid query parameter or cursor (codes VALIDATION.INVALID_PARAMETER, PAGINATION.INVALID_CURSOR).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '404':
+          description: No endpoint with this id in this company (code WEBHOOKS.ENDPOINT_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /webhooks/endpoints/{endpointId}/deliveries/{deliveryId}:
+    get:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: Get a delivery
+      description: Returns one delivery with the payload that was sent and every attempt on this endpoint, newest first, including the HTTP status your server answered and the first 4 KB of its response body. After 30 days the payload is no longer kept and `payload` is null.
+      operationId: public-v1-get-webhook-delivery
+      parameters:
+      - name: endpointId
+        in: path
+        required: true
+        description: Webhook endpoint id (`ep_...`).
+        schema:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+      - name: deliveryId
+        in: path
+        required: true
+        description: Delivery id (`msg_...`). It is the same value as the `svix-id` header of the delivered request.
+        schema:
+          type: string
+          example: msg_2nJ5bQw1pX7cT4aZsY8vHk0dLr3
+      responses:
+        '200':
+          description: The delivery.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookDeliveryDetail'
+              example:
+                id: msg_2nJ5bQw1pX7cT4aZsY8vHk0dLr3
+                eventType: call.ended
+                eventId: 01929c4e-7a3b-7c1d-9f2e-5b6a8c0d1e2f
+                status: retrying
+                nextAttemptAt: '2026-10-13T09:46:02Z'
+                createdAt: '2026-10-13T09:12:44Z'
+                payload:
+                  type: call.ended
+                  data:
+                    call_id: '123456'
+                attempts:
+                - id: atmpt_2nJ5c1Lq8sRvY3kD0aWbXhZt7Me
+                  createdAt: '2026-10-13T09:31:02Z'
+                  status: failed
+                  responseStatusCode: 503
+                  responseDurationMs: 412
+                  responseBody: Service Unavailable
+                  responseTruncated: false
+                  trigger: scheduled
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '404':
+          description: No such delivery on this endpoint (code WEBHOOKS.DELIVERY_NOT_FOUND), or no such endpoint (code WEBHOOKS.ENDPOINT_NOT_FOUND). A delivery is found from its first attempt.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          $ref: '#/components/responses/WebhooksRateLimited'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+  /webhooks/endpoints/{endpointId}/deliveries/{deliveryId}/retry:
+    post:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - Webhooks
+      summary: Retry a delivery
+      description: Queues a new attempt of the delivery to this endpoint. Only a delivery this endpoint received can be retried on it. Test events and retries share a limit of 10 per minute per company.
+      operationId: public-v1-retry-webhook-delivery
+      parameters:
+      - name: endpointId
+        in: path
+        required: true
+        description: Webhook endpoint id (`ep_...`).
+        schema:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+      - name: deliveryId
+        in: path
+        required: true
+        description: Delivery id (`msg_...`). It is the same value as the `svix-id` header of the delivered request.
+        schema:
+          type: string
+          example: msg_2nJ5bQw1pX7cT4aZsY8vHk0dLr3
+      responses:
+        '202':
+          description: The retry is queued.
+          headers:
+            X-CloudTalkAPI-Send-Limit:
+              description: Test and retry requests allowed per company in the current one-minute window.
+              schema:
+                type: integer
+            X-CloudTalkAPI-Send-Remaining:
+              description: Test and retry requests left in the current window.
+              schema:
+                type: integer
+            X-CloudTalkAPI-Send-ResetTime:
+              description: Unix timestamp (seconds) when the current window resets.
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookAcceptedDelivery'
+              example:
+                deliveryId: msg_2nJ5bQw1pX7cT4aZsY8vHk0dLr3
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Webhooks are not included in this company's plan (code WEBHOOKS.NOT_ENABLED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '404':
+          description: No such delivery on this endpoint (code WEBHOOKS.DELIVERY_NOT_FOUND), or no such endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '429':
+          description: Too many test or retry requests for this company in the current minute (code RATE_LIMIT.EXCEEDED), with the X-CloudTalkAPI-Send-* headers. A 429 can also come from the gateway's API rate limit; that one carries X-CloudTalkAPI-Limit, -Remaining and -ResetTime instead and no error body.
+          headers:
+            X-CloudTalkAPI-Send-Limit:
+              description: Test and retry requests allowed per company in the current one-minute window.
+              schema:
+                type: integer
+            X-CloudTalkAPI-Send-Remaining:
+              description: Test and retry requests left in the current window.
+              schema:
+                type: integer
+            X-CloudTalkAPI-Send-ResetTime:
+              description: Unix timestamp (seconds) when the current window resets.
+              schema:
+                type: integer
+            Retry-After:
+              description: Seconds until the window resets.
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '502':
+          description: The webhook service is unavailable (code WEBHOOKS.UPSTREAM_UNAVAILABLE). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+        '504':
+          description: The webhook service did not answer within the 10-second request budget (code WEBHOOKS.UPSTREAM_TIMEOUT). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicErrorBody'
+components:
+  schemas:
+    PublicErrorObject:
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+        details:
+          items:
+            $ref: '#/components/schemas/PublicErrorDetail'
+          type:
+          - array
+          - 'null'
+        message:
+          type: string
+        target:
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    WebhookTestRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - eventType
+      properties:
+        eventType:
+          type: string
+          example: call.ended
+    PublicErrorBody:
+      additionalProperties: false
+      properties:
+        error:
+          $ref: '#/components/schemas/PublicErrorObject'
+        requestId:
+          type: string
+      required:
+      - error
+      - requestId
+      type: object
+    WebhookDeliveryList:
+      type: object
+      required:
+      - data
+      - pagination
+      - requestId
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookDelivery'
+        pagination:
+          $ref: '#/components/schemas/PublicPagination'
+        requestId:
+          type: string
+    WebhookAcceptedDelivery:
+      type: object
+      required:
+      - deliveryId
+      properties:
+        deliveryId:
+          type: string
+          example: msg_2nJ5bQw1pX7cT4aZsY8vHk0dLr3
+    WebhookEndpointList:
+      type: object
+      required:
+      - data
+      - pagination
+      - requestId
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookEndpoint'
+        pagination:
+          $ref: '#/components/schemas/PublicPagination'
+        requestId:
+          type: string
+    WebhookEndpointUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        url:
+          type: string
+          maxLength: 2048
+        description:
+          type: string
+          maxLength: 500
+        eventTypes:
+          type:
+          - array
+          - 'null'
+          minItems: 1
+          items:
+            type: string
+          description: Replaces the subscription. `null` subscribes to every event type.
+        enabled:
+          type: boolean
+    WebhookSecret:
+      type: object
+      required:
+      - secret
+      properties:
+        secret:
+          type: string
+          example: whsec_EXAMPLE_SIGNING_SECRET
+    WebhookEventType:
+      type: object
+      required:
+      - name
+      - description
+      - groupName
+      properties:
+        name:
+          type: string
+          example: call.ended
+        description:
+          type: string
+        groupName:
+          type: string
+          example: call
+        schemas:
+          type: object
+          description: 'Only with `include=schema`: the JSON Schema of the full webhook body, keyed by version.'
+          additionalProperties:
+            type: object
+    WebhookEndpointCreate:
+      type: object
+      additionalProperties: false
+      required:
+      - url
+      properties:
+        url:
+          type: string
+          maxLength: 2048
+          description: '`https://` URL on a public host whose name ends in a public top-level domain.'
+        description:
+          type: string
+          maxLength: 500
+        eventTypes:
+          type:
+          - array
+          - 'null'
+          minItems: 1
+          items:
+            type: string
+          description: Event types to receive (see List webhook event types). Omit or send null for every event type. An empty list is rejected.
+    WebhookEventTypeList:
+      type: object
+      required:
+      - data
+      - requestId
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookEventType'
+        requestId:
+          type: string
+    WebhookDelivery:
+      type: object
+      required:
+      - id
+      - eventType
+      - eventId
+      - status
+      - nextAttemptAt
+      - createdAt
+      properties:
+        id:
+          type: string
+          description: Delivery id; the same value as the `svix-id` header of the delivered request.
+        eventType:
+          type: string
+        eventId:
+          type:
+          - string
+          - 'null'
+          description: The `event_id` of the webhook body, the key to deduplicate on.
+        status:
+          type: string
+          enum:
+          - succeeded
+          - failed
+          - retrying
+          - pending
+          - canceled
+          description: '`retrying`: an attempt failed and another is scheduled at `nextAttemptAt`. `failed`: the last attempt failed and no retry is scheduled.'
+        nextAttemptAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    WebhookDeliveryAttempt:
+      type: object
+      required:
+      - id
+      - createdAt
+      - status
+      - responseStatusCode
+      - responseDurationMs
+      - responseBody
+      - responseTruncated
+      - trigger
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+          - succeeded
+          - failed
+          - pending
+          - canceled
+        responseStatusCode:
+          type: integer
+          description: HTTP status your server answered; 0 when it could not be reached.
+        responseDurationMs:
+          type: integer
+        responseBody:
+          type: string
+          description: Your server's response body, at most 4 KB. When no HTTP response came back (`responseStatusCode` 0), a fixed message instead.
+        responseTruncated:
+          type: boolean
+        trigger:
+          type: string
+          enum:
+          - scheduled
+          - manual
+          description: '`manual` for a retry you requested.'
+    PublicPagination:
+      additionalProperties: false
+      properties:
+        limit:
+          format: int64
+          type: integer
+        next:
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next
+      type: object
+    PublicErrorDetail:
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    WebhookEndpoint:
+      type: object
+      required:
+      - id
+      - url
+      - description
+      - eventTypes
+      - status
+      - createdAt
+      - updatedAt
+      properties:
+        id:
+          type: string
+          example: ep_2nJ4qKZr8C1tY0dXwV3uFh7bM9s
+        url:
+          type: string
+          description: As stored; the host may come back lowercased and a bare host with a trailing slash.
+        description:
+          type: string
+        eventTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Subscribed event types, sorted. `null` means every event type, including ones added later.
+        status:
+          type: string
+          enum:
+          - enabled
+          - disabled
+          - failing
+          description: '`disabled`: turned off by you (Dashboard or API). `failing`: turned off automatically after repeated delivery failures; it may be re-enabled automatically, or by you.'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        secret:
+          type: string
+          description: 'Only in the create response: the signing secret (`whsec_...`). Absent if it could not be read; then use the secret endpoint.'
+    WebhookDeliveryDetail:
+      allOf:
+      - $ref: '#/components/schemas/WebhookDelivery'
+      - type: object
+        required:
+        - payload
+        - attempts
+        properties:
+          payload:
+            type:
+            - object
+            - 'null'
+            description: The body that was sent. `null` after the 30-day payload retention.
+          attempts:
+            type: array
+            items:
+              $ref: '#/components/schemas/WebhookDeliveryAttempt'
+    WebhookRotatedSecret:
+      type: object
+      required:
+      - secret
+      - previousSecretExpiresAt
+      properties:
+        secret:
+          type: string
+          description: The new signing secret.
+          example: whsec_EXAMPLE_NEW_SIGNING_SECRET
+        previousSecretExpiresAt:
+          type: string
+          format: date-time
+          description: 'When the previous secret stops signing deliveries: 24 hours after the rotation. Until then every delivery carries signatures from both secrets.'
+          example: '2026-10-15T09:30:12Z'
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error envelope returned by the authentication layer in front of the `api.cloudtalk.io/v1` surface. It differs from the per-service error shapes used for other statuses.
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: UNAUTHORIZED
+              message:
+                type: string
+                description: Error message
+                example: You are not authorized to access this resource.
+            required:
+            - code
+            - message
+          example:
+            code: UNAUTHORIZED
+            message: You are not authorized to access this resource.
+    WebhooksRateLimited:
+      description: 'Too many requests: this company is over the API rate limit (see the Rate limiting guide). The gateway answers before the request reaches the webhooks API, so there is no JSON error body; rely on the status and the headers X-CloudTalkAPI-Limit, X-CloudTalkAPI-Remaining and X-CloudTalkAPI-ResetTime.'
+      headers:
+        X-CloudTalkAPI-Limit:
+          description: Requests allowed per company in the current one-minute window.
+          schema:
+            type: integer
+        X-CloudTalkAPI-Remaining:
+          description: Requests left in the current window.
+          schema:
+            type: integer
+        X-CloudTalkAPI-ResetTime:
+          description: Unix timestamp (seconds) when the current window resets.
+          schema:
+            type: integer
+      content:
+        text/plain:
+          schema:
+            type: string
+            description: Empty or a short plain-text reason from the gateway. Do not parse it.
+          example: ''
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your API Access Key ID as the username and your API Access Key Secret as the password. Generate keys in the CloudTalk Dashboard under Account -> Settings -> API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys).

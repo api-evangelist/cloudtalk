@@ -1,0 +1,650 @@
+openapi: 3.2.0
+info:
+  title: CloudTalk Campaigns API
+  description: '# Introduction
+
+    Welcome to CloudTalk API reference!'
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+tags:
+- name: Campaigns
+  description: All data you can get about your campaigns.
+paths:
+  /campaigns/index.json:
+    get:
+      tags:
+      - Campaigns
+      summary: List campaigns
+      parameters:
+      - name: id
+        in: query
+        description: Filter by campaign ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Max. number of items in response data.
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - name: page
+        in: query
+        description: Number of page to return.
+        schema:
+          minimum: 1
+          type: integer
+      responses:
+        '200':
+          description: Contacts data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  itemsCount:
+                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
+                  pageCount:
+                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
+                  pageNumber:
+                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
+                  limit:
+                    $ref: '#/components/schemas/PaginationData/properties/limit'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Campaign:
+                          $ref: '#/components/schemas/CampaignList'
+                        Button:
+                          $ref: '#/components/schemas/Button'
+                        Tag:
+                          $ref: '#/components/schemas/Tag'
+                        Group:
+                          $ref: '#/components/schemas/Group'
+                        Agent:
+                          $ref: '#/components/schemas/PdAgent'
+              example:
+                responseData:
+                  itemsCount: 3
+                  pageCount: 1
+                  pageNumber: 1
+                  limit: 3
+                  data:
+                  - Campaign:
+                      id: '63'
+                      name: Test Dialer
+                      status: inactive
+                      has_schedule_date: false
+                      answer_wait_time: '45'
+                      after_call_dialing_auto: false
+                      after_call_time: '5'
+                      is_recording: false
+                      is_predictive: false
+                      attempts: '1'
+                      attempts_interval: '18'
+                    Button:
+                    - id: '252'
+                      title: Sale
+                      type: successful_positive
+                      color: '#2980b9'
+                      description: Sold
+                    ContactsTag:
+                    - id: '133'
+                      name: dialer
+                    Group:
+                    - id: '568'
+                      internal_name: Agents
+                    Agent:
+                    - id: '1075'
+                      fullname: Jane Doe
+      operationId: getCampaignsIndexJson
+      x-operation-id-source: derived
+  /campaigns/add.json:
+    put:
+      tags:
+      - Campaigns
+      summary: Add campaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - Button
+              - name
+              type: object
+              properties:
+                name:
+                  $ref: '#/components/schemas/CampaignList/properties/name'
+                status:
+                  $ref: '#/components/schemas/CampaignList/properties/status'
+                has_schedule_date:
+                  $ref: '#/components/schemas/CampaignList/properties/has_schedule_date'
+                schedule_start_date:
+                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_date'
+                schedule_start_time:
+                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_time'
+                answer_wait_time:
+                  $ref: '#/components/schemas/CampaignList/properties/answer_wait_time'
+                after_call_dialing_auto:
+                  $ref: '#/components/schemas/CampaignList/properties/after_call_dialing_auto'
+                after_call_time:
+                  $ref: '#/components/schemas/CampaignList/properties/after_call_time'
+                is_recording:
+                  $ref: '#/components/schemas/CampaignList/properties/is_recording'
+                call_number_id:
+                  $ref: '#/components/schemas/CampaignList/properties/call_number_id'
+                call_script_id:
+                  $ref: '#/components/schemas/CampaignList/properties/call_script_id'
+                survey_id:
+                  $ref: '#/components/schemas/CampaignList/properties/survey_id'
+                is_predictive:
+                  $ref: '#/components/schemas/CampaignList/properties/is_predictive'
+                calls_percentage:
+                  $ref: '#/components/schemas/CampaignList/properties/calls_percentage'
+                attempts:
+                  $ref: '#/components/schemas/CampaignList/properties/attempts'
+                attempts_interval:
+                  $ref: '#/components/schemas/CampaignList/properties/attempts_interval'
+                Button:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        $ref: '#/components/schemas/Button/properties/title'
+                      type:
+                        $ref: '#/components/schemas/Button/properties/type'
+                      color:
+                        $ref: '#/components/schemas/Button/properties/color'
+                      description:
+                        $ref: '#/components/schemas/Button/properties/description'
+                ContactsTag:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Tag ID
+                Agent:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Agent/properties/id'
+                Group:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Group/properties/id'
+        required: true
+      responses:
+        '201':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/CampaignList/properties/id'
+              example:
+                responseData:
+                  status: 201
+                  data:
+                    id: '12345'
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    name:
+                    - Please supply a valid campaign name.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+      operationId: putCampaignsAddJson
+      x-operation-id-source: derived
+  /campaigns/edit/{id}.json:
+    post:
+      tags:
+      - Campaigns
+      summary: Edit campaign
+      description: Edit a campaign
+      parameters:
+      - name: id
+        in: path
+        description: Campaign ID to edit
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - Button
+              - name
+              type: object
+              properties:
+                name:
+                  $ref: '#/components/schemas/CampaignList/properties/name'
+                status:
+                  $ref: '#/components/schemas/CampaignList/properties/status'
+                has_schedule_date:
+                  $ref: '#/components/schemas/CampaignList/properties/has_schedule_date'
+                schedule_start_date:
+                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_date'
+                schedule_start_time:
+                  $ref: '#/components/schemas/CampaignList/properties/schedule_start_time'
+                answer_wait_time:
+                  $ref: '#/components/schemas/CampaignList/properties/answer_wait_time'
+                after_call_dialing_auto:
+                  $ref: '#/components/schemas/CampaignList/properties/after_call_dialing_auto'
+                after_call_time:
+                  $ref: '#/components/schemas/CampaignList/properties/after_call_time'
+                is_recording:
+                  $ref: '#/components/schemas/CampaignList/properties/is_recording'
+                call_number_id:
+                  $ref: '#/components/schemas/CampaignList/properties/call_number_id'
+                call_script_id:
+                  $ref: '#/components/schemas/CampaignList/properties/call_script_id'
+                survey_id:
+                  $ref: '#/components/schemas/CampaignList/properties/survey_id'
+                is_predictive:
+                  $ref: '#/components/schemas/CampaignList/properties/is_predictive'
+                calls_percentage:
+                  $ref: '#/components/schemas/CampaignList/properties/calls_percentage'
+                attempts:
+                  $ref: '#/components/schemas/CampaignList/properties/attempts'
+                attempts_interval:
+                  $ref: '#/components/schemas/CampaignList/properties/attempts_interval'
+                Button:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Button id
+                      title:
+                        $ref: '#/components/schemas/Button/properties/title'
+                      type:
+                        $ref: '#/components/schemas/Button/properties/type'
+                      color:
+                        $ref: '#/components/schemas/Button/properties/color'
+                      description:
+                        $ref: '#/components/schemas/Button/properties/description'
+                ContactsTag:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Tag ID
+                Agent:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Agent/properties/id'
+                Group:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/Group/properties/id'
+        required: true
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/StatusCode/properties/status'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '406':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorInvalidData'
+              example:
+                responseData:
+                  status: 406
+                  message: Invalid input data.
+                  data:
+                    name:
+                    - Please supply a valid campaign name.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+      operationId: postCampaignsEdit{id}Json
+      x-operation-id-source: derived
+  /campaigns/delete/{id}.json:
+    delete:
+      tags:
+      - Campaigns
+      summary: Delete campaign
+      parameters:
+      - name: id
+        in: path
+        description: Campaign ID to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessGeneralData'
+              example:
+                responseData:
+                  status: 200
+        '404':
+          description: Campaign not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 404
+                  message: Not found.
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      operationId: deleteCampaignsDelete{id}Json
+      x-operation-id-source: derived
+components:
+  schemas:
+    StatusCode:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    CampaignList:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Campaign ID
+        name:
+          type: string
+          description: Campaign name
+        status:
+          type: string
+          description: Campaign status (active/inactive)
+        has_schedule_date:
+          type: boolean
+          description: Is campaign scheduled?
+        schedule_start_date:
+          type: string
+          description: Campaign start date
+          format: date
+        schedule_start_time:
+          type: string
+          description: Campaign start time
+          format: time
+        answer_wait_time:
+          type: integer
+          description: Maximum number of seconds we will wait for the call to be answered.
+        after_call_dialing_auto:
+          type: boolean
+          description: Automatically dial next contact after a call ends true/false
+        after_call_time:
+          type: integer
+          description: After call time (in seconds)
+        is_recording:
+          type: boolean
+          description: Calls recording true/false
+        call_number_id:
+          type: integer
+          description: Outbound caller id
+        call_script_id:
+          type: integer
+          description: Call script ID
+        survey_id:
+          type: integer
+          description: Survey ID
+        is_predictive:
+          type: integer
+          description: Is predictive dialer campaign 0/1
+        calls_percentage:
+          type: integer
+          description: Agents utilization
+        attempts:
+          type: integer
+          description: Attempts per contact
+        attempts_interval:
+          type: integer
+          description: Hours between attempts
+      description: Campaign data
+    PaginationData:
+      type: object
+      properties:
+        itemsCount:
+          type: integer
+          description: number of resources in the response
+          format: int64
+        pageCount:
+          type: integer
+          description: number of pages found
+          format: int64
+        pageNumber:
+          type: integer
+          description: current page in the response
+          format: int64
+        limit:
+          type: integer
+          description: number of objects sent per page
+          format: int64
+      description: Call data
+    Button:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Button ID
+        title:
+          type: string
+          description: Button title
+        type:
+          type: string
+          enum:
+          - successful_positive
+          - successful_negative
+          - rescheduled
+          - unsuccessful_call_again
+          - unsuccessful_do_not_call
+          description: Button type
+        color:
+          type: string
+          description: Button color (hex code)
+        description:
+          type: string
+          description: Button description
+      description: Campaign button
+    Agent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Agent ID
+        name:
+          type: string
+          description: Agent\'s Voice ID
+        firstname:
+          type: string
+          description: First name
+        lastname:
+          type: string
+          description: Last name
+        email:
+          type: string
+          description: Email
+          format: email
+        pass:
+          type: string
+          description: Password
+        daily_price_limit:
+          maximum: 200
+          minimum: 1
+          type: integer
+          description: Daily price limit for all calls in EUR. Usually allowed values are from 1 to 200 EUR. Leave empty for using default value.
+        is_daily_limit_ok:
+          type: boolean
+          description: Is daily price limit OK? If not, agent cannot make new calls
+        status_outbound:
+          type: boolean
+          description: Does agent have outbound calls allowed?
+        availability_status:
+          type: string
+          description: Current availability status of the agent
+          enum:
+          - online
+          - offline
+          - paused
+          - calling
+        extension:
+          maximum: 9999
+          minimum: 1000
+          type: integer
+          description: Extension of an agent. Extension must be four digits long and be unique across whole company.
+        call_number_id:
+          minimum: 1
+          type: integer
+          description: Default outbound number ID
+        default_number:
+          type: string
+          description: Default outbound number in E164 format
+        associated_numbers:
+          type: array
+          description: array of e164 numbers that the agent has assigned
+          items:
+            type: string
+      description: Agent data
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Tag ID
+        name:
+          type: string
+          description: Tag name
+      description: Campaign tag
+    SuccessGeneralData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+    ErrorInvalidData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+        data:
+          type: object
+          properties: {}
+          description: More data explaining the error
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Group ID
+        internal_name:
+          type: string
+          description: Group name
+      description: Campaign group
+    PdAgent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Agent ID
+        fullname:
+          type: string
+          description: Agent name
+      description: Campaign agent

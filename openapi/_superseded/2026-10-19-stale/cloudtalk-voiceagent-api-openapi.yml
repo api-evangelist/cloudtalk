@@ -1,0 +1,159 @@
+openapi: 3.2.0
+info:
+  title: CloudTalk Voice Agent API
+  description: '# Introduction
+
+    Welcome to CloudTalk API reference!'
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+tags:
+- name: VoiceAgent
+  description: VoiceAgent API ver. 1.0.0
+paths:
+  /voice-agent/calls:
+    post:
+      servers:
+      - url: https://api.cloudtalk.io/v1
+      tags:
+      - VoiceAgent
+      summary: Initiate a VoiceAgent call
+      description: Creates a new VoiceAgent call with specified parameters and properties. Call properties are optional and can be used to configure the call.
+      operationId: createVoiceAgentCall
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - call_number
+              - voice_agent_id
+              properties:
+                call_number:
+                  type: string
+                  description: The phone number to call
+                  example: '+421000000000'
+                voice_agent_id:
+                  type: string
+                  description: ID of the VoiceAgent to use for the call
+                  example: 681b0639876543cfbc3d6b55
+                call_properties:
+                  type: object
+                  description: Additional properties for configuring the VoiceAgent call
+                  properties:
+                    output:
+                      type: object
+                      description: Variables that will be included in the VoiceAgent call analysis output
+                      properties:
+                        variables:
+                          type: object
+                          additionalProperties: true
+                          description: Variables that will be included in the call analysis output
+                          example:
+                            external_contact_id: 12345
+                    system_prompt:
+                      type: object
+                      description: Variables that will be used during the actual call by the VoiceAgent
+                      properties:
+                        variables:
+                          type: object
+                          additionalProperties: true
+                          description: Variables that will be used in the VoiceAgent's system prompt during the call
+                          example:
+                            name: John Doe
+                            company: CloudTalk
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: BAD_REQUEST
+              message:
+                type: string
+                description: Error message
+                example: The request could not be understood or was missing required parameters.
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: NOT_FOUND
+              message:
+                type: string
+                description: Error message
+                example: The requested resource was not found.
+    NoContentResponse:
+      description: Operation completed successfully with no content to return
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              responseData:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 204
+                  message:
+                    type: string
+                    example: No Content
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: UNAUTHORIZED
+              message:
+                type: string
+                description: Error message
+                example: You are not authorized to access this resource.
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: INTERNAL_SERVER_ERROR
+              message:
+                type: string
+                description: Error message
+                example: An unexpected error occurred on the server.

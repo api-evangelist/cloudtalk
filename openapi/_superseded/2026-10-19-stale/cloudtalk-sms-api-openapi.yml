@@ -1,0 +1,173 @@
+openapi: 3.2.0
+info:
+  title: CloudTalk Sms API
+  description: '# Introduction
+
+    Welcome to CloudTalk API reference!'
+  contact:
+    name: CloudTalk API Support
+    url: https://www.cloudtalk.io/contact
+  version: '1.7'
+  x-logo:
+    url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
+servers:
+- url: https://my.cloudtalk.io/api
+tags:
+- name: SMS
+  description: Sms handling.
+paths:
+  /sms/send.json:
+    post:
+      tags:
+      - SMS
+      summary: Send sms
+      description: The success response for sms/send.json may include false success attribute, where attribute data is populated with the provider error message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - message
+              - recipient
+              - sender
+              type: object
+              properties:
+                recipient:
+                  $ref: '#/components/schemas/Sms/properties/recipient'
+                message:
+                  $ref: '#/components/schemas/Sms/properties/message'
+                sender:
+                  $ref: '#/components/schemas/Sms/properties/sender'
+                country_code:
+                  $ref: '#/components/schemas/Sms/properties/country_code'
+                images_by_url:
+                  $ref: '#/components/schemas/Sms/properties/images_by_url'
+                images:
+                  $ref: '#/components/schemas/Sms/properties/images'
+                file_by_url:
+                  $ref: '#/components/schemas/Sms/properties/file_by_url'
+                file:
+                  $ref: '#/components/schemas/Sms/properties/file'
+        required: true
+      responses:
+        '200':
+          description: Status of sms sending
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Success result
+                  data:
+                    type: object
+                    description: 'If success is true, data contains object with properties : recipent,message, sender and country_code, else if success is false, data contains error message'
+              example:
+                responseData:
+                  success: true|false
+                  data: "{'recipient': 'string','message': 'string','sender': 'string','country_code': 'string'}\n    |SMS send failed|Not allowed country.|Unknown number|Limit exceeded|Bad number configuration"
+        '400':
+          description: 'Bad request '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BadRequest'
+              example:
+                responseData:
+                  status: 400
+                  message: Bad request
+        '401':
+          description: 'Unauthorized action '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 401
+                  message: Unauthorized action
+        '403':
+          description: Insufficient Funds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 403
+                  message: Insufficient Funds
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorData'
+              example:
+                responseData:
+                  status: 500
+                  message: Something went wrong.
+      x-codegen-request-body-name: body
+      operationId: postSmsSendJson
+      x-operation-id-source: derived
+components:
+  schemas:
+    Sms:
+      type: object
+      properties:
+        recipient:
+          type: string
+          description: Recipient number in E.164 format. To send Whatsapp message include prefix "whatsapp:+421..." to both sender and recipient numbers.
+        message:
+          type: string
+          description: Message body/content.
+        sender:
+          type: string
+          description: Sender number in E.164 format. To send Whatsapp message include prefix "whatsapp:+421..." to both sender and recipient numbers.
+        country_code:
+          type: string
+          description: Country code of recipient number.
+        images_by_url:
+          type: array
+          items:
+            type: string
+          description: Image to be send as MMS. Will be downloaded from URL. MAX 5MB. Can contain up to 5 urls.
+        images:
+          type: array
+          items:
+            type: string
+            format: binary
+          description: Image sent as blob to be send as MMS. MAX 5MB. Can contain up to 5 images.
+        file_by_url:
+          type: string
+          description: File to be send to Whatsapp. Will be downloaded from URL. MAX 16MB. To send Whatsapp message recipient and sender number must contain prefix "whatsapp:" example "whatsapp:+421...". Field message must be empty.
+        file:
+          type: string
+          format: binary
+          description: File sent as blob to be send to Whatsapp. MAX 16MB. To send Whatsapp message recipient and sender number must contain prefix "whatsapp:" example "whatsapp:+421...". Field message must be empty.
+      description: Sms data
+    ErrorData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status code
+        message:
+          type: string
+          description: The error message
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+                example: BAD_REQUEST
+              message:
+                type: string
+                description: Error message
+                example: The request could not be understood or was missing required parameters.

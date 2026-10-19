@@ -3,7 +3,134 @@ info:
   title: CloudTalk Contacts API
   description: '# Introduction
 
-    Welcome to CloudTalk API reference!'
+    Welcome to CloudTalk API reference! Many of these businesses use the CloudTalk API to automate and enhance their customer support with CloudTalk Support. With CloudTalk we are re-building telco industry from the ground and taking it to the next level with first-class customer support system. Please find below the full documenation to CloudTalk. # API Overview
+
+
+    The API is organized around the following resources:
+
+
+    API Area | Description
+
+    ----------------|-------------
+
+    Calls | Browse your call history, download recordings and access all your calls data. Contacts | Create and update Contacts. Use filters to get lists of Contacts, or access their profiles individually. Numbers | Automate Numbers modifications. List all your numbers. Agents | Create or update your Agents, access their settings. Conversation Intelligence | Get Conversation Intelligence data about your calls. VoiceAgent | Initiate VoiceAgent calls
+
+
+    JSON is returned in all responses. XML is not supported. The API also uses common approaches for the following:
+
+
+    Function | Description
+
+    ----------------|-------------
+
+    Data | API data is JSON encoded with UTF-8. API JSON is either a single object or a list of objects. Errors | 4xx and 5xx responses returning JSON with error codes
+
+    Rate Limiting | Controls how many requests can be made in a time window
+
+    HTTP | Methods are used in accordance with HTTP (GET POST and DELETE are the primary methods used) and resources are identified using URIs. All API requests are sent over HTTPS. ## Authentication
+
+
+    This is an HTTPS-only API. Authentication is based on API Access Key ID and Access Key Secret. The API Access Key ID and Access Key Secret is passed via HTTP Basic Authentication. Basic Auth credentials are used to determine on which project should this request be executed on. List of all Basic Auth credentials for the project can be found by Administrators in the CloudTalk Dashboard under Account → Settings → API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys). To try the API via curl on the command-line, the general form used would be:
+
+    ```
+
+    curl -u ACCESS_KEY_ID:ACCESS_KEY_SECRET API_URL
+
+    ```
+
+
+    For instance, you would execute:
+
+    ```
+
+    curl -u ABCDEFGHIJTESTKEY1:X05Dg4c331c3h61An https://my.cloudtalk.io/api/calls/index.json
+
+    ```
+
+
+    ## Usage
+
+
+    The API may rate limit submission of requests for your application. Such limits are managed as an allowed number of operations per time window, where an operation might be read or an update. In that case a **''429 Too Many Requests''** response code will be returned along with the following headers -
+
+
+    Header name | Description
+
+    ----------------|-------------
+
+    X-CloudTalkAPI-Limit | Maximum number of API requests allowed in the current time window. X-CloudTalkAPI-Remaining | Number of API requests left in the current window. X-CloudTalkAPI-ResetTime | Time when rate limit window will be reset as a Unix timestamp. Note that the default rate limit is **60 operations per minute per company**. If you need to make more requests, please contact our support with detailed explanation of your use case. ## Response Envelopes
+
+
+    **Note:** Conversation Intelligence doesn''t follow envelopes. The API returns one of three envelopes depending upon the request issued:
+
+
+    1. Single Item Envelope
+
+    2. Collections Envelope
+
+    3. Error Envelope
+
+
+    ### Single Item Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    }
+
+    }
+
+    ```
+
+
+    ### Collections Envelope
+
+
+    All dates/times are returned in ISO8601 format and in UTC timezone. ```
+
+    Status: 200 OK
+
+    {
+
+    "responseData": {
+
+    "itemsCount": 65,
+
+    "pageCount": 3,
+
+    "pageNumber": 1,
+
+    "limit": 30,
+
+    "data": [
+
+    {
+
+    "id": 123,
+
+    ... "created": "2018-01-10 12:34:56"
+
+    },
+
+    {
+
+    "id": 456,
+
+    ... "created": "2017-10-19 09:21:29"
+
+    },
+
+    ...'
   contact:
     name: CloudTalk API Support
     url: https://www.cloudtalk.io/contact
@@ -12,6 +139,8 @@ info:
     url: https://my.cloudtalk.io/img/logo-cloudtalk-color.png
 servers:
 - url: https://my.cloudtalk.io/api
+security:
+- basicAuth: []
 tags:
 - name: Contacts
   description: All data you can get about your contacts.
@@ -21,6 +150,7 @@ paths:
       tags:
       - Contacts
       summary: List contacts
+      description: Returns contacts together with their phone numbers, email addresses and custom attributes. Narrow the result with `country_id`, `tag_id`, `industry` or a free-text `keyword`, and page through it with `limit` and `page`.
       parameters:
       - name: country_id
         in: query
@@ -63,27 +193,40 @@ paths:
               schema:
                 type: object
                 properties:
-                  itemsCount:
-                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
-                  pageCount:
-                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
-                  pageNumber:
-                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
-                  limit:
-                    $ref: '#/components/schemas/PaginationData/properties/limit'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Contact:
-                          $ref: '#/components/schemas/ContactList'
-                        ContactNumber:
-                          $ref: '#/components/schemas/ContactNumber'
-                        ContactEmail:
-                          $ref: '#/components/schemas/ContactEmail'
-                        ContactAttribute:
-                          $ref: '#/components/schemas/ContactAttribute'
+                  responseData:
+                    type: object
+                    properties:
+                      itemsCount:
+                        type: integer
+                        description: number of resources in the response
+                        format: int64
+                      pageCount:
+                        type: integer
+                        description: number of pages found
+                        format: int64
+                      pageNumber:
+                        type: integer
+                        description: current page in the response
+                        format: int64
+                      limit:
+                        type: integer
+                        description: number of objects sent per page
+                        format: int64
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            Contact:
+                              $ref: '#/components/schemas/ContactList'
+                            ContactNumber:
+                              $ref: '#/components/schemas/ContactNumber'
+                            ContactEmail:
+                              $ref: '#/components/schemas/ContactEmail'
+                            ContactAttribute:
+                              $ref: '#/components/schemas/ContactAttribute'
+                required:
+                - responseData
               example:
                 responseData:
                   itemsCount: 3
@@ -106,6 +249,10 @@ paths:
       tags:
       - Contacts
       summary: Add contact
+      description: 'Creates a contact. Only `name` is required. The remaining scalar fields describe the company and postal address, and the `ContactNumber`, `ContactEmail`, `ContactsTag`, `ContactAttribute` and `ExternalUrl` arrays attach phone numbers, email addresses, tags, custom attribute values and links to external systems in the same request. Returns `201` with the new contact''s ID.
+
+
+        Note the core API creates with `PUT`, not `POST`.'
       requestBody:
         content:
           application/json:
@@ -115,27 +262,47 @@ paths:
               type: object
               properties:
                 name:
-                  $ref: '#/components/schemas/Contact/properties/name'
+                  type: string
+                  description: Name
+                  maxLength: 150
                 title:
-                  $ref: '#/components/schemas/Contact/properties/title'
+                  type: string
+                  description: Title
+                  maxLength: 255
                 company:
-                  $ref: '#/components/schemas/Contact/properties/company'
+                  type: string
+                  description: Company name
+                  maxLength: 100
                 industry:
-                  $ref: '#/components/schemas/Contact/properties/industry'
+                  type: string
+                  description: Industry
+                  maxLength: 100
                 website:
-                  $ref: '#/components/schemas/Contact/properties/website'
+                  type: string
+                  description: Website
+                  maxLength: 100
                 address:
-                  $ref: '#/components/schemas/Contact/properties/address'
+                  type: string
+                  description: Address
+                  maxLength: 255
                 city:
-                  $ref: '#/components/schemas/Contact/properties/city'
+                  type: string
+                  description: City
+                  maxLength: 255
                 zip:
-                  $ref: '#/components/schemas/Contact/properties/zip'
+                  type: string
+                  description: ZIP code
+                  maxLength: 15
                 state:
-                  $ref: '#/components/schemas/Contact/properties/state'
+                  type: string
+                  description: State
+                  maxLength: 255
                 country_id:
-                  $ref: '#/components/schemas/Contact/properties/country_id'
+                  type: integer
+                  description: Country ID
                 favorite_agent:
-                  $ref: '#/components/schemas/Contact/properties/favorite_agent'
+                  type: integer
+                  description: Favorite agent ID
                 ExternalUrl:
                   $ref: '#/components/schemas/ExternalUrlArray'
                 ContactNumber:
@@ -150,9 +317,12 @@ paths:
                     type: object
                     properties:
                       attribute_id:
-                        $ref: '#/components/schemas/ContactAttribute/items/properties/attribute_id'
+                        type: integer
+                        description: Attribute ID
                       value:
-                        $ref: '#/components/schemas/ContactAttribute/items/properties/value'
+                        type: string
+                        description: Attribute value (max 255 chars per attribute)
+                        maxLength: 255
         required: true
       responses:
         '201':
@@ -162,13 +332,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
-                  data:
+                  responseData:
                     type: object
                     properties:
-                      id:
-                        $ref: '#/components/schemas/Contact/properties/id'
+                      status:
+                        type: integer
+                        description: Status code
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Contact ID
+                required:
+                - responseData
               example:
                 responseData:
                   status: 201
@@ -220,27 +397,47 @@ paths:
               type: object
               properties:
                 name:
-                  $ref: '#/components/schemas/Contact/properties/name'
+                  type: string
+                  description: Name
+                  maxLength: 150
                 title:
-                  $ref: '#/components/schemas/Contact/properties/title'
+                  type: string
+                  description: Title
+                  maxLength: 255
                 company:
-                  $ref: '#/components/schemas/Contact/properties/company'
+                  type: string
+                  description: Company name
+                  maxLength: 100
                 industry:
-                  $ref: '#/components/schemas/Contact/properties/industry'
+                  type: string
+                  description: Industry
+                  maxLength: 100
                 website:
-                  $ref: '#/components/schemas/Contact/properties/website'
+                  type: string
+                  description: Website
+                  maxLength: 100
                 address:
-                  $ref: '#/components/schemas/Contact/properties/address'
+                  type: string
+                  description: Address
+                  maxLength: 255
                 city:
-                  $ref: '#/components/schemas/Contact/properties/city'
+                  type: string
+                  description: City
+                  maxLength: 255
                 zip:
-                  $ref: '#/components/schemas/Contact/properties/zip'
+                  type: string
+                  description: ZIP code
+                  maxLength: 15
                 state:
-                  $ref: '#/components/schemas/Contact/properties/state'
+                  type: string
+                  description: State
+                  maxLength: 255
                 country_id:
-                  $ref: '#/components/schemas/Contact/properties/country_id'
+                  type: integer
+                  description: Country ID
                 favorite_agent:
-                  $ref: '#/components/schemas/Contact/properties/favorite_agent'
+                  type: integer
+                  description: Favorite agent ID
                 ExternalUrl:
                   $ref: '#/components/schemas/ExternalUrlArray'
                 ContactNumber:
@@ -255,9 +452,12 @@ paths:
                     type: object
                     properties:
                       attribute_id:
-                        $ref: '#/components/schemas/ContactAttribute/items/properties/attribute_id'
+                        type: integer
+                        description: Attribute ID
                       value:
-                        $ref: '#/components/schemas/ContactAttribute/items/properties/value'
+                        type: string
+                        description: Attribute value (max 255 chars per attribute)
+                        maxLength: 255
         required: true
       responses:
         '200':
@@ -267,8 +467,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  responseData:
+                    type: object
+                    properties:
+                      status:
+                        type: integer
+                        description: Status code
+                required:
+                - responseData
               example:
                 responseData:
                   status: 200
@@ -313,6 +519,7 @@ paths:
       tags:
       - Contacts
       summary: Delete contact
+      description: Deletes the contact identified by `contactId`. Returns `404` if no contact has that ID.
       parameters:
       - name: contactId
         in: path
@@ -357,6 +564,7 @@ paths:
       tags:
       - Contacts
       summary: Inspect a contact
+      description: Returns one contact in full — the contact record plus its phone numbers, email addresses, tags, custom attributes and external URLs. Use this when you already have the contact's ID; use List contacts to search for one.
       parameters:
       - name: contactId
         in: path
@@ -372,18 +580,23 @@ paths:
               schema:
                 type: object
                 properties:
-                  Contact:
-                    $ref: '#/components/schemas/Contact'
-                  ExternalUrl:
-                    $ref: '#/components/schemas/ExternalUrlArray'
-                  ContactNumber:
-                    $ref: '#/components/schemas/ContactNumberArray'
-                  ContactEmail:
-                    $ref: '#/components/schemas/ContactEmailArray'
-                  ContactsTag:
-                    $ref: '#/components/schemas/ContactsTag'
-                  ContactAttribute:
-                    $ref: '#/components/schemas/ContactAttribute'
+                  responseData:
+                    type: object
+                    properties:
+                      Contact:
+                        $ref: '#/components/schemas/Contact'
+                      ExternalUrl:
+                        $ref: '#/components/schemas/ExternalUrlArray'
+                      ContactNumber:
+                        $ref: '#/components/schemas/ContactNumberArray'
+                      ContactEmail:
+                        $ref: '#/components/schemas/ContactEmailArray'
+                      ContactsTag:
+                        $ref: '#/components/schemas/ContactsTag'
+                      ContactAttribute:
+                        $ref: '#/components/schemas/ContactAttribute'
+                required:
+                - responseData
               example:
                 responseData:
                   Contact:
@@ -446,9 +659,12 @@ paths:
                           type: object
                           properties:
                             id:
-                              $ref: '#/components/schemas/ContactAttribute/items/properties/attribute_id'
+                              type: integer
+                              description: Attribute ID
                             title:
-                              $ref: '#/components/schemas/ContactAttribute/items/properties/title'
+                              type: string
+                              description: Attribute name (max 255 chars per attribute)
+                              maxLength: 255
               example:
                 responseData:
                 - ContactAttribute:
@@ -463,8 +679,8 @@ paths:
     put:
       tags:
       - Contacts
-      summary: Assign Tags
-      description: Assign tags to contact.
+      summary: Assign contact tags
+      description: Assign contact tags to a contact.
       parameters:
       - name: contactId
         in: path
@@ -494,30 +710,35 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: integer
-                    description: Status code
-                  message:
-                    type: string
-                    description: Success message
-                  data:
+                  responseData:
                     type: object
                     properties:
-                      tags:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                              description: Tag ID
-                            name:
-                              type: string
-                              description: Tag name
-                      contact_id:
+                      status:
+                        type: integer
+                        description: Status code
+                      message:
                         type: string
-                        description: Contact ID
-                    description: Data of assigned tags
+                        description: Success message
+                      data:
+                        type: object
+                        properties:
+                          tags:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                  description: Tag ID
+                                name:
+                                  type: string
+                                  description: Tag name
+                          contact_id:
+                            type: string
+                            description: Contact ID
+                        description: Data of assigned tags
+                required:
+                - responseData
               example:
                 responseData:
                   status: 200
@@ -536,14 +757,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    description: Status code
-                  message:
-                    type: string
-                    description: Error message
+                $ref: '#/components/schemas/ErrorData'
               example:
                 responseData:
                   status: 404
@@ -553,14 +767,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    description: Status code
-                  message:
-                    type: string
-                    description: Error message
+                $ref: '#/components/schemas/ErrorInvalidData'
               example:
                 responseData:
                   status: 406
@@ -572,8 +779,8 @@ paths:
     delete:
       tags:
       - Contacts
-      summary: Unassign Tags
-      description: Unassign tags to contact.
+      summary: Unassign contact tags
+      description: Unassign contact tags from a contact.
       parameters:
       - name: contactId
         in: path
@@ -603,30 +810,35 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: integer
-                    description: Status code
-                  message:
-                    type: string
-                    description: Success message
-                  data:
+                  responseData:
                     type: object
                     properties:
-                      tags:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                              description: Tag ID
-                            name:
-                              type: string
-                              description: Tag name
-                      contact_id:
+                      status:
+                        type: integer
+                        description: Status code
+                      message:
                         type: string
-                        description: Contact ID
-                    description: Data of unassigned tags
+                        description: Success message
+                      data:
+                        type: object
+                        properties:
+                          tags:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                  description: Tag ID
+                                name:
+                                  type: string
+                                  description: Tag name
+                          contact_id:
+                            type: string
+                            description: Contact ID
+                        description: Data of unassigned tags
+                required:
+                - responseData
               example:
                 responseData:
                   status: 200
@@ -645,14 +857,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    description: Status code
-                  message:
-                    type: string
-                    description: Error message
+                $ref: '#/components/schemas/ErrorData'
               example:
                 responseData:
                   status: 404
@@ -662,14 +867,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    description: Status code
-                  message:
-                    type: string
-                    description: Error message
+                $ref: '#/components/schemas/ErrorInvalidData'
               example:
                 responseData:
                   status: 406
@@ -720,21 +918,34 @@ paths:
               schema:
                 type: object
                 properties:
-                  itemsCount:
-                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
-                  pageCount:
-                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
-                  pageNumber:
-                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
-                  limit:
-                    $ref: '#/components/schemas/PaginationData/properties/limit'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        ContactNote:
-                          $ref: '#/components/schemas/ContactNote'
+                  responseData:
+                    type: object
+                    properties:
+                      itemsCount:
+                        type: integer
+                        description: number of resources in the response
+                        format: int64
+                      pageCount:
+                        type: integer
+                        description: number of pages found
+                        format: int64
+                      pageNumber:
+                        type: integer
+                        description: current page in the response
+                        format: int64
+                      limit:
+                        type: integer
+                        description: number of objects sent per page
+                        format: int64
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            ContactNote:
+                              $ref: '#/components/schemas/ContactNote'
+                required:
+                - responseData
               example:
                 responseData:
                   itemsCount: 3
@@ -772,9 +983,11 @@ paths:
               type: object
               properties:
                 user_id:
-                  $ref: '#/components/schemas/ContactNote/properties/user_id'
+                  type: integer
+                  description: Assigned agent ID
                 note:
-                  $ref: '#/components/schemas/ContactNote/properties/note'
+                  type: string
+                  description: Note content
         required: true
       responses:
         '201':
@@ -784,13 +997,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
-                  data:
+                  responseData:
                     type: object
                     properties:
-                      id:
-                        $ref: '#/components/schemas/ContactNote/properties/id'
+                      status:
+                        type: integer
+                        description: Status code
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Note ID
+                required:
+                - responseData
               example:
                 responseData:
                   status: 201
@@ -837,6 +1057,10 @@ paths:
       tags:
       - Contacts
       summary: Edit note
+      description: 'Updates the note identified by `noteId`. `contact_id` and `note` are required on every request; `user_id` optionally records which agent the note belongs to. Returns `404` if no note has that ID.
+
+
+        Note the core API updates with `POST`, not `PUT`.'
       parameters:
       - name: noteId
         in: path
@@ -854,11 +1078,14 @@ paths:
               type: object
               properties:
                 contact_id:
-                  $ref: '#/components/schemas/ContactNote/properties/contact_id'
+                  type: integer
+                  description: Assigned contact ID
                 user_id:
-                  $ref: '#/components/schemas/ContactNote/properties/user_id'
+                  type: integer
+                  description: Assigned agent ID
                 note:
-                  $ref: '#/components/schemas/ContactNote/properties/note'
+                  type: string
+                  description: Note content
         required: true
       responses:
         '200':
@@ -868,8 +1095,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  responseData:
+                    type: object
+                    properties:
+                      status:
+                        type: integer
+                        description: Status code
+                required:
+                - responseData
               example:
                 responseData:
                   status: 200
@@ -914,6 +1147,7 @@ paths:
       tags:
       - Contacts
       summary: Delete note
+      description: Deletes the note identified by `noteId`. Returns `404` if no note has that ID.
       parameters:
       - name: noteId
         in: path
@@ -991,21 +1225,34 @@ paths:
               schema:
                 type: object
                 properties:
-                  itemsCount:
-                    $ref: '#/components/schemas/PaginationData/properties/itemsCount'
-                  pageCount:
-                    $ref: '#/components/schemas/PaginationData/properties/pageCount'
-                  pageNumber:
-                    $ref: '#/components/schemas/PaginationData/properties/pageNumber'
-                  limit:
-                    $ref: '#/components/schemas/PaginationData/properties/limit'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        ContactActivity:
-                          $ref: '#/components/schemas/ContactActivity'
+                  responseData:
+                    type: object
+                    properties:
+                      itemsCount:
+                        type: integer
+                        description: number of resources in the response
+                        format: int64
+                      pageCount:
+                        type: integer
+                        description: number of pages found
+                        format: int64
+                      pageNumber:
+                        type: integer
+                        description: current page in the response
+                        format: int64
+                      limit:
+                        type: integer
+                        description: number of objects sent per page
+                        format: int64
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            ContactActivity:
+                              $ref: '#/components/schemas/ContactActivity'
+                required:
+                - responseData
               example:
                 responseData:
                   itemsCount: 3
@@ -1049,19 +1296,37 @@ paths:
               type: object
               properties:
                 type:
-                  $ref: '#/components/schemas/ContactActivity/properties/type'
+                  type: string
+                  description: Type of activity
+                  enum:
+                  - order
+                  - task
+                  - chat
+                  - ticket
+                  - other
+                  - invoice
+                  - proforma
+                  - estimate
+                  - cancel
                 name:
-                  $ref: '#/components/schemas/ContactActivity/properties/name'
+                  type: string
+                  description: Name/Title
                 activity_date:
-                  $ref: '#/components/schemas/ContactActivity/properties/activity_date'
+                  type: string
+                  description: Activity date and time. Set to current company time by default.
+                  format: date-time
                 description:
-                  $ref: '#/components/schemas/ContactActivity/properties/description'
+                  type: string
+                  description: Detailed description
                 activity_author:
-                  $ref: '#/components/schemas/ContactActivity/properties/activity_author'
+                  type: string
+                  description: Author of activity - user name you want to show
                 external_id:
-                  $ref: '#/components/schemas/ContactActivity/properties/external_id'
+                  type: integer
+                  description: Activity ID from external resource - e.g. your order ID
                 external_url:
-                  $ref: '#/components/schemas/ContactActivity/properties/external_url'
+                  type: string
+                  description: External url which can be opened from activity detail
         required: true
       responses:
         '201':
@@ -1071,13 +1336,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
-                  data:
+                  responseData:
                     type: object
                     properties:
-                      id:
-                        $ref: '#/components/schemas/ContactActivity/properties/id'
+                      status:
+                        type: integer
+                        description: Status code
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Activity ID
+                required:
+                - responseData
               example:
                 responseData:
                   status: 201
@@ -1124,6 +1396,10 @@ paths:
       tags:
       - Contacts
       summary: Edit activity
+      description: 'Updates the activity identified by `activityId`. `contact_id` is required on every request. The optional fields set the activity `type` (`order`, `task`, `chat`, `ticket`, `other`, `invoice`, `proforma`, `estimate` or `cancel`), its name, timestamp, description and author, and the `external_id` / `external_url` pair that links it back to the system it came from. Returns `404` if no activity has that ID.
+
+
+        Note the core API updates with `POST`, not `PUT`.'
       parameters:
       - name: activityId
         in: path
@@ -1140,21 +1416,40 @@ paths:
               type: object
               properties:
                 contact_id:
-                  $ref: '#/components/schemas/ContactActivity/properties/contact_id'
+                  type: integer
+                  description: Assigned contact ID
                 type:
-                  $ref: '#/components/schemas/ContactActivity/properties/type'
+                  type: string
+                  description: Type of activity
+                  enum:
+                  - order
+                  - task
+                  - chat
+                  - ticket
+                  - other
+                  - invoice
+                  - proforma
+                  - estimate
+                  - cancel
                 name:
-                  $ref: '#/components/schemas/ContactActivity/properties/name'
+                  type: string
+                  description: Name/Title
                 activity_date:
-                  $ref: '#/components/schemas/ContactActivity/properties/activity_date'
+                  type: string
+                  description: Activity date and time. Set to current company time by default.
+                  format: date-time
                 description:
-                  $ref: '#/components/schemas/ContactActivity/properties/description'
+                  type: string
+                  description: Detailed description
                 activity_author:
-                  $ref: '#/components/schemas/ContactActivity/properties/activity_author'
+                  type: string
+                  description: Author of activity - user name you want to show
                 external_id:
-                  $ref: '#/components/schemas/ContactActivity/properties/external_id'
+                  type: integer
+                  description: Activity ID from external resource - e.g. your order ID
                 external_url:
-                  $ref: '#/components/schemas/ContactActivity/properties/external_url'
+                  type: string
+                  description: External url which can be opened from activity detail
         required: true
       responses:
         '200':
@@ -1164,8 +1459,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    $ref: '#/components/schemas/StatusCode/properties/status'
+                  responseData:
+                    type: object
+                    properties:
+                      status:
+                        type: integer
+                        description: Status code
+                required:
+                - responseData
               example:
                 responseData:
                   status: 200
@@ -1210,6 +1511,7 @@ paths:
       tags:
       - Contacts
       summary: Delete activity
+      description: Deletes the activity identified by `activityId`. Returns `404` if no activity has that ID.
       parameters:
       - name: activityId
         in: path
@@ -1251,6 +1553,159 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ContactAttribute:
+      type: array
+      description: Attributes for contact - can include multiple
+      items:
+        type: object
+        properties:
+          attribute_id:
+            type: integer
+            description: Attribute ID
+          title:
+            type: string
+            description: Attribute name (max 255 chars per attribute)
+            maxLength: 255
+          value:
+            type: string
+            description: Attribute value (max 255 chars per attribute)
+            maxLength: 255
+    ContactNumber:
+      type: object
+      properties:
+        public_number:
+          type: string
+          description: Full number in international E.164 format
+      description: Number assigned to contact
+    SuccessGeneralData:
+      type: object
+      description: Success envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
+      properties:
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: Status code
+      required:
+      - responseData
+    ExternalUrlArray:
+      type: array
+      maxItems: 3
+      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
+      items:
+        type: object
+        properties:
+          name:
+            maxLength: 30
+            type: string
+            description: Name of external service. Name will be shown to agents while working with contacts.
+          url:
+            type: string
+            description: External URL to contact page
+    ErrorData:
+      type: object
+      description: Error envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
+      properties:
+        responseData:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code
+            message:
+              type: string
+              description: The error message
+          required:
+          - status
+          - message
+      required:
+      - responseData
+    ContactNote:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Note ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        user_id:
+          type: integer
+          description: Assigned agent ID
+        note:
+          type: string
+          description: Note content
+        created:
+          type: string
+          description: Created date and time
+          format: date-time
+      description: Note data
+    ContactEmailArray:
+      type: array
+      description: Emails assigned to contact
+      items:
+        type: object
+        properties:
+          email:
+            type: string
+            description: Email address
+            format: email
+    ContactActivity:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Activity ID
+        contact_id:
+          type: integer
+          description: Assigned contact ID
+        type:
+          type: string
+          description: Type of activity
+          enum:
+          - order
+          - task
+          - chat
+          - ticket
+          - other
+          - invoice
+          - proforma
+          - estimate
+          - cancel
+        name:
+          type: string
+          description: Name/Title
+        description:
+          type: string
+          description: Detailed description
+        activity_author:
+          type: string
+          description: Author of activity - user name you want to show
+        external_id:
+          type: integer
+          description: Activity ID from external resource - e.g. your order ID
+        external_url:
+          type: string
+          description: External url which can be opened from activity detail
+        activity_date:
+          type: string
+          description: Activity date and time. Set to current company time by default.
+          format: date-time
+        created:
+          type: string
+          description: Created date and time
+          format: date-time
+      description: Activity data
+    ContactNumberArray:
+      type: array
+      description: Numbers assigned to contact
+      items:
+        type: object
+        properties:
+          public_number:
+            type: string
+            description: Full number in international E.164 format
     Contact:
       type: object
       properties:
@@ -1259,40 +1714,40 @@ components:
           description: Contact ID
         name:
           type: string
-          maximum: 150
           description: Name
+          maxLength: 150
         title:
           type: string
-          maximum: 255
           description: Title
+          maxLength: 255
         company:
           type: string
-          maximum: 100
           description: Company name
+          maxLength: 100
         industry:
           type: string
-          maximum: 100
           description: Industry
+          maxLength: 100
         website:
           type: string
-          maximum: 100
           description: Website
+          maxLength: 100
         address:
           type: string
-          maximum: 255
           description: Address
+          maxLength: 255
         city:
           type: string
-          maximum: 255
           description: City
+          maxLength: 255
         zip:
           type: string
-          maximum: 15
           description: ZIP code
+          maxLength: 15
         state:
           type: string
-          maximum: 255
           description: State
+          maxLength: 255
         country_id:
           type: integer
           description: Country ID
@@ -1358,187 +1813,28 @@ components:
                 type: string
                 description: Custom field value (max 255 chars per attribute)
       description: Contact data
-    StatusCode:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    PaginationData:
-      type: object
-      properties:
-        itemsCount:
-          type: integer
-          description: number of resources in the response
-          format: int64
-        pageCount:
-          type: integer
-          description: number of pages found
-          format: int64
-        pageNumber:
-          type: integer
-          description: current page in the response
-          format: int64
-        limit:
-          type: integer
-          description: number of objects sent per page
-          format: int64
-      description: Call data
-    ContactActivity:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Activity ID
-        contact_id:
-          type: integer
-          description: Assigned contact ID
-        type:
-          type: string
-          description: Type of activity
-          enum:
-          - order
-          - task
-          - chat
-          - ticket
-          - other
-          - invoice
-          - proforma
-          - estimate
-          - cancel
-        name:
-          type: string
-          description: Name/Title
-        description:
-          type: string
-          description: Detailed description
-        activity_author:
-          type: string
-          description: Author of activity - user name you want to show
-        external_id:
-          type: integer
-          description: Activity ID from external resource - e.g. your order ID
-        external_url:
-          type: string
-          description: External url which can be opened from activity detail
-        activity_date:
-          type: string
-          description: Activity date and time. Set to current company time by default.
-          format: date-time
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-      description: Activity data
-    ContactAttribute:
-      type: array
-      description: Attributes for contact - can include multiple
-      items:
-        type: object
-        properties:
-          attribute_id:
-            type: integer
-            description: Attribute ID
-          title:
-            type: string
-            description: Attribute name (max 255 chars per attribute)
-            maximum: 255
-          value:
-            type: string
-            description: Attribute value (max 255 chars per attribute)
-            maximum: 255
-    ContactNote:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Note ID
-        contact_id:
-          type: integer
-          description: Assigned contact ID
-        user_id:
-          type: integer
-          description: Assigned agent ID
-        note:
-          type: string
-          description: Note content
-        created:
-          type: string
-          description: Created date and time
-          format: date-time
-      description: Note data
-    SuccessGeneralData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-    ErrorData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
     ErrorInvalidData:
       type: object
+      description: Validation-error envelope returned by the core API on `my.cloudtalk.io/api`. The payload is always wrapped in `responseData`.
       properties:
-        status:
-          type: string
-          description: Status code
-        message:
-          type: string
-          description: The error message
-        data:
+        responseData:
           type: object
-          properties: {}
-          description: More data explaining the error
-    ExternalUrlArray:
-      type: array
-      maxItems: 3
-      description: List of all URLs which points to a detail page of a contact in an external service, e.g. CRMs, Helpdesk or any other custom service you use. You may list up to 3 URLs.
-      items:
-        type: object
-        properties:
-          name:
-            maxLength: 30
-            type: string
-            description: Name of external service. Name will be shown to agents while working with contacts.
-          url:
-            type: string
-            description: External URL to contact page
-    ContactList:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Contact ID
-        name:
-          type: string
-          description: Name
-        company:
-          type: string
-          description: Company name
-      description: Contact data
-    ContactNumber:
-      type: object
-      properties:
-        public_number:
-          type: string
-          description: Full number in international E.164 format
-      description: Number assigned to contact
-    ContactEmailArray:
-      type: array
-      description: Emails assigned to contact
-      items:
-        type: object
-        properties:
-          email:
-            type: string
-            description: Email address
-            format: email
+          properties:
+            status:
+              type: integer
+              description: HTTP status code
+            message:
+              type: string
+              description: The error message
+            data:
+              type: object
+              properties: {}
+              description: Field-level detail explaining the error
+          required:
+          - status
+          - message
+      required:
+      - responseData
     ContactEmail:
       type: object
       properties:
@@ -1556,12 +1852,21 @@ components:
           name:
             type: string
             description: Tag
-    ContactNumberArray:
-      type: array
-      description: Numbers assigned to contact
-      items:
-        type: object
-        properties:
-          public_number:
-            type: string
-            description: Full number in international E.164 format
+    ContactList:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Contact ID
+        name:
+          type: string
+          description: Name
+        company:
+          type: string
+          description: Company name
+      description: Contact data
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Use your API Access Key ID as the username and your API Access Key Secret as the password. Generate keys in the CloudTalk Dashboard under Account -> Settings -> API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys).
