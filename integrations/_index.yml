@@ -14,349 +14,7 @@
   evidence: https://zapier.com/apps/cloudtalk/integrations/coach-by-wonderway/1633815/process-new-cloudtalk-calls-with-wonderway-coach
   template: https://zapier.com/apps/cloudtalk/integrations/coach-by-wonderway/1633815/process-new-cloudtalk-calls-with-wonderway-coach
   source: template
-  status: pending-partner-spec
-  arazzo: null
-- slug: cloudtalk-pipedrive
-  label: Pipedrive
-  partner: pipedrive
-  partner_name: Pipedrive
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/pipedrive
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-hubspot
-  label: HubSpot
-  partner: hubspot
-  partner_name: HubSpot
-  category: Marketing Automation
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/hubspot
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-airtable
-  label: Airtable
-  partner: airtable
-  partner_name: Airtable
-  category: Databases
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/airtable
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-monday-com
-  label: monday.com
-  partner_name: monday.com
-  category: Project Management
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/monday
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: cloudtalk-activecampaign
-  label: ActiveCampaign
-  partner: activecampaign
-  partner_name: ActiveCampaign
-  category: Marketing Automation
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/activecampaign
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-attio
-  label: Attio
-  partner: attio
-  partner_name: Attio
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/attio
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-close
-  label: Close
-  partner: close
-  partner_name: Close
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/close
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-recruitee
-  label: Recruitee
-  partner: recruitee
-  partner_name: Recruitee
-  category: HR Talent & Recruitment
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/recruitee
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-google-sheets
-  label: Google Sheets
-  partner: google-sheets
-  partner_name: Google Sheets
-  category: Google
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/google-sheets
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-apollo
-  label: Apollo
-  partner: apollo
-  partner_name: Apollo
-  category: Sales & CRM
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/apollo
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-notion
-  label: Notion
-  partner: notion
-  partner_name: Notion
-  category: Task Management
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/notion
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-capsule-crm
-  label: Capsule CRM
-  partner_name: Capsule CRM
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/capsulecrm
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: cloudtalk-bigcommerce
-  label: BigCommerce
-  partner: bigcommerce
-  partner_name: BigCommerce
-  category: eCommerce
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/bigcommerce
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-calendly
-  label: Calendly
-  partner: calendly
-  partner_name: Calendly
-  category: Scheduling & Booking
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/calendly
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-google-calendar
-  label: Google Calendar
-  partner: google-calendar
-  partner_name: Google Calendar
-  category: Calendar
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/google-calendar
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-bitrix24-crm
-  label: Bitrix24 CRM
-  partner: bitrix24
-  partner_name: Bitrix24 CRM
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/bitrix24-crm-new
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-zoho-recruit
-  label: Zoho Recruit
-  partner: zoho-recruit
-  partner_name: Zoho Recruit
-  category: HR Talent & Recruitment
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/zoho-recruit
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-livespace
-  label: Livespace
-  partner_name: Livespace
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/livespace
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: cloudtalk-atera
-  label: Atera
-  partner: atera
-  partner_name: Atera
-  category: IT Operations
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/atera-1
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: cloudtalk-kvcore
-  label: kvCORE
-  partner_name: kvCORE
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/kvcore
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: cloudtalk-mysql
-  label: MySQL
-  partner: mysql
-  partner_name: MySQL
-  category: Databases
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/mysql
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-geckoboard
-  label: Geckoboard
-  partner: geckoboard
-  partner_name: Geckoboard
-  category: Dashboards
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/geckoboard
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-stripe-legacy
-  label: Stripe (Legacy)
-  partner: stripe
-  partner_name: Stripe (Legacy)
-  category: Payment Processing
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/stripe-legacy
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-livechat
-  label: LiveChat
-  partner: livechat
-  partner_name: LiveChat
-  category: Customer Support
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/livechat
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-webinarjam-everwebinar
-  label: WebinarJam / EverWebinar
-  partner: webinarjam
-  partner_name: WebinarJam / EverWebinar
-  category: Webinars
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/webinarjam
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: cloudtalk-instantly
-  label: Instantly
-  partner: instantly-ai
-  partner_name: Instantly
-  category: Email
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/instantly
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-amazon-s3
-  label: Amazon S3
-  partner: amazon-s3
-  partner_name: Amazon S3
-  category: Amazon
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/amazon-s3
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-vitally
-  label: Vitally
-  partner: vitally
-  partner_name: Vitally
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/vitally
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: cloudtalk-canopy
-  label: Canopy
-  partner_name: Canopy
-  category: Accounting
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/cloudtalk/integrations/canopy
-  source: edge
+  relationship: ipaas-bridge
   status: pending-partner-spec
   arazzo: null
 - slug: cloudtalk-greenhouse-own
@@ -502,4 +160,378 @@
     detected_by: sweep-compliance-assurance.py
     detected: '2026-10-20'
   status: not-a-workflow
+  arazzo: null
+- slug: cloudtalk-hubspot
+  label: HubSpot
+  partner: hubspot
+  partner_name: HubSpot
+  category: Marketing Automation
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/hubspot
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-pipedrive
+  label: Pipedrive
+  partner: pipedrive
+  partner_name: Pipedrive
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/pipedrive
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-airtable
+  label: Airtable
+  partner: airtable
+  partner_name: Airtable
+  category: Databases
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/airtable
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-monday-com
+  label: monday.com
+  partner: monday-com
+  partner_name: monday.com
+  category: Project Management
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/monday
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-activecampaign
+  label: ActiveCampaign
+  partner: activecampaign
+  partner_name: ActiveCampaign
+  category: Marketing Automation
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/activecampaign
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-attio
+  label: Attio
+  partner: attio
+  partner_name: Attio
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/attio
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-google-sheets
+  label: Google Sheets
+  partner: google-sheets
+  partner_name: Google Sheets
+  category: Google
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/google-sheets
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-close
+  label: Close
+  partner: close
+  partner_name: Close
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/close
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-recruitee
+  label: Recruitee
+  partner: recruitee
+  partner_name: Recruitee
+  category: HR Talent & Recruitment
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/recruitee
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-apollo
+  label: Apollo
+  partner: apollo-io
+  partner_name: Apollo
+  category: Sales & CRM
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/apollo
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-notion
+  label: Notion
+  partner: notion
+  partner_name: Notion
+  category: Task Management
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/notion
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-capsule-crm
+  label: Capsule CRM
+  partner: capsule-crm
+  partner_name: Capsule CRM
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/capsulecrm
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-bigcommerce
+  label: BigCommerce
+  partner: bigcommerce
+  partner_name: BigCommerce
+  category: eCommerce
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/bigcommerce
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-calendly
+  label: Calendly
+  partner: calendly
+  partner_name: Calendly
+  category: Scheduling & Booking
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/calendly
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-google-calendar
+  label: Google Calendar
+  partner: google-calendar
+  partner_name: Google Calendar
+  category: Calendar
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/google-calendar
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-bitrix24-crm
+  label: Bitrix24 CRM
+  partner: bitrix24
+  partner_name: Bitrix24 CRM
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/bitrix24-crm-new
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-zoho-recruit
+  label: Zoho Recruit
+  partner: zoho-recruit
+  partner_name: Zoho Recruit
+  category: HR Talent & Recruitment
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/zoho-recruit
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-livespace
+  label: Livespace
+  partner_name: Livespace
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/livespace
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: cloudtalk-atera
+  label: Atera
+  partner: atera
+  partner_name: Atera
+  category: IT Operations
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/atera-1
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: cloudtalk-kvcore
+  label: kvCORE
+  partner_name: kvCORE
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/kvcore
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: cloudtalk-mysql
+  label: MySQL
+  partner: mysql
+  partner_name: MySQL
+  category: Databases
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/mysql
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-geckoboard
+  label: Geckoboard
+  partner: geckoboard
+  partner_name: Geckoboard
+  category: Dashboards
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/geckoboard
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-stripe-legacy
+  label: Stripe (Legacy)
+  partner: stripe
+  partner_name: Stripe (Legacy)
+  category: Payment Processing
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/stripe-legacy
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-livechat
+  label: LiveChat
+  partner: livechat
+  partner_name: LiveChat
+  category: Customer Support
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/livechat
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-webinarjam-everwebinar
+  label: WebinarJam / EverWebinar
+  partner: webinarjam
+  partner_name: WebinarJam / EverWebinar
+  category: Webinars
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/webinarjam
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: cloudtalk-instantly
+  label: Instantly
+  partner: instantly-ai
+  partner_name: Instantly
+  category: Email
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/instantly
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-amazon-s3
+  label: Amazon S3
+  partner: amazon-s3
+  partner_name: Amazon S3
+  category: Amazon
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/amazon-s3
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-vitally
+  label: Vitally
+  partner: vitally
+  partner_name: Vitally
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/vitally
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: cloudtalk-canopy
+  label: Canopy
+  partner_name: Canopy
+  category: Accounting
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/cloudtalk/integrations/canopy
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
   arazzo: null
