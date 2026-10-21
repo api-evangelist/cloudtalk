@@ -17,6 +17,13 @@ checked:
 - microsoft-teams/integrations/microsoft-teams-integration-edges.yml
 - monday-com/integrations/monday-com-integration-edges.yml
 - zendesk/integrations/zendesk-integration-edges.yml
+- https://api.appexchange.salesforce.com/recommendations/v3/listings?type=apps
+- https://api.appexchange.salesforce.com/recommendations/v3/listings?type=consultants
+- https://appexchange.salesforce.com/
+- https://appexchange.salesforce.com/consulting
+- https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm
+- https://slack.com/marketplace
+- salesforce/integrations/salesforce-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -47,22 +54,6 @@ marketplace_apps:
   - key: find_contacts
     label: Find Contact
 edges:
-- partner_name: Greenhouse (own)
-  partner: greenhouse
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://integrations.greenhouse.com/partners/cloudtalk
-  mirror_of: greenhouse/integrations/greenhouse-integration-edges.yml
-  apps:
-  - CloudTalk
-  listing_count: 1
-  detected: '2026-10-14'
-  detected_by: mirror-platform-listings.py
 - partner_name: Zapier
   partner: zapier
   partner_match: aggregator
@@ -88,77 +79,6 @@ edges:
     builder: unknown (not in the directory record)
   detected_by: sweep-workflow-automation.py
   first_seen: '2026-10-15'
-- partner_name: Microsoft Teams (own)
-  partner: microsoft-teams
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://appsource.microsoft.com/en-us/product/office/WA200007800
-  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
-  apps:
-  - CloudTalk
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Microsoft Teams app
-  publisher_verified:
-  - Microsoft 365 Publisher Attestation
-- partner_name: Monday.com (own)
-  partner: monday-com
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://monday.com/marketplace/listing/10001142
-  mirror_of: monday-com/integrations/monday-com-integration-edges.yml
-  apps:
-  - CloudTalk
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: monday.com app
-  publisher_verified:
-  - monday.com security & compliance flag
-- partner_name: Gorgias (own)
-  partner: gorgias
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://www.gorgias.com/apps/cloudtalk
-  mirror_of: gorgias/integrations/gorgias-integration-edges.yml
-  apps:
-  - Cloudtalk
-  listing_count: 1
-  detected: '2026-10-19'
-  detected_by: mirror-platform-listings.py
-- partner_name: Zendesk (own)
-  partner: zendesk
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://www.zendesk.com/marketplace/apps/support/280695/cloudtalk-for-support/
-  mirror_of: zendesk/integrations/zendesk-integration-edges.yml
-  apps:
-  - CloudTalk for Support
-  listing_count: 1
-  detected: '2026-10-19'
-  detected_by: mirror-platform-listings.py
-  category: Contact Center
 - partner_name: Fivetran
   partner: fivetran
   partner_match: aggregator
@@ -575,6 +495,148 @@ edges:
   direction: third-party
   category: Accounting
   partner_url: https://www.canopytax.com/
+- partner_name: Salesforce AppExchange Security Review
+  partner: salesforce
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm
+  category: AppExchange security-reviewed publisher
+  contract_reference:
+    register: Salesforce AppExchange public listings (listing JSON) under the AgentExchange Security Review requirement
+    standard: Salesforce AppExchange Security Review
+    spec_file: null
+    role: security-reviewed-publisher
+    registered_name: CloudTalk
+    register_country: null
+    matched_domain: cloudtalk.io
+    matched_by: domain
+    identity_source: the listing's own publisher.website (no lookup)
+    certified_products:
+    - product: Salesforce package (security-reviewed)
+      product_type: force/package
+      certifier: Salesforce (AgentExchange / AppExchange Security Review)
+      listings: 2
+      example_listing: https://appexchange.salesforce.com/appxListingDetail?listingId=34f29eff-fc6a-4d8a-abd7-18ba2ed4accb
+      latest_approval: '2025-03-07'
+      lapsed: false
+      lapsed_note: the listing JSON prints solution.securityReview.approvalDate on a LIVE public listing; Salesforce
+        publishes no expiry, so no entry is marked lapsed (latest_approval is context)
+    signal_note: certified_products = ONE entry per product type (listing technology) with a printed securityReview.approvalDate,
+      never per listing or version; a listing with no approval date reads nothing; listing counts / versions are
+      context
+    requirement: https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm
+    detected_by: sweep-salesforce-appexchange.py
+    detected: '2026-10-21'
+  detected_by: sweep-salesforce-appexchange.py
+  first_seen: '2026-10-21'
+- partner_name: Greenhouse (own)
+  partner: greenhouse
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://integrations.greenhouse.com/partners/cloudtalk
+  mirror_of: greenhouse/integrations/greenhouse-integration-edges.yml
+  apps:
+  - CloudTalk
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+- partner_name: Microsoft Teams (own)
+  partner: microsoft-teams
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appsource.microsoft.com/en-us/product/office/WA200007800
+  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+  apps:
+  - CloudTalk
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Microsoft Teams app
+  publisher_verified:
+  - Microsoft 365 Publisher Attestation
+- partner_name: Monday.com (own)
+  partner: monday-com
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://monday.com/marketplace/listing/10001142
+  mirror_of: monday-com/integrations/monday-com-integration-edges.yml
+  apps:
+  - CloudTalk
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: monday.com app
+  publisher_verified:
+  - monday.com security & compliance flag
+- partner_name: Gorgias (own)
+  partner: gorgias
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.gorgias.com/apps/cloudtalk
+  mirror_of: gorgias/integrations/gorgias-integration-edges.yml
+  apps:
+  - Cloudtalk
+  listing_count: 1
+  detected: '2026-10-19'
+  detected_by: mirror-platform-listings.py
+- partner_name: Zendesk (own)
+  partner: zendesk
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.zendesk.com/marketplace/apps/support/280695/cloudtalk-for-support/
+  mirror_of: zendesk/integrations/zendesk-integration-edges.yml
+  apps:
+  - CloudTalk for Support
+  listing_count: 1
+  detected: '2026-10-19'
+  detected_by: mirror-platform-listings.py
+  category: Contact Center
+- partner_name: Salesforce (own)
+  partner: salesforce
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000FtRTAUA3
+  mirror_of: salesforce/integrations/salesforce-integration-edges.yml
+  apps:
+  - 'CloudTalk CTI for Salesforce: Global Calling, SMS, Cadences & Einstein AI'
+  - CloudTalk | AI Business Calling for Salesforce Service Cloud Voice
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: sales
 templates:
 - title: Send Slack messages for missed CloudTalk calls
   url: https://zapier.com/apps/cloudtalk/integrations/slack/138256/send-slack-messages-for-missed-cloudtalk-calls
