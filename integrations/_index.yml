@@ -633,3 +633,16 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: cloudtalk-pipedrive-own
+  label: Pipedrive (own)
+  partner: pipedrive
+  partner_name: Pipedrive (own)
+  category: Nurture my leads
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://www.pipedrive.com/en/marketplace/app/cloud-talk-ai-dialer-cti-for-pipedrive/9f5f8e12f3836e83
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null

@@ -29,6 +29,7 @@ checked:
 - https://ecosystem.hubspot.com/marketplace/explore?eco_PRODUCT_TYPE=APP&eco_CERTIFIED=true
 - https://ecosystem.hubspot.com/marketplace/solutions
 - hubspot/integrations/hubspot-integration-edges.yml
+- pipedrive/integrations/pipedrive-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -692,6 +693,23 @@ edges:
   detected: '2026-10-21'
   detected_by: mirror-platform-listings.py
   category: SMS
+- partner_name: Pipedrive (own)
+  partner: pipedrive
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.pipedrive.com/en/marketplace/app/cloud-talk-ai-dialer-cti-for-pipedrive/9f5f8e12f3836e83
+  mirror_of: pipedrive/integrations/pipedrive-integration-edges.yml
+  apps:
+  - 'CloudTalk: AI Dialer & CTI for Pipedrive'
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Nurture my leads
 templates:
 - title: Send Slack messages for missed CloudTalk calls
   url: https://zapier.com/apps/cloudtalk/integrations/slack/138256/send-slack-messages-for-missed-cloudtalk-calls
