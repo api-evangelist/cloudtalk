@@ -30,6 +30,7 @@ checked:
 - https://ecosystem.hubspot.com/marketplace/solutions
 - hubspot/integrations/hubspot-integration-edges.yml
 - pipedrive/integrations/pipedrive-integration-edges.yml
+- intercom/integrations/intercom-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -710,6 +711,23 @@ edges:
   detected: '2026-10-22'
   detected_by: mirror-platform-listings.py
   category: Nurture my leads
+- partner_name: Intercom (own)
+  partner: intercom
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.intercom.com/app-store/?app_package_code=cloudtalk-integration
+  mirror_of: intercom/integrations/intercom-integration-edges.yml
+  apps:
+  - CloudTalk
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Phone & Video
 templates:
 - title: Send Slack messages for missed CloudTalk calls
   url: https://zapier.com/apps/cloudtalk/integrations/slack/138256/send-slack-messages-for-missed-cloudtalk-calls
