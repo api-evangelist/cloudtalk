@@ -1870,3 +1870,9 @@ components:
       type: http
       scheme: basic
       description: HTTP Basic Authentication. Use your API Access Key ID as the username and your API Access Key Secret as the password. Generate keys in the CloudTalk Dashboard under Account -> Settings -> API Keys (https://dashboard.cloudtalk.io/menu/account/settings/API-keys).
+x-provenance:
+  method: harvested
+  publisher: CloudTalk
+  source: https://help.cloudtalk.io/api-reference/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
