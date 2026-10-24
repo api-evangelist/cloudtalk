@@ -226,6 +226,8 @@ apis:
   humanURL: https://developers.cloudtalk.io/
   baseURL: https://my.cloudtalk.io/api
   tags:
+  - Contact Tags
+  tags_raw:
   - Contact tags
   properties:
   - type: OpenAPI
@@ -267,6 +269,8 @@ apis:
   humanURL: https://developers.cloudtalk.io/
   baseURL: https://my.cloudtalk.io/api
   tags:
+  - Sales Dialer
+  tags_raw:
   - Dialer
   properties:
   - type: OpenAPI
@@ -297,6 +301,8 @@ apis:
   humanURL: https://developers.cloudtalk.io/
   baseURL: https://my.cloudtalk.io/api
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
